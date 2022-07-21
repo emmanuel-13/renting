@@ -37,7 +37,7 @@
             <p> Room ID: {{ room.unique_room_id }} </p>
             <p> Room Features: {{ room.ammenities }} </p>
             <p> Room Type: <span>{{ room.room_types }} </span></p>
-            <p> Room Price #{{ room.price }} </p>
+            <p> Room Price #{{ room.room_price }} </p>
             {% if room.occupied == False %}
                 <p> Available </p>
             {% else %}

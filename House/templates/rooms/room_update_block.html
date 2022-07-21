@@ -1,0 +1,52 @@
+{% extends 'Dashboard/base.html' %}
+{% load crispy_forms_tags bootstrap3 %}
+
+{% block content %}
+<div class="row">
+    
+<div class="col-sm-4">
+    <a href="{% url 'room_det' room.flat_id_rooms %}" style="text-decoration: none;">
+        <p class="card-header"> Apartment Name: {{room.apartment_name_rooms}}</p>
+    </a>
+    {% if room.unique_room_id %}
+
+    <p class="text-center">Room ID: {{room.unique_room_id }}</p>
+
+    {% if room.image1 %}
+        <img src="{{ room.image1.url }}" height="200px" width="200px" style="margin-left: 20px">
+    {% endif %}
+
+    {% else %}
+    <p class="pt-4"> Room ID: <span style="margin-left: 70px;"> {{room.room_id}} </span></p>
+
+    <p class="pt-4"> Service Charge: <span style="margin-left: 70px;"> {{room.service_charge}} </span></p>
+
+    <p class="pt-4"> Power Charge: <span style="margin-left: 70px;"> {{room.power_charge}} </span></p>
+
+    {% endif %}
+</div>
+
+{% if form %}
+<div class="col-sm-8">
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+        <div class="row">
+            <div class="col-md-3">{% bootstrap_label field.label %}</div>
+            <div class="col-md-8">{% bootstrap_field field show_label=False %}</div>
+        </div>
+        {% endfor %}
+        {% if room.roomimages_set.all  %}
+                <p> Images Avaliable </p>
+        {% endif %}
+        <label for=""> Estate Images </label>
+        <input type="file" name="image" multiple accept="image/*">
+        <button type="submit" class="btn btn-info form-control mt-4"> Update </button>
+    </form>
+</div>
+{% endif %}
+</div>
+
+
+{% endblock content %}      

@@ -1,6 +1,13 @@
+from ctypes import addressof
+from distutils.command.upload import upload
+from email import message
+import email
+from email.headerregistry import Address
 from django.contrib.auth.models import User
 from django.db import models
 from House.models import *
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 class UserProfile(models.Model):
@@ -12,9 +19,45 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.username
 
+   
+def only_digit(value):
+    if value.isdigit()==False:
+        raise ValidationError('Can only contain numbers')
+    
+    
+     
+class Profile(models.Model):
+    title_type = (
+        ('Mr', 'Mr'), ('Mrs', 'Mrs'), ('Master', 'Master'), ('Chief', 'Chief'), ('Bachelor', 'Bachelor'), ('Prof', 'Prof')
+    )
+    
+    title = models.CharField(max_length=10, choices=title_type, null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    date_of_birth = models.DateField(auto_now=False, null=True)
+    image = models.ImageField(upload_to='profile/', default="download.jpg")
+    phone_no = models.CharField(max_length=11, null=True, blank=True, validators=[only_digit])
+    address = models.CharField(max_length=50, null=True, blank=True)
+    
+    
     def __str__(self):
         return self.user.username
-
+    
+class LandLord(models.Model):
+    first_name = models.CharField(max_length=15, null=False)
+    last_name = models.CharField(max_length=15, blank=False, null=False)
+    phone_no = models.CharField(max_length=11, null=False, blank=False, validators=[only_digit])
+    address = models.CharField(max_length=20)
+    email = models.EmailField(null=False)
+    location_of_property = models.CharField(max_length=50, null=False, blank=False)
+    number_of_flat = models.CharField(max_length=2, null=False, blank=False, validators=[only_digit])
+    number_of_rooms = models.CharField(max_length=2, null=False, blank=False, validators=[only_digit])
+    description_of_property = models.TextField()
+    date_created = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.email
+    
+    
 
 class Contact(models.Model):
     email = models.EmailField(unique=True)
@@ -23,54 +66,45 @@ class Contact(models.Model):
 
     def __str__(self):
         return self.subject
-
-
-class RoomCart(models.Model):
-    user = models.OneToOneField(UserProfile, on_delete=models.CASCADE)
-    room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    quantity = models.CharField(default=0, max_length=1)
-
+    
+    
+class Subscribers(models.Model):
+    email = models.EmailField(null=True)
+    date_subcribe = models.DateTimeField(auto_now_add=True)
+    
     def __str__(self):
-        return self.user.username
-    
-    
-class Order(models.Model):
-    customer_username  =  models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True)
-    first_name = models.CharField(max_length=20, null=True)
-    last_name = models.CharField(max_length=20, null=True)
-    address = models.CharField(max_length=20)
-    city = models.CharField(max_length=20)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    status = (
-        ('Pending', 'Pending'), ('Paid', 'Paid')
-    )
-    payment_status = models.CharField(max_length=20, choices=status, default="Pending")
+        return self.email
     
     class Meta:
-        ordering = ('-created_at',)
-        
-    def __str__(self):
-        return f'Order {self.id} by {self.first_name}'
-    
-    
-    def get_total_cost(self):
-            return sum(room.get_cost() for room in self.room.all())
-    
-    
-class OrderItem(models.Model):
-    order = models.ForeignKey(Order,
-                                  related_name='items',
-                                  on_delete=models.CASCADE)
-    room = models.ForeignKey(Room,
-                                 related_name='order_room',
-                                 on_delete=models.CASCADE)
-    status = models.BooleanField(default=False)
-    # ordered_date = models.DateTimeField(auto_now_add=True)
-    
-    
-    def __str__(self):
-            return str(self.id)
+        verbose_name = "Subscriber"
+        verbose_name_plural = "Subscribers"
 
-    def get_cost(self):
-        return self.price
+class MailMessage(models.Model):
+    
+    title = models.CharField(max_length=200, null=True)
+    content = models.TextField(null=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.title
+    
+    def get_date(self):
+        return datetime.today()
+    
+    def save(self, *args, **kwargs):
+        self.get_date
+        super().save(*args, **kwargs)
+    
+    class Meta:
+        verbose_name = "Mail Message"
+        verbose_name_plural = "Mail Messages"
+        
+        
+class About(models.Model):
+    title = models.CharField(max_length=50, null=True)
+    content = models.TextField()
+    
+    def __str__(self):
+        return self.id
+    
+    

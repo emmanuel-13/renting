@@ -1,0 +1,12 @@
+{% autoescape off %}
+
+welcome to Rent4Less {email} and Remember to signup for more info, thanks.
+
+hi {email}, please click the link to verify your email http://127.0.0.1:8000/customer/verify/{token}/'
+
+thank you?.
+
+Sincerely,
+The Rent4Less Team
+
+{% endautoescape %}

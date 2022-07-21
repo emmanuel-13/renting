@@ -1,4 +1,4 @@
-{% load static%}
+{% load static House_extras %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -8,7 +8,7 @@
     <!--=============== FAVICON ===============-->
     <link
       rel="shortcut icon"
-      href="{% static 'asset_detail/img/favicon.png' %}"
+      href="{% static 'asseting/img/favicon.png' %}"
       type="image/x-icon"
     />
 
@@ -19,113 +19,56 @@
     />
 
     <!--=============== SWIPER CSS ===============-->
-    <link rel="stylesheet" href="{% static 'asset_detail/css/swiper-bundle.min.css' %}" />
-
-    <!--=============== LIGHTBOX CSS ===============-->
-    <link rel="stylesheet" href="{% static 'asset_detail/css/lightbox.css' %}" />
+    <link rel="stylesheet" href="{% static 'asseting/css/swiper-bundle.min.css' %}" />
 
     <!--=============== CSS ===============-->
-    <link rel="stylesheet" href="{% static 'asset_detail/css/style.css' %}" />
-
-    <!--=============== Jquery CSS ===============-->
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="{% static 'asseting/css/styleing.css' %}" />
 
     <title>Rent4Less</title>
   </head>
   <body>
-    <!--==================== NAVBAR ====================-->
-    <div class="navbar" id="navbar">
-      <nav class="nav container">
-        <a href="/" class="nav__logo">
-          <img
-            src="{% static 'asset_detail/img/rent4less-logo-small.png' %}"
-            alt="rent4less-logo-small"
-          />
-        </a>
-
-        <div class="nav__menu">
-          <ul class="nav__list">
-            <li class="nav__item">
-              <a href="/index.html" class="nav__link">
-                <i class="bx bx-home-alt-2"></i>
-                <span>Home</span>
-              </a>
-            </li>
-
-            <li class="nav__item">
-              <a href="#about" class="nav__link">
-                <i class="bx bx-building-house"></i>
-                <span>About</span>
-              </a>
-            </li>
-
-            <li class="nav__item">
-              <a href="#faq" class="nav__link">
-                <i class="bx bx-award"></i>
-                <span>Faq</span>
-              </a>
-            </li>
-
-            <li class="nav__item">
-              <a href="{% url 'contact' %}" class="nav__link">
-                <i class="bx bx-phone"></i>
-                <span>Contact</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <!-- Theme Change Button -->
-
-        <div class="sign">
-          {% if not user.is_authenticated %}
-          <a href="{% url 'register' %}" class="nav__button">Sign Up</a>
-          <a href="{% url 'login' %}" class="nav__button nav__button--outlined">Log In</a>
-          <i class="bx bx-moon change-theme" id="theme-button"></i>
-          {% else %}
-            <p class="sub__title"> welcome {{ user.username }} </p>
-            <a href="{% url 'logout' %}" class="nav__button nav__button--outlined">Logout</a>
-            <i class="bx bx-moon change-theme" id="theme-button"></i>
-            <button type="button" class="btn btn-b-n navbar-toggle-box navbar-toggle-box-collapse ml-2" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02">
-              <a href="{% url 'cart_display' %}">
-                  <i class="bi bi-book"></i><sup>{% if total_cart %} {{total_cart }} {% else %} 0 {% endif %} </sup>
-              </a>
-            </button>
-          {% endif %}
-        </div>
-      </nav>
+    <!--==================== SPINNER ====================-->
+    <div class="spinner-wrapper">
+      <div class="spinner"></div>
     </div>
+
+    <!-- ======= TOAST ANIMATION ====== -->
+    <div class="toast">
+      <div class="toast-content">
+        <i class="bx bxs-check-circle check"></i>
+        <div class="message">
+          <span class="message-text text-1"></span>
+        </div>
+      </div>
+      <i class="bx bx-x close"></i>
+
+      <div class="progress"></div>
+    </div>
+    <!-- ======= END TOAST ANIMATION ====== -->
+
+    <!--==================== NAVBAR ====================-->
 
     <!--==================== HEADER ====================-->
     <header class="header" id="header">
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-12">
-            <div class="col-sm-4"></div>
-            <div class="col-sm-4 text-center">
-            {% if messages %}
-              {% for message in messages %}
-                  <div class="text-center alert alert-{{ message.tags }}" id="msg">
-                      {{ message|safe }}
-                  </div>
-              {% endfor %}
-            {% endif %}
+      {% include 'primary_navbar.html' %}
+
+      {% if messages %}
+            {% for message in messages %}
+            <div class="text-center alert alert-{{ message.tags }}" id="msg" style="font-size: 30px">
+                {{ message|safe|title }}
             </div>
-            <div class="col-sm-4"></div>
-          </div>
-        </div>
-      </div>
+        {% endfor %}
+      {% endif %}
       <div class="header__container container grid">
-        
         <div class="header__data">
           <h1 class="header__title">
-            discover<br />
-            Most <span>Suitable</span> <br />
-            Property
+            Welcome to the <br />
+            #1 <span>Monthly</span> <br />
+            Rental Platform
           </h1>
           <p class="header__description">
-            Find a variety of properties that suit you very easily, forget all
-            difficulties in finding a residence for you.
+            You can hear comfort and flexibility call your name when you open
+            our doors.
           </p>
 
           <form action="{% url 'estate-search' %}" method="POST" class="header__search">
@@ -143,24 +86,25 @@
           </form>
 
           <div class="header__value">
-            <div>
-              <span class="header__value-description">
-                Premium <br />
-                Product
-              </span>
-            </div>
-            <div>
-              <span class="header__value-description">
-                Happy <br />
-                Customer
-              </span>
-            </div>
+            <img src="{% static 'asseting/img/face-6.jpg' %}" alt="realtors" />
+            <img src="{% static 'asseting/img/face-7.jpg' %}" alt="realtors" />
+            <img src="{% static 'asseting/img/face-3.jpg' %}" alt="realtors" />
+            <img src="{% static 'asseting/img/face-5.jpg' %}" alt="realtors" />
+            <img src="{% static 'asseting/img/face-2.jpg' %}" alt="realtors" />
+            <img src="{% static 'asseting/img/face-4.jpg' %}" alt="realtors" />
+            <img src="{% static 'asseting/img/face-1.jpg' %}" alt="realtors" />
+            <span class="header__value-description">+25K</span>
+          </div>
 
-            <div>
-              <span class="header__value-description">
-                Awards <br />
-                Winning
-              </span>
+          <div class="header__followers">
+            <p>Join over 100+ Subscribers on Rent4Less Today.</p>
+            <div class="header__followers--link">
+              <!-- <a href="/signup.html" class="text-capitalize secondary-button">
+                <span><i class="bx bxl-youtube"></i> Watch Video</span>
+              </a> -->
+              <a href="/signup.html" class="text-capitalize"
+                >Get started today!</a
+              >
             </div>
           </div>
         </div>
@@ -168,7 +112,12 @@
         <div class="header__images">
           <div class="header__orbe"></div>
           <div class="header__img">
-            <img src="{% static 'asset_detail/img/home.jpg' %}" alt="header__img" />
+            <img
+              src="{% static 'asseting/img/home-small.jpg' %}"
+              data-src="{% static 'asseting/img/home.jpg' %}"
+              alt="header__img"
+              class="home-img lazy-img"
+            />
           </div>
         </div>
       </div>
@@ -176,128 +125,421 @@
 
     <!--==================== MAIN ====================-->
     <main class="main">
-      <!--==================== DESTINATION ====================-->
-      <section class="destination section">
-        <div class="destination__wrapper">
-          <span class="section__subtitle"
-            >Which City Do You Want To Book A Property?</span
-          >
-          <h2 class="section__title">Explore City <span>.</span></h2>
+      <!--==================== BECOME A TENANT / LANDLORD ====================-->
+      <div class="section deals">
+        <div class="deals__img--container">
+          <img
+            src="{% static 'asseting/img/dancing-small.jpg' %}"
+            data-src="{% static 'asseting/img/dancing-their-way.jpg' %}"
+            class="lazy-img"
+            alt="home"
+          />
+          <div class="deal__wrapper deal__wrapper--1">
+            <div class="deal__wrapper--1-icon">
+              <i class="bx bx-play-circle"></i>
+            </div>
+            <div class="deal__wrapper--text">
+              <p class="letter-spacing-1">Find the best deals</p>
+              <span>browse thousands of properties</span>
+            </div>
+          </div>
+          <div class="deal__wrapper deal__wrapper--2">
+            <div class="deal__wrapper--text">
+              <p class="letter-spacing-1">Find the best deals</p>
+              <span>browse thousands of properties</span>
+            </div>
+            <div class="deal__wrapper--2-icon">
+              <i class="bx bx-home-circle"></i>
+            </div>
+          </div>
+        </div>
+        <div class="deals__detail--container">
+          <div class="deal__pills">
+            <ul>
+              <li data-filter=".tenants" class="deal__pills--item">
+                For tenants
+              </li>
+              <li data-filter=".landlords" class="deal__pills--item">
+                For landlords
+              </li>
+            </ul>
+          </div>
+          <div class="deal__pills--wrapper">
+            <div class="deal__content tenants">
+              <h3>Join the Community of Tenants who Pay Rent Monthly</h3>
+              <p>
+                Indulge in a wholesome living experience where you get all you
+                need in a stress-free manner. You also get:
+              </p>
+              <div class="lists">
+                <li>No Agency Fee</li>
+                <li>No Commission Payment</li>
+                <li>Just Pay & Pack In</li>
+              </div>
+              <div>
+                <a href="{% url 'register' %}" class="btn button">Be a Tenant</a>
+              </div>
+            </div>
 
-          <div class="destination__container">
-            <!-- start loop from here -->
-            {% for city in city %}
-            <a href="{% url 'property_detail' city.pk %}" class="destination__item">
+            <div class="deal__content landlords">
+              <h3>Sit back. Relax. Let Your Money do the Work</h3>
+              <p>
+                Explore the endless possibilities of consistent earnings by
+                getting on our Guaranteed Rental Income Programme (GRIP) Today.
+                All you need do is list your property while we take care of the
+                rest. From getting tenants to verifying their profiles and
+                maintaining your property, we’ve got you covered.
+              </p>
+              <div>
+                <a href="/landlord.html" class="btn button">Get Started</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--==================== DESTINATION ====================-->
+      <section class="destination section border-sm">
+        <div
+          class="destination__wrapper d-flex justify-between align-items-center"
+        >
+          <div class="destination__wrapper--title">
+            <span class="section__subtitle color-white text-center"
+              >Which City Do You Want To Book A Property?</span
+            >
+            <h2 class="section__title color-white mb-0">
+              Explore City <span>.</span>
+            </h2>
+          </div>
+
+          <!-- <div class="destination__container">
+            <a href="/city.html" class="destination__item">
               <div class="destination__img">
-                <img src="{% if city.image %} {{city.image.url}} {% else %} {% static 'asset_detail/img/city4.jpg' %} {% endif %}" alt="destination" />
+                <img src="{% static 'asseting/img/city4.jpg' %}" alt="destination" />
               </div>
               <div class="destination__content">
-                <h3 class="destination__title"> {{ city }}</h3>
-                <p class="destination__description"> </p>
+                <h3 class="destination__title">Ikeja</h3>
+                <p class="destination__description">70 Properties</p>
               </div>
             </a>
-            {% endfor %}
-          </div>
-            <!-- stop loop from here -->
+
+            <div class="destination__item">
+              <div class="destination__img">
+                <img src="{% static 'asseting/img/city5.jpg' %}" alt="destination" />
+              </div>
+              <div class="destination__content">
+                <h3 class="destination__title">Ikoyi</h3>
+                <p class="destination__description">120 Properties</p>
+              </div>
+            </div>
+
+            <div class="destination__item">
+              <div class="destination__img">
+                <img src="{% static 'asseting/img/city6.jpg' %}" alt="destination" />
+              </div>
+              <div class="destination__content">
+                <h3 class="destination__title">Lekki</h3>
+                <p class="destination__description">50 Properties</p>
+              </div>
+            </div>
+
+            <div class="destination__item">
+              <div class="destination__img">
+                <img src="{% static 'asseting/img/city7.jpg' %}" alt="destination" />
+              </div>
+              <div class="destination__content">
+                <h3 class="destination__title">Festac</h3>
+                <p class="destination__description">100 Properties</p>
+              </div>
+            </div>
+            <div class="destination__item">
+              <div class="destination__img">
+                <img src="{% static 'asseting/img/city7.jpg' %}" alt="destination" />
+              </div>
+              <div class="destination__content">
+                <h3 class="destination__title">Gbagada</h3>
+                <p class="destination__description">150 Properties</p>
+              </div>
+            </div>
+            <div class="destination__item">
+              <div class="destination__img">
+                <img src="{% static 'asseting/img/bali.jpg' %}" alt="destination" />
+              </div>
+              <div class="destination__content">
+                <h3 class="destination__title">Victoria Island</h3>
+                <p class="destination__description">40 Properties</p>
+              </div>
+            </div>
+            <div class="destination__item">
+              <div class="destination__img">
+                <img src="{% static 'asseting/img/borabora.jpg' %}" alt="destination" />
+              </div>
+              <div class="destination__content">
+                <h3 class="destination__title">Ibadan</h3>
+                <p class="destination__description">80 Properties</p>
+              </div>
+            </div>
+            <div class="destination__item">
+              <div class="destination__img">
+                <img src="{% static 'asseting/img/place5.jpg' %}" alt="destination" />
+              </div>
+              <div class="destination__content">
+                <h3 class="destination__title">Ketu</h3>
+                <p class="destination__description">60 Properties</p>
+              </div>
+            </div>
+          </div> -->
 
           <!-- start explore city button -->
-          <a href="{% url 'city' %}" class="btn button__outlined destination__button"
-            >Explore City</a
+          <a href="{% url 'city' %}" class="btn button destination__button mt-0"
+            >Explore Cities</a
           >
           <!-- end explore city button -->
         </div>
       </section>
 
-      <!--==================== POPULAR ====================-->
-      <section class="popular section" id="popular">
-        <div class="popular__wrapper">
-          <span class="section__subtitle">Best Choice</span>
-          <h2 class="section__title">Popular Residences<span>.</span></h2>
+      <!--==================== ALL PROPERTIES ====================-->
+      <section class="property property-home section ">
+        <span class="section__subtitle text-center"
+          >A selection of the best Property deals, only available today</span
+        >
+        <h2 class="section__title text-center mb-4">
+          Top Estate Deals <span>.</span>
+        </h2>
 
-          <div class="popular__container swiper">
-            <div class="swiper-wrapper">
-              <!-- start loop from here -->
-              {% for estate in estate %}
-              <a href="{% url 'apartment_detail' estate.pk %}" class="popular__card swiper-slide">
-                <div class="popular__img">
-                  <img src="{{ estate.image.url }}" alt="popular__img" />
-                </div>
+        <div class="property--wrapper">
+          {% if estate %}
+            {% for estate in estate %}          
+            <a href="{% url 'apartment_detail' estate.apartment_name_rooms %}" class="property--wrapper-card">
+              <div class="card__image">
+                <img src="{{ estate.image1.url }}" alt="estate" />
+              </div>
+              <div class="card__content">
 
-                <div class="popular__data">
-                  <h3 class="popular__title">
-                    <span><i class="bx bx-home-circle"></i></span> {{ estate.estate_name }}
-                  </h3>
-                  <p class="popular__description">
-                    {{ estate.location }} in {{ estate.city }}
+                <h4 class="text-capitalize mb-1">
+                    {{ estate.bedroom_type }} bedroom apartment
+                </h4>
+                <span>{{ estate.location }}</span>
+                <span class="card__content--estate">{{ estate.apartment_name_rooms }}</span>
+                <h4>{{ estate.city }}</h4>
+                <p class="price__data text-uppercase mt-1 mb-1">
+                  &#8358;{{ estate.price }}
+                </p>
+              </div>
+              {% if estate.discount != "0" %}
+              <div class="card__discount">
+                <div>
+                  <p class="estate-discount text-uppercase">
+                    up to <span>{{ estate.discount }}%</span>off
                   </p>
+                  <div class="slant"></div>
                 </div>
-              </a>
-              {% endfor %}
-              <!-- end loop from here -->
-
+              </div>
+              {% endif %}
+            </a>
+            {% endfor %}
+          {% else %}
+          <a href="/" class="property--wrapper-card">
+            <div class="card__image">
+              <img src="{% static 'asseting/img/place-1.jpg' %}" alt="estate" />
             </div>
-          </div>
-          <div class="swiper-button-next">
-            <i class="bx bx-chevron-right"></i>
-          </div>
-          <div class="swiper-button-prev">
-            <i class="bx bx-chevron-left"></i>
-          </div>
+            <div class="card__content">
+              <h4 class="text-capitalize mb-1">3 bedroom apartment</h4>
+              <span>24 adeshina street, off ijeshatedo, surulere, Lagos</span>
+              <span class="card__content--estate">Chevy Hills Estate</span>
+              <p class="price__data text-uppercase mt-1 mb-1">
+                &#8358;12k - &#8358;5M /mo
+              </p>
+            </div>
+            <div class="card__discount">
+              <div>
+                <p class="estate-discount text-uppercase">
+                  up to <span>13%</span>off
+                </p>
+                <div class="slant"></div>
+              </div>
+            </div>
+          </a>
+          <a href="/" class="property--wrapper-card">
+            <div class="card__image">
+              <img src="{% static 'asseting/img/place-1.jpg' %}" alt="estate" />
+            </div>
+            <div class="card__content">
+              <h4 class="text-capitalize mb-1">3 bedroom apartment</h4>
+              <span>24 adeshina street, off ijeshatedo, surulere, Lagos</span>
+              <span class="card__content--estate">Chevy Hills Estate</span>
+              <p class="price__data text-uppercase mt-1 mb-1">
+                &#8358;12k - &#8358;5M /mo
+              </p>
+            </div>
+            <div class="card__discount">
+              <div>
+                <p class="estate-discount text-uppercase">
+                  up to <span>13%</span>off
+                </p>
+                <div class="slant"></div>
+              </div>
+            </div>
+          </a>
+          <a href="/" class="property--wrapper-card">
+            <div class="card__image">
+              <img src="{% static 'asseting/img/place-1.jpg' %}" alt="estate" />
+            </div>
+            <div class="card__content">
+              <h4 class="text-capitalize mb-1">3 bedroom apartment</h4>
+              <span>24 adeshina street, off ijeshatedo, surulere, Lagos</span>
+              <span class="card__content--estate">Chevy Hills Estate</span>
+              <p class="price__data text-uppercase mt-1 mb-1">
+                &#8358;12k - &#8358;5M /mo
+              </p>
+            </div>
+            <div class="card__discount">
+              <div>
+                <p class="estate-discount text-uppercase">
+                  up to <span>13%</span>off
+                </p>
+                <div class="slant"></div>
+              </div>
+            </div>
+          </a>
+          <a href="/" class="property--wrapper-card">
+            <div class="card__image">
+              <img src="{% static 'asseting/img/place-1.jpg' %}" alt="estate" />
+            </div>
+            <div class="card__content">
+              <h4 class="text-capitalize mb-1">3 bedroom apartment</h4>
+              <span>24 adeshina street, off ijeshatedo, surulere, Lagos</span>
+              <span class="card__content--estate">Chevy Hills Estate</span>
+              <p class="price__data text-uppercase mt-1 mb-1">
+                &#8358;12k - &#8358;5M /mo
+              </p>
+            </div>
+            <div class="card__discount">
+              <div>
+                <p class="estate-discount text-uppercase">
+                  up to <span>13%</span>off
+                </p>
+                <div class="slant"></div>
+              </div>
+            </div>
+          </a>
+          <a href="/" class="property--wrapper-card">
+            <div class="card__image">
+              <img src="{% static 'asseting/img/place-1.jpg' %}" alt="estate" />
+            </div>
+            <div class="card__content">
+              <h4 class="text-capitalize mb-1">3 bedroom apartment</h4>
+              <span>24 adeshina street, off ijeshatedo, surulere, Lagos</span>
+              <span class="card__content--estate">Chevy Hills Estate</span>
+              <p class="price__data text-uppercase mt-1 mb-1">
+                &#8358;12k - &#8358;5M /mo
+              </p>
+            </div>
+            <div class="card__discount">
+              <div>
+                <p class="estate-discount text-uppercase">
+                  up to <span>13%</span>off
+                </p>
+                <div class="slant"></div>
+              </div>
+            </div>
+          </a>
+          <a href="/" class="property--wrapper-card">
+            <div class="card__image">
+              <img src="{% static 'asseting/img/place-1.jpg' %}" alt="estate" />
+            </div>
+            <div class="card__content">
+              <h4 class="text-capitalize mb-1">3 bedroom apartment</h4>
+              <span>24 adeshina street, off ijeshatedo, surulere, Lagos</span>
+              <span class="card__content--estate">Chevy Hills Estate</span>
+              <p class="price__data text-uppercase mt-1 mb-1">
+                &#8358;12k - &#8358;5M /mo
+              </p>
+            </div>
+            <div class="card__discount">
+              <div>
+                <p class="estate-discount text-uppercase">
+                  up to <span>13%</span>off
+                </p>
+                <div class="slant"></div>
+              </div>
+            </div>
+          </a>
+          <a href="/" class="property--wrapper-card">
+            <div class="card__image">
+              <img src="{% static 'asseting/img/place-1.jpg' %}" alt="estate" />
+            </div>
+            <div class="card__content">
+              <h4 class="text-capitalize mb-1">3 bedroom apartment</h4>
+              <span>24 adeshina street, off ijeshatedo, surulere, Lagos</span>
+              <span class="card__content--estate">Chevy Hills Estate</span>
+              <p class="price__data text-uppercase mt-1 mb-1">
+                &#8358;12k - &#8358;5M /mo
+              </p>
+            </div>
+            <div class="card__discount">
+              <div>
+                <p class="estate-discount text-uppercase">
+                  up to <span>13%</span>off
+                </p>
+                <div class="slant"></div>
+              </div>
+            </div>
+          </a>
+          {% endif %}
+        </div>
+
+        <div class="property__button">
+          <a href="{% url 'property' %}" class="btn text-center"
+            >View All available Properties</a
+          >
         </div>
       </section>
 
       <!--==================== FEATURED ====================-->
-      <section class="featured" id="featured">
+      <section class="featured section" id="featured">
         <div class="featured__wrapper">
-          <span class="section__subtitle"
+          <span class="section__subtitle text-center"
             >Handpicked TopNotch Properties By Our Team.</span
           >
-          <h2 class="section__title">Featured Properties<span>.</span></h2>
+          <h2 class="section__title text-center mb-4">
+            Estate Deal<span>.</span>
+          </h2>
 
           <div class="featured__container swiper">
             <div class="swiper-wrapper">
               <!-- start loop of featured section -->
-              {% for testamonial in testemonial %}
-              <a href="{% url 'apartment_detail' testamonial.pk %}" class="featured__card swiper-slide">
-                <div class="featured__badge">
-                  <span class="letter-spacing-2">featured</span>
-                </div>
-                <div class="featured__img">
-                  <img src="{{ testamonial.image.url }}" alt="featured__img" />
-                </div>
+              {% if room %}
 
-                <div class="featured__data">
-                  <div>
-                    <h3 class="featured__title">{{testamonial.estate_name}}</h3>
-                    <p class="featured__description">
-                      {{ testamonial.location }} in {{ testemonial.city }}
-                    </p>
-                  </div>
-                  <ul class="featured__content">
-                    <li class="featured__content-item">
-                      Bath <span> <i class="bx bx-bath"></i>2</span>
-                    </li>
-                    <li class="featured__content-item">
-                      Bed <span> <i class="bx bx-bed"></i>2</span>
-                    </li>
-                    <li class="featured__content-item">
-                      Rooms <span> <i class="bx bxs-door-open"></i>2</span>
-                    </li>
-                    <li class="featured__content-item">
-                      Area <span> <i class="bx bx-trip"></i>1450</span>
-                    </li>
-                  </ul>
-                </div>
-              </a>
-              {% endfor %}
+                {% for room in room %}
+                  <a href="{% url 'apartment_detail' room.estate_name %}" class="featured__card swiper-slide">
+                    <div class="featured__badge">
+                      <span class="letter-spacing-2">Hot Deals</span>
+                    </div>
+                    <div class="featured__img">
+                      <img src="{{ room.image.url }}" alt="featured__img" />
+                    </div>
+
+                    <div class="featured__data">
+                      <div>
+                        <h3 class="featured__title">{{ room.estate_name }}</h3>
+                        <p class="featured__description">
+                          {{ room.location }}, {{ room.city }}
+                        </p>
+                      </div>
+                    </div>
+                  </a>
+                {% endfor %}
               <!-- end loop for featured section -->
+              {% endif %}
             </div>
           </div>
         </div>
       </section>
 
       <!--==================== EXCLUSIVE PICKS ====================-->
-      <section class="exclusive section" id="exclusive">
+
+      <!-- <section class="exclusive section" id="exclusive">
         <div class="exclusive__wrapper">
           <span class="section__subtitle"
             >Most Exclusive Properties By Our Team.</span
@@ -305,51 +547,119 @@
           <h2 class="section__title">Exclusive Picks<span>.</span></h2>
 
           <div class="exclusive__container">
-
-            {% for apartment in apartment %}
             <article class="exclusive__card">
               <div class="exclusive__img">
-                <img src="{{ apartment.apartment_image.url }}" alt="exclusive__img" />
+                <img src="{% static 'asseting/img/gal-2.jpeg' %}" alt="exclusive__img" />
               </div>
               <div class="exclusive__data">
-                <h3 class="exclusive__title letter-spacing-2"> Exclusive </h3>
-                {% if apartment.location %}
-                <p class="section__subtitle"> {{apartment.location}} </p>
-                {% else %}
-                <p class="section__subtitle"> {{ apartment.location }} </p>
-                {% endif %}
+                <h3 class="exclusive__title letter-spacing-2">Exclusive</h3>
                 <p class="exclusive__description">
-                 {{ apartment.bedroom_type }} bedroom Flat at {{ apartment.estate_name }} in Lagos
+                  Street The Garden City Of Miraflores, Lima - Perú Av. Sol
+                  #9876
                 </p>
-                <a href="{% url 'apartment_detail' apartment.pk %}" class="btn button__outlined">View Now</a>
+                <a href="#" class="btn button__outlined">View Now</a>
               </div>
             </article>
-            {% endfor %}
 
+            <article class="exclusive__card">
+              <div class="exclusive__img">
+                <img src="{% static 'asseting/img/gal-3.jpeg' %}" alt="exclusive__img" />
+              </div>
+              <div class="exclusive__data">
+                <h3 class="exclusive__title letter-spacing-2">Exclusive</h3>
+                <p class="exclusive__description">
+                  Street The Garden City Of Miraflores, Lima - Perú Av. Sol
+                  #9876
+                </p>
+                <a href="#" class="btn button__outlined">View Now</a>
+              </div>
+            </article>
+
+            <article class="exclusive__card">
+              <div class="exclusive__img">
+                <img src="{% static 'asseting/img/gal-5.jpeg' %}" alt="exclusive__img" />
+              </div>
+              <div class="exclusive__data">
+                <h3 class="exclusive__title letter-spacing-2">Exclusive</h3>
+                <p class="exclusive__description">
+                  Street The Garden City Of Miraflores, Lima - Perú Av. Sol
+                  #9876
+                </p>
+                <a href="#" class="btn button__outlined">View Now</a>
+              </div>
+            </article>
+
+            <article class="exclusive__card">
+              <div class="exclusive__img">
+                <img src="{% static 'asseting/img/gal-6.jpeg' %}" alt="exclusive__img" />
+              </div>
+              <div class="exclusive__data">
+                <h3 class="exclusive__title letter-spacing-2">Exclusive</h3>
+                <p class="exclusive__description">
+                  Street The Garden City Of Miraflores, Lima - Perú Av. Sol
+                  #9876
+                </p>
+                <a href="#" class="btn button__outlined">View Now</a>
+              </div>
+            </article>
+            <article class="exclusive__card">
+              <div class="exclusive__img">
+                <img src="{% static 'asseting/img/gal-9.jpeg' %}" alt="exclusive__img" />
+              </div>
+              <div class="exclusive__data">
+                <h3 class="exclusive__title letter-spacing-2">Exclusive</h3>
+                <p class="exclusive__description">
+                  Street The Garden City Of Miraflores, Lima - Perú Av. Sol
+                  #9876
+                </p>
+                <a href="#" class="btn button__outlined">View Now</a>
+              </div>
+            </article>
+            <article class="exclusive__card">
+              <div class="exclusive__img">
+                <img src="{% static 'asseting/img/gal-10.jpeg' %}" alt="exclusive__img" />
+              </div>
+              <div class="exclusive__data">
+                <h3 class="exclusive__title letter-spacing-2">Exclusive</h3>
+                <p class="exclusive__description">
+                  Street The Garden City Of Miraflores, Lima - Perú Av. Sol
+                  #9876
+                </p>
+                <a href="#" class="btn button__outlined">View Now</a>
+              </div>
+            </article>
           </div>
           <a href="#" class="btn button__outlined exclusive__button"
             >See All Exclusive Deals</a
           >
         </div>
-      </section>
+      </section> -->
 
       <!--==================== ABOUT ====================-->
       <section class="about section" id="about">
         <div class="about__img">
           <div class="about__img-1">
-            <img src="{% static 'asset_detail/img/gal-2.jpeg' %}" alt="about" class="about__images" />
+            <img
+              src="{% static 'asseting/img/video-overlay-small.jpg' %}"
+              data-src="{% static 'asseting/img/video-overlay.jpg' %}"
+              alt="about"
+              class="about__images lazy-img"
+            />
           </div>
           <div class="about__img-2">
-            <img src="{% static 'asset_detail/img/gal-3.jpeg' %}" alt="about" class="about__images" />
+            <img
+              src="{% static 'asseting/img/young-millennials-small.jpg' %}"
+              data-src="{% static 'asseting/img/young-millennials.jpg' %}"
+              alt="about"
+              class="about__images lazy-img"
+            />
           </div>
         </div>
         <div class="about__content">
           <span class="section__subtitle letter-spacing-2 text-uppercase"
             >About Us</span
           >
-          <h2 class="section__title about__title">
-            The Most Preferred Real Esate Realtors in West Africa<span>.</span>
-          </h2>
+          <h2 class="section__title about__title">WHO WE ARE<span>.</span></h2>
           <p class="section__description">
             Rent4Less by Alpha Mead is a rental scheme designed to provide a
             flexible and convenient option for middle income Nigerians to rent
@@ -358,36 +668,43 @@
             monthly basis.
           </p>
 
-          <a href="{% url 'about' %}" class="btn button">Learn More</a>
+          <a href="#" class="btn button">Learn More</a>
         </div>
       </section>
 
       <!--==================== JOIN TODAY ====================-->
       <section class="join section" id="join">
         <div class="join__wrapper">
-          <div class="join__content">
-            <span class="section__subtitle">Join Our Community Today.</span>
-            <h2 class="section__title join__title">Join Today<span>.</span></h2>
-            <p class="join__description">
-              Join our growing community. Pay rent monthly.
-            </p>
-            <ul class="join__description">
-              <li><i class="bx bx-cross"></i>No Agency Fee</li>
-              <li><i class="bx bx-cross"></i>No Commission</li>
-              <li><i class="bx bx-cross"></i>Pay & Pack In</li>
-            </ul>
-            <a href="{% url 'register' %}" class="btn button__outlined join__button">
-              Sign Up Now
-            </a>
+          <div class="join__content--wrapper">
+            <div class="join__content">
+              <span class="section__subtitle">Join Our Community Today.</span>
+              <h2 class="section__title join__title">
+                Join Today<span>.</span>
+              </h2>
+              <p class="join__description">
+                Join our growing community. Pay rent monthly.
+              </p>
+              <ul class="join__description">
+                <li><i class="bx bx-cross"></i>No Agency Fee</li>
+                <li><i class="bx bx-cross"></i>No Commission</li>
+                <li><i class="bx bx-cross"></i>Pay & Pack In</li>
+              </ul>
+              <a href="{% url 'register' %}" class="btn join__button"> Sign Up Now </a>
+            </div>
           </div>
           <div class="join__img">
-            <img src="{% static 'asset_detail/img/place-4.jpg' %}" alt="join__img" />
+            <img
+              src="{% static 'asseting/img/place-4-small.jpg' %}"
+              data-src="{% static 'asseting/img/place-4.jpg' %}"
+              class="lazy-img"
+              alt="join__img"
+            />
           </div>
         </div>
       </section>
 
       <!--==================== GALLERY ====================-->
-      <section class="gallery section" id="gallery">
+      <!-- <section class="gallery section" id="gallery">
         <div class="gallery__wrapper">
           <span class="section__subtitle"
             >Most Exclusive Properties that suits your budget.</span
@@ -396,183 +713,184 @@
 
           <div class="gallery__container">
             <a
-              href="{% static 'asset_detail/img/gal-1.jpeg' %}"
+              href="{% static 'asseting/img/gal-1.jpeg' %}"
               data-lightbox="models"
               data-title="Caption1"
               class="gallery__item gallery__item--1"
             >
               <img
-                src="{% static 'asset_detail/img/gal-1.jpeg' %}"
+                src="{% static 'asseting/img/gal-1.jpeg' %}"
                 alt="Gallery image 1"
                 class="gallery__img"
               />
             </a>
             <a
-              href="{% static 'asset_detail/img/gal-2.jpeg' %}"
+              href="{% static 'asseting/img/gal-2.jpeg' %}"
               data-lightbox="models"
               data-title="Caption2"
               class="gallery__item gallery__item--2"
             >
               <img
-                src="{% static 'asset_detail/img/gal-2.jpeg' %}"
+                src="{% static 'asseting/img/gal-2.jpeg' %}"
                 alt="Gallery image 2"
                 class="gallery__img"
               />
             </a>
             <a
-              href="{% static 'asset_detail/img/gal-3.jpeg' %}"
+              href="{% static 'asseting/img/gal-3.jpeg' %}"
               data-lightbox="models"
               data-title="Caption3"
               class="gallery__item gallery__item--3"
             >
               <img
-                src="{% static 'asset_detail/img/gal-3.jpeg' %}"
+                src="{% static 'asseting/img/gal-3.jpeg' %}"
                 alt="Gallery image 3"
                 class="gallery__img"
               />
             </a>
             <a
-              href="{% static 'asset_detail/img/gal-4.jpeg' %}"
+              href="{% static 'asseting/img/gal-4.jpeg' %}"
               data-lightbox="models"
               data-title="Caption4"
               class="gallery__item gallery__item--4"
             >
               <img
-                src="{% static 'asset_detail/img/gal-4.jpeg' %}"
+                src="{% static 'asseting/img/gal-4.jpeg' %}"
                 alt="Gallery image 4"
                 class="gallery__img"
               />
             </a>
             <a
-              href="{% static 'asset_detail/img/gal-5.jpeg' %}"
+              href="{% static 'asseting/img/gal-5.jpeg' %}"
               data-lightbox="models"
               data-title="Caption1"
               class="gallery__item gallery__item--5"
             >
               <img
-                src="{% static 'asset_detail/img/gal-5.jpeg' %}"
+                src="{% static 'asseting/img/gal-5.jpeg' %}"
                 alt="Gallery image 5"
                 class="gallery__img"
               />
             </a>
             <a
-              href="{% static 'asset_detail/img/gal-6.jpeg' %}"
+              href="{% static 'asseting/img/gal-6.jpeg' %}"
               data-lightbox="models"
               data-title="Caption6"
               class="gallery__item gallery__item--6"
             >
               <img
-                src="{% static 'asset_detail/img/gal-6.jpeg' %}"
+                src="{% static 'asseting/img/gal-6.jpeg' %}"
                 alt="Gallery image 6"
                 class="gallery__img"
               />
             </a>
             <a
-              href="{% static 'asset_detail/img/gal-7.jpeg' %}"
+              href="{% static 'asseting/img/gal-7.jpeg' %}"
               data-lightbox="models"
               data-title="Caption7"
               class="gallery__item gallery__item--7"
             >
               <img
-                src="{% static 'asset_detail/img/gal-7.jpeg' %}"
+                src="{% static 'asseting/img/gal-7.jpeg' %}"
                 alt="Gallery image 7"
                 class="gallery__img"
               />
             </a>
             <a
-              href="{% static 'asset_detail/img/gal-8.jpeg' %}"
+              href="{% static 'asseting/img/gal-8.jpeg' %}"
               data-lightbox="models"
               data-title="Caption8"
               class="gallery__item gallery__item--8"
             >
               <img
-                src="{% static 'asset_detail/img/gal-8.jpeg' %}"
+                src="{% static 'asseting/img/gal-8.jpeg' %}"
                 alt="Gallery image 8"
                 class="gallery__img"
               />
             </a>
             <a
-              href="{% static 'asset_detail/img/gal-9.jpeg' %}"
+              href="{% static 'asseting/img/gal-9.jpeg' %}"
               data-lightbox="models"
               data-title="Caption9"
               class="gallery__item gallery__item--9"
             >
               <img
-                src="{% static 'asset_detail/img/gal-9.jpeg' %}"
+                src="{% static 'asseting/img/gal-9.jpeg' %}"
                 alt="Gallery image 9"
                 class="gallery__img"
               />
             </a>
             <a
-              href="{% static 'asset_detail/img/gal-10.jpeg' %}"
+              href="{% static 'asseting/img/gal-10.jpeg' %}"
               data-lightbox="models"
               data-title="Caption10"
               class="gallery__item gallery__item--10"
             >
               <img
-                src="{% static 'asset_detail/img/gal-10.jpeg' %}"
+                src="{% static 'asseting/img/gal-10.jpeg' %}"
                 alt="Gallery image 10"
                 class="gallery__img"
               />
             </a>
             <a
-              href="{% static 'asset_detail/img/gal-11.jpeg' %}"
+              href="{% static 'asseting/img/gal-11.jpeg' %}"
               data-lightbox="models"
               data-title="Caption11"
               class="gallery__item gallery__item--11"
             >
               <img
-                src="{% static 'asset_detail/img/gal-11.jpeg' %}"
+                src="{% static 'asseting/img/gal-11.jpeg' %}"
                 alt="Gallery image 11"
                 class="gallery__img"
               />
             </a>
             <a
-              href="{% static 'asset_detail/img/gal-12.jpeg' %}"
+              href="{% static 'asseting/img/gal-12.jpeg' %}"
               data-lightbox="models"
               data-title="Caption12"
               class="gallery__item gallery__item--12"
             >
               <img
-                src="{% static 'asset_detail/img/gal-12.jpeg' %}"
+                src="{% static 'asseting/img/gal-12.jpeg' %}"
                 alt="Gallery image 12"
                 class="gallery__img"
               />
             </a>
             <a
-              href="{% static 'asset_detail/img/gal-13.jpeg' %}"
+              href="{% static 'asseting/img/gal-13.jpeg' %}"
               data-lightbox="models"
               data-title="Caption13"
               class="gallery__item gallery__item--13"
             >
               <img
-                src="{% static 'asset_detail/img/gal-13.jpeg' %}"
+                src="{% static 'asseting/img/gal-13.jpeg' %}"
                 alt="Gallery image 13"
                 class="gallery__img"
               />
             </a>
             <a
-              href="{% static 'asset_detail/img/gal-14.jpeg' %}"
+              href="{% static 'asseting/img/gal-14.jpeg' %}"
               data-lightbox="models"
               data-title="Caption14"
               class="gallery__item gallery__item--14"
             >
               <img
-                src="{% static 'asset_detail/img/gal-14.jpeg' %}"
+                src="{% static 'asseting/img/gal-14.jpeg' %}"
                 alt="Gallery image 14"
                 class="gallery__img"
               />
             </a>
           </div>
         </div>
-      </section>
+      </section> -->
+
       <!--==================== Faq ====================-->
       <section class="faq section" id="faq">
         <div class="faq__container">
           <div class="faq__images">
             <div class="faq__orbe"></div>
             <div class="faq__img">
-              <img src="{% static 'asset_detail/img/value.jpg' %}" alt="faq__img" />
+              <img src="{% static 'asseting/img/value.jpg' %}" alt="faq__img" />
             </div>
           </div>
           <div class="faq__content">
@@ -675,18 +993,19 @@
       <div class="container">
         <div class="footer__item">
           <ul class="footer__list">
-            <li><a href="{# url 'about' %}"> About </a></li>
+            <li><a href="#"> About </a></li>
             <li><a href="#"> Gallery </a></li>
             <li><a href="#"> Faq </a></li>
-            <li><a href="#"> Our Vison & Mission </a></li>
-            <li><a href="{% url 'contact' %}"> Contact Us </a></li>
-            <li><a href="#"> Terms & Condition </a></li>
+            <li><a href="#"> Contact Us </a></li>
             <li><a href="#"> Property </a></li>
+            <li><a href="#"> Tenancy Terms </a></li>
+            <li><a href="#"> Privacy Terms </a></li>
+            <li><a href="#"> Terms & Condition </a></li>
           </ul>
         </div>
         <div class="footer__item footer__location">
           <div class="footer__location--logo">
-            <img src="{% static 'asset_detail/img/rent4less-logo-small.png' %}" alt="logo" />
+            <img src="{% static 'asseting/img/rent4less-logo-small.png' %}" alt="logo" />
           </div>
           <div class="footer__location--address">
             <i class="bx bxs-map-alt"></i>
@@ -710,8 +1029,8 @@
               Subscribe to our email newsletter to receive updates and news on
               special offers.
             </p>
-            <form class="footer__subscribe--form">
-              <input type="email" placeholder="Email address" />
+            <form class="footer__subscribe--form" id="sub" method="post">
+              <input type="email" placeholder="Email address" id="email" name="email" />
               <button><i class="bx bx-send"></i></button>
             </form>
           </div>
@@ -720,7 +1039,6 @@
       <div class="container">
         <div class="footer__copyright">
           <p>Copyright © 2022 Rent4Less</p>
-          <p> designed by team mastertech </p>
         </div>
       </div>
     </footer>
@@ -730,38 +1048,95 @@
       <i class="bx bx-chevrons-up"></i>
     </a>
 
-    <!--=============== SCROLLREVEAL ===============-->
+    <!-- ================ INLINE SCRIPT =============== -->
+    <script>
+      const spinnerWrapper = document.querySelector(".spinner-wrapper");
+
+      window.addEventListener("DOMContentLoaded", () => {
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        document.body.scrollTop = 0; // For Safari
+        spinnerWrapper.parentElement.removeChild(spinnerWrapper);
+      });
+    </script>
+
+    <!-- =============== SCROLLREVEAL =============== -->
+    <script src="{% static 'asseting/js/scrollreveal.min.js' %}"></script>
+
+    <!--=============== MIXITUP JS ===============-->
+    <script src="{% static 'asseting/js/mixitup.js' %}"></script>
+
+    <!--=============== SWIPER JS ===============-->
+    <script src="{% static 'asseting/js/swiper-bundle.min.js' %}"></script>
+
+    <!--=============== MAIN JS ===============-->
+    <script src="{% static 'asseting/js/main.js' %}"></script>
+
+    <script
+      src="//code.tidio.co/etuszgde4hdtn0rcdfwtkvfkptptgkoq.js"
+      async
+    ></script>
+
     <script src="{% static 'asset_detail/js/scrollreveal.min.js' %}"></script>
 
     <!--=============== SWIPER JS ===============-->
     <script src="{% static 'asset_detail/js/swiper-bundle.min.js' %}"></script>
 
-    <!--=============== lIGHTBOX ===============-->
-    <script src="{% static 'asset_detail/js/lightbox.js' %}"></script>
-
     <!--=============== MAIN JS ===============-->
     <script src="{% static 'asset_detail/js/main.js' %}"></script>
-
-    <!--=============== Ajax JS ===============-->
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 
     <script>
       var availableTags = [];
       $.ajax({
-		type: "GET",
-		url: "{% url 'estate-listing' %}",
-		success: function (response) {
-            startAutocomplete(response);
-		}
-		});
-
-	function startAutocomplete(availableTags)
-	{
-        $( "#search-estate" ).autocomplete({
-          source: availableTags
+        type: "GET",
+        url: "{% url 'estate-listing' %}",
+        success: function (response) {
+                startAutocomplete(response);
+        }
         });
+
+      function startAutocomplete(availableTags)
+      {
+            $( "#search-estate" ).autocomplete({
+              source: availableTags
+            });
      }
   </script>
+
+
+  <script>
+    $("#sub").on('submit', function(e) {
+      e.preventDefault();
+
+      $.ajax({
+        type: "POST",
+        url: "{% url 'email_verify' %}",
+        data: {
+          email: $('#email').val(),
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+          dataType: "json",
+        },
+        success: function(data){
+          alert(data.msg);
+          $('#email').val('');
+        },
+        failure: function(data) {
+          alert(data.msg)
+        }
+      })
+    })
+  </script> 
+
+  <script>
+    setTimeout(function(){
+        if ($('#msg').length > 0) {
+            $('#msg').remove();
+        }
+        
+    }, 2000); 
+</script>
   </body>
+
+  
 </html>

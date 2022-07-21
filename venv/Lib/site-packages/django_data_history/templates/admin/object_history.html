@@ -1,0 +1,69 @@
+{% extends "admin/object_history.html" %}
+{% load i18n admin_urls %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    {{ media.css }}
+{% endblock %}
+
+{% block extrahead %}
+    {{ block.super }}
+    {{ media.js }}
+{% endblock %}
+
+{% block content %}
+{% if using_django_data_history_view %}
+    <div id="content-main">
+        <div class="module">
+            <table id="change-history">
+                <thead>
+                <tr>
+                    <th scope="col" rowspan="2"><nobr>{% trans 'Change Version' %}</nobr></th>
+                    <th scope="col" rowspan="2"><nobr>{% trans 'Request ID' %}</nobr></th>
+                    <th scope="col" rowspan="2"><nobr>{% trans 'Date/time' %}</nobr></th>
+                    <th scope="col" rowspan="2"><nobr>{% trans 'User' %}</nobr></th>
+                    <th scope="col" rowspan="2"><nobr>{% trans 'Action' %}</nobr></th>
+                    <th scope="col" colspan="3"><nobr>{% trans 'Data Changes' %}</nobr></th>
+                </tr>
+                <tr>
+                    <th scope="col"><nobr>{% trans 'Field' %}</nobr></th>
+                    <th scope="col"><nobr>{% trans 'Old Value' %}</nobr></th>
+                    <th scope="col"><nobr>{% trans 'New Value' %}</nobr></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for history in django_data_histories %}
+                    <tr class="{% cycle "row1" "row2" as row_class %}">
+                        <td rowspan="{{history.changes_count}}">{{ history.version }}</td>
+                        <td rowspan="{{history.changes_count}}"><nobr><a href="" class="btn-copy" copy-value="{{ history.request_id|default_if_none:"-" }}" title="{{ history.request_id|default_if_none:"-" }}">{{ history.request_id|default_if_none:"-"|truncatechars:16 }}</a></nobr></td>
+                        <td rowspan="{{history.changes_count}}"><nobr>{{ history.add_time|date:"DATETIME_FORMAT" }}</nobr></td>
+                        <td rowspan="{{history.changes_count}}">
+                            <nobr>
+                            {% if history.username %}
+                            <a class="django-data-history-userinfo btn-copy" href="#" copy-value="{{history.userinfo_text}}" title="{{history.userinfo_display}}">{{ history.username }}</a>
+                            {% else %}
+                            -
+                            {% endif %}
+                            </nobr>
+                        </td>
+                        <td rowspan="{{history.changes_count}}"><nobr>{{ history.get_action_display }}</nobr></td>
+                        <td><nobr>{{history.get_first_changes.field}}</nobr></td>
+                        <td>{{history.get_first_changes.old_value}}</td>
+                        <td>{{history.get_first_changes.new_value}}</td>
+                    </tr>
+                    {% for change_item in history.get_more_changes %}
+                    <tr class="{{row_class}} django-data-history-more-changes">
+                        <td>{{change_item.field}}</td>
+                        <td>{{change_item.old_value}}</td>
+                        <td>{{change_item.new_value}}</td>
+                    </tr>
+                    {% endfor %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% else %}
+    {{block.super}}
+{% endif %}
+{% endblock %}

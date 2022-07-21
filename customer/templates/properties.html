@@ -1,0 +1,196 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--=============== FAVICON ===============-->
+    <link
+      rel="shortcut icon"
+      href="{% static 'asseting/img/favicon.png' %}"
+      type="image/x-icon"
+    />
+    <!--=============== BOXICONS ===============-->
+    <link
+      href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <!--=============== SWIPER CSS ===============-->
+    <link rel="stylesheet" href="{% static 'asseting/css/swiper-bundle.min.css' %}" />
+    <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="{% static 'asseting/css/styleing.css' %}" />
+
+    <title>Rent4Less</title>
+  </head>
+  <body>
+    <!--==================== SPINNER ====================-->
+    <div class="spinner-wrapper">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- ======= TOAST ANIMATION ====== -->
+    <div class="toast">
+      <div class="toast-content">
+        <i class="bx bxs-check-circle check"></i>
+        <div class="message">
+          <span class="message-text text-1"></span>
+        </div>
+      </div>
+      <i class="bx bx-x close"></i>
+
+      <div class="progress"></div>
+    </div>
+    <!-- ======= END TOAST ANIMATION ====== -->
+
+    <!--==================== NAVBAR ====================-->
+      {% include 'primary_navbar.html' %}
+
+    <!--==================== ALL PROPERTIES ====================-->
+    <section class="property section container section mt-5">
+      <span class="section__subtitle"
+        >A selection of the best Estate deals, only available today</span
+      >
+      <h2 class="section__title">All Properties Avaliable <span>.</span></h2>
+
+      {% if room %}
+      <div class="property--wrapper">
+        {% for room in room %}
+        <a href="{% url 'apartment_detail' room.apartment_name_rooms %}" class="property--wrapper-card">
+          <div class="card__image">
+            <img src="{{ room.image1.url }}" alt="estate" />
+          </div>
+          <div class="card__content">
+            <h4 class="text-capitalize mb-1">{{room.bedroom_type}} Bedroom {% if room.apartment_type == "X" %} (Exclusive) Apartment
+              {% else %} (Shared Apartment) {% endif %}
+            </h4> 
+            <span> {{ room.location }} </span>
+            <span class="card__content--estate"> {{ room.apartment_name_rooms }}</span>
+              <span>  {{ room.city }} </span>
+            <p class="price__data text-uppercase mt-1 mb-1">
+              &#8358;{{ room.price }}
+            </p>
+          </div>
+           {% if room.discount != "0" %}
+            <div class="card__discount">
+              <div>
+                <p class="estate-discount text-uppercase">
+                  up to <span>{{room.discount}}%</span>off
+                </p>
+                <div class="slant"></div>
+              </div>
+            </div>
+          {% endif %}
+        </a>
+        {% endfor %}
+        
+        {% else %}
+        <a href="/" class="property--wrapper-card">
+          <div class="card__image">
+            <img src="{% static 'asseting/img/place-1.jpg' %}" alt="estate" />
+          </div>
+          <div class="card__content">
+            <h4 class="text-capitalize mb-1">3 bedroom apartment</h4>
+            <span>24 adeshina street, off ijeshatedo, surulere, Lagos</span>
+            <span class="card__content--estate">Chevy Hills Estate</span>
+            <p class="price__data text-uppercase mt-1 mb-1">
+              &#8358;12k - &#8358;5M /mo
+            </p>
+          </div>
+          <div class="card__discount">
+            <div>
+              <p class="estate-discount text-uppercase">
+                up to <span>13%</span>off
+              </p>
+              <div class="slant"></div>
+            </div>
+          </div>
+        </a>
+        {% endif %}
+      </div>
+    </section>
+
+    <!--==================== FOOTER ====================-->
+    <footer class="footer section">
+      <div class="container">
+        <div class="footer__item">
+          <ul class="footer__list">
+            <li><a href="#"> About </a></li>
+            <li><a href="#"> Gallery </a></li>
+            <li><a href="#"> Faq </a></li>
+            <li><a href="#"> Contact Us </a></li>
+            <li><a href="#"> Property </a></li>
+            <li><a href="#"> Tenancy Terms </a></li>
+            <li><a href="#"> Privacy Terms </a></li>
+            <li><a href="#"> Terms & Condition </a></li>
+          </ul>
+        </div>
+        <div class="footer__item footer__location">
+          <div class="footer__location--logo">
+            <img src="{% static 'asseting/img/rent4less-logo-small.png' %}" alt="logo" />
+          </div>
+          <div class="footer__location--address">
+            <i class="bx bxs-map-alt"></i>
+            <span>6 Mobolaji Johnson avenue, Ikoyi , Lagos. Nigeria</span>
+          </div>
+          <div class="footer__location--address">
+            <i class="bx bx-phone"></i>
+            <span>+234 90 8456 3508, +234 81 2182 5297</span>
+          </div>
+          <div class="footer__location--address">
+            <i class="bx bxs-map-alt"></i>
+            <span>sales@rent4less.com, reservation@rent4less.com</span>
+          </div>
+        </div>
+        <div class="footer__item">
+          <div class="footer__subscribe">
+            <span class="section__subtitle letter-spacing-3 text-uppercase"
+              >Newsletter</span
+            >
+            <p class="footer__subscribe--description">
+              Subscribe to our email newsletter to receive updates and news on
+              special offers.
+            </p>
+            <form class="footer__subscribe--form">
+              <input type="email" placeholder="Email address" />
+              <button><i class="bx bx-send"></i></button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="footer__copyright">
+          <p>Copyright © 2022 Rent4Less</p>
+        </div>
+      </div>
+    </footer>
+
+    <!--========== SCROLL UP ==========-->
+    <a href="#" class="scrollup" id="scroll-up">
+      <i class="bx bx-chevrons-up"></i>
+    </a>
+
+    <script
+      src="//code.tidio.co/etuszgde4hdtn0rcdfwtkvfkptptgkoq.js"
+      async
+    ></script>
+
+    <!-- ================ INLINE SCRIPT =============== -->
+    <script>
+      const spinnerWrapper = document.querySelector(".spinner-wrapper");
+
+      window.addEventListener("DOMContentLoaded", () => {
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        document.body.scrollTop = 0; // For Safari
+        spinnerWrapper.parentElement.removeChild(spinnerWrapper);
+      });
+    </script>
+
+    <!--=============== MAIN js ===============-->
+    <script src="{% static 'asseting/js/navigation.js' %}"></script>
+
+    <script
+      src="//code.tidio.co/gobd0ylyixf3p6qfl2mkxjksrybphifl.js' %}"
+      async
+    ></script>
+  </body>
+</html>

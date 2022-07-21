@@ -1,0 +1,168 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--=============== FAVICON ===============-->
+    <link
+      rel="shortcut icon"
+      href="{% static 'asseting/img/favicon.png' %}' %}"
+      type="image/x-icon"
+    />
+
+    <!--=============== BOXICONS ===============-->
+    <link
+      href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+
+    <!--=============== SWIPER CSS ===============-->
+    <link rel="stylesheet" href="{% static 'asseting/css/swiper-bundle.min.css' %}" />
+
+    <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="{% static 'asseting/css/styleing.css' %}" />
+
+    <title>Rent4Less | Sign Up</title>
+  </head>
+  <body>
+    <!--==================== SPINNER ====================-->
+    <div class="spinner-wrapper">
+      <div class="spinner"></div>
+    </div>
+
+    <a href="{% url 'home' %}" class="mt-2 ml-2 checkout__button">
+      <i class="bx bx-chevron-left"></i> <span>Go to Home</span>
+    </a>
+
+    <!--==================== LOGIN CONTAINER ====================-->
+    {% if messages %}
+            {% for message in messages %}
+                <div class="text-center alert alert-{{ message.tags }}" id="msg" style="font-size: 20px">
+                    {{ message|safe|title }}
+                </div>
+            {% endfor %}
+    {% endif %}
+    <div class="signup">
+      <div class="signup__form signup__form--container">
+        <div class="signup__form--logo">
+          <a href="#" class="nav__logo">
+            <img
+              src="{% static 'asseting/img/rent4less-logo-small.png' %}"
+              alt="rent4less-logo-small"
+            />
+          </a>
+        </div>
+        <div class="signup__form--message">
+          <h2>Where the Magic Begins</h2>
+          <p>Sign up for flexible stress-free living today .</p>
+        </div>
+        <div class="signup__form--wrapper">
+          <form
+            action=""
+            autocomplete="off"
+            class="process__form signup__form--content"
+            method="post"
+          >
+          {% csrf_token %}
+            <div class="process__form-container">
+              <fieldset class="process__form-div">
+                <input
+                  type="text"
+                  name="first-name"
+                  id="firstName"
+                  class="process__form-input"
+                  placeholder=" "
+                  required
+                />
+                <label for="firstName" class="process__form-label"
+                  >First Name</label
+                >
+              </fieldset>
+              <fieldset class="process__form-div">
+                <input
+                  type="text"
+                  name="last-name"
+                  id="lastName"
+                  class="process__form-input"
+                  placeholder=" "
+                  required
+                />
+                <label for="lastName" class="process__form-label"
+                  >Last Name</label
+                >
+              </fieldset>
+            </div>
+            <div class="process__form-container">
+              <fieldset class="process__form-div">
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  class="process__form-input"
+                  placeholder=" "
+                  required
+                />
+                <label for="email" class="process__form-label"
+                  >Email Address</label
+                >
+              </fieldset>
+            </div>
+            <fieldset class="process__form-div">
+              <input
+                type="text"
+                name="username"
+                id="username"
+                class="process__form-input"
+                placeholder=" "
+                required
+              />
+              <label for="username" class="process__form-label">Username</label>
+            </fieldset>
+            <div class="process__form-container">
+              <fieldset class="process__form-div">
+                <input
+                  type="password"
+                  name="password"
+                  id="password"
+                  class="process__form-input password"
+                  placeholder=" "
+                  required
+                />
+                <label for="password" class="process__form-label"
+                  >Password</label
+                >
+                <i class="bx bxs-low-vision password-show"></i>
+              </fieldset>
+            </div>
+            <button type="submit" class="button letter-spacing-1">
+              Sign Up
+            </button>
+            <div class="signup__form--wrapper-new">
+              <p>
+                Already have an account?
+                <a href="{% url 'login' %}">Sign in here</a>
+                .
+              </p>
+            </div>
+          </form>
+          <span class="login__form--copy">&copy; 2022 Rent4Less</span>
+        </div>
+      </div>
+    </div>
+
+    <!--================ INLINE SCRIPT ===============-->
+    <script>
+      const spinnerWrapper = document.querySelector(".spinner-wrapper");
+
+      window.addEventListener("DOMContentLoaded", () => {
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        document.body.scrollTop = 0; // For Safari
+        spinnerWrapper.parentElement.removeChild(spinnerWrapper);
+      });
+    </script>
+
+    <script src="{% static 'asseting/js/signup.js' %}"></script>
+  </body>
+</html>

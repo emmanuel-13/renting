@@ -1,4 +1,7 @@
+from distutils import extension
 from django import template
+from django.template.defaultfilters import stringfilter, stringformat
+import markdown as md
 
 register = template.Library()
 
@@ -14,3 +17,10 @@ def my_url(value, field_name, urlencode=None):
         url = '{}&{}'.format(url, encoded_querystring)
         
     return url
+
+
+@register.filter()
+@stringfilter
+def markdown(value):
+    return md.markdown(value, extensions=['markdown.extensions.fenced_code'])
+

@@ -1,0 +1,13 @@
+{% autoescape off %}
+Hello {{ title }} {{ username }},
+
+Your Profile has been successfully updated 
+
+Remember to always reach out to us when you have any issues at all for further discussion.
+
+thank you.?
+
+Sincerely,
+The Rent4Less Team
+
+{% endautoescape %}

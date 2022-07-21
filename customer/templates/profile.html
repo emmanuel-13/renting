@@ -1,66 +1,57 @@
 {% extends 'Dashboard/base.html' %}
-{% load bootstrap3 %}
+{% load crispy_forms_tags static bootstrap3 %}
+
+
 {% block content %}
-<div class="content-section">
-    {% if messages %}
-        {% for message in messages %}
-            <div class="text-center alert alert-{{ message.tags }}" id="msg">
-                {{ message|safe }}
+    <div class="row">
+        <div class="col-sm-4"> </div>
+
+        <div class="col-sm-4" style="margin-top: 40px;"> 
+            <div class="card mt-2">
+            {% if pro %}
+                <a href="{% url 'user_form' %}" class="mt-4 ml-2">
+                    <button class="btn btn-info">  Back </button>
+                    
+                </a>
+               <h3 class="card-title text-center pt-4"> {{ pro.title }} {{ pro.user.get_full_name }}</h3>
+                <div class="card-body text-center">
+                <p><b> Email Address</b>: {{ pro.user.email|capfirst }} </p>
+                <p><img src="{{ pro.image.url }}" alt="more" class="img-profile rounded-circle" width="200px" height="200px"></p>
+                {% comment %} <p><b> Date OF Birth</b>: {{ pro.date_of_birth|title }} </p> {% endcomment %}
+                <p><b> Phone Number</b>: {{ pro.phone_no }} </p>
+                </div>
+            {% elif landlord  %}
+                <a href="{% url 'user_form' %}" class="mt-4 ml-2">
+                    <button class="btn btn-info">  Back </button>
+                    
+                </a>
+                <h3 class="card-title text-center pt-4"> {{ landlord.first_name }}</h3>
+                <div class="card-body text-center">
+                    <p><b> Email Address</b>: {{ landlord.email|capfirst }} </p>
+                    <p><img src="{{ landlord.image.url }}" alt="more" class="img-profile rounded-circle" width="200px" height="200px"></p>
+                    <p><b>  Address </b>: {{ landlord.address|title }} </p>
+                    <p><b> Phone Number </b>: {{ landlord.phone_no }} </p>
+                    <p><b> Description of Property </b>: {{ landlord.description_of_property }} </p>
+                    <p><b> Address OF Property </b>: {{ landlord.full_address_of_property }} </p>
+                </div>
+            {% elif book %}
+            <a href="{% url 'user_booking' %}" class="mt-4 ml-2">
+                <button class="btn btn-info">  Back </button>
+                
+            </a>
+            <h3 class="card-title text-center pt-4"> {{ bookings.payment.username }}</h3>
+            <div class="card-body text-center">
+                <p><b> Email Address</b>: {{ book.payment.email|capfirst }} </p>
+                <p><img src="{{ book.room.image1.url }}" alt="more" class="img-profile rounded-circle" width="200px" height="200px"></p>
+                <p><b>  Room </b>: {{ book.room.unique_room_id|title }} </p>
+                <p><b> Phone Number </b>: {{ book.payment.phone_no }} </p>
+                <p><b> Description of Property </b>: {{ landlord.description_of_property }} </p>
+                <p><b> Address OF Property </b>: {{ landlord.full_address_of_property }} </p>
             </div>
-        {% endfor %}
- {% endif %}
- <div class="row">
-        
-        <div class="col-sm-6">
-            <form action="" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                 <fieldset>
-                        {{ u_form.non_field_errors }}
-                        {% for field in u_form %}
-                        <div class="row">
-                            <div class="col-md-2">{% bootstrap_label field.label %}</div>
-                            <div class="col-md-6">{% bootstrap_field field show_label=False %}</div>
-                        </div>
-                        {% endfor %}
-                </fieldset>
-
-                <fieldset>
-                    {{ p_form.non_field_errors }}
-                    {% for field in p_form %}
-                    <div class="row">
-                        <div class="col-md-2">{% bootstrap_label field.label %}</div>
-                        <div class="col-md-6">{% bootstrap_field field show_label=False %}</div>
-                    </div>
-                    {% endfor %}
-            </fieldset>
-
-                <div class="form-group">
-                    <button class="btn btn-outline-info" type="submit">
-                        Update
-                    </button>
-                </div>
-            </form>
-        </div>
-        <div class="col-sm-2"></div>
-        <div class="col-sm-4">
-            <div class="media">
-                <img src="{{user.profile.image.url}}" width="170px" alt="" srcset="" class="rounded-circle account-img">
-                <div class="media-body ml-4 mt-4">
-                    <h2 class="account-heading">
-                        {{user.username|capfirst}}
-                    </h2>
-                    <p class="text-secondary">{{ user.email|capfirst }} </p>
-                </div>
+            {% else %}
+                no profile created
+            {% endif %}
             </div>
         </div>
-    </div>
-</div>
-<script>
-    setTimeout(function(){
-        if ($('#msg').length > 0) {
-            $('#msg').remove();
-        }
-        
-    }, 2000);
-</script>
-{% endblock content %}
+        <div class="col-sm-4"> </div>
+{% endblock %}

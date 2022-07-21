@@ -1,4 +1,4 @@
-{% extends "Dashboard/base.html" %} {% load static %} {% block content %}
+{% extends "Dashboard/base.html" %} {% load static custom_tags %} {% block content %}
 <!-- Page Heading -->
 
 <!-- Content Row -->
@@ -31,7 +31,7 @@
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                            Active Users
+                            Active
                         </div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">
                             {{user_name}}
@@ -52,17 +52,17 @@
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                            Order
+                            Booking
                         </div>
                         <div class="row no-gutters align-items-center">
                             <div class="col-auto">
                                 <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
-                                    0%
+                                  {{payment}}
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="progress progress-sm mr-2">
-                                    <div class="progress-bar bg-info" role="progressbar" style="width: 10%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar bg-info" role="progressbar" style="width: {{payment}}" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                             </div>
                         </div>
@@ -85,7 +85,7 @@
                             Pending Requests
                         </div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">
-                            0
+                          {{pending}}
                         </div>
                     </div>
                     <div class="col-auto">
@@ -95,8 +95,61 @@
             </div>
         </div>
     </div>
+
+
+    
 </div>
 
+
+<div class="row">
+  <!-- Earnings (Monthly) Card Example -->
+  <div class="col-xl-6 col-md-6 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <a href="{% url 'room_list' %}">
+          <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                          Available Rooms
+                      </div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">
+                          {{room_available}}
+                      </div>
+                  </div>
+                  <div class="col-auto">
+                      <i class="fas fa-bed fa-2x text-gray-300"></i>
+                  </div>
+              </div>
+          </div>
+        </a>
+      </div>
+  </div>
+
+  <!-- Earnings (Monthly) Card Example -->
+  <div class="col-xl-6 col-md-6 mb-4">
+      <div class="card border-left-success shadow h-100 py-2">
+        <a href="{% url 'room_list' %}">
+          <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                          Occupied Rooms
+                      </div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">
+                        {{room_occupied}}
+                      </div>
+                  </div>
+                  <div class="col-auto">
+                      <i class="fas fa-bed fa-2x text-gray-300"></i>
+                  </div>
+              </div>
+          </div>
+        </a>
+      </div>
+  </div>
+
+  
+</div>
 <!-- Content Row -->
 
 <div class="row">
@@ -106,7 +159,7 @@
             <!-- Card Header - Dropdown -->
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 class="m-0 font-weight-bold text-primary">
-                    Earnings Overview
+                    Booking Price Overview
                 </h6>
                 <div class="dropdown no-arrow">
                     <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -139,7 +192,7 @@
                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
                   >
                     <h6 class="m-0 font-weight-bold text-primary">
-                      Revenue Sources
+                      Estate Chart
                     </h6>
                     <div class="dropdown no-arrow">
                       <a
@@ -171,15 +224,11 @@
                       <canvas id="myPieChart"></canvas>
                     </div>
                     <div class="mt-4 text-center small">
+                      {% for estate in estate_name %}
                       <span class="mr-2">
-                        <i class="fas fa-circle text-primary"></i> Direct
+                        <i class="fas fa-circle text-primary"></i> {{estate}}
                       </span>
-                      <span class="mr-2">
-                        <i class="fas fa-circle text-success"></i> Social
-                      </span>
-                      <span class="mr-2">
-                        <i class="fas fa-circle text-info"></i> Referral
-                      </span>
+                      {% endfor %}
                     </div>
                   </div>
                 </div>
@@ -193,11 +242,11 @@
                 <!-- Illustrations -->
                 <div class="card shadow mb-4">
                   <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">
+                    <h6 class="m-0 font-weight-bold text-success">
                       Bookings
                     </h6>
                   </div>
-                  <div class="card-body">
+                  <div class="card-body overflow-auto">
                     {% if booking %}
                     <table class="table">
                       <thead>
@@ -206,6 +255,8 @@
                           <th> Rooms </th>
                           <th> Check IN</th>
                           <th> Status </th>
+                          <th> Amount Paid </th>
+                          <th> Payment Duration </th>
                           <th> Check OUT</th>
                         </tr>
                       </thead>
@@ -213,11 +264,17 @@
                       <tbody>
                         {% for booking in booking %}
                         <tr>
-                            <td> {{booking.guest }}</td>
+                            <td> {{ booking.payment.username|capfirst }}</td>
                             <td> {{ booking.room.room_id }}</td>
-                            <td> {{ booking.check_in}}</td>
-                            <td> {% if booking.status == False %} Incompleted {% else %} Completed {% endif %}</td>
-                            <td> {{ booking.check_out}}</td>
+                            <td> {{ booking.book_date }}</td>
+                            {% if booking.checkout|is_old_date %}
+                              <td> Running </td>
+                            {% else %}
+                              <td> Expired </td>
+                            {% endif %}
+                            <td> {{ booking.prices }}</td>
+                            <td> {{ booking.payment.payment_type }} Month </td>
+                            <td> {{ booking.checkout }}</td>
                         </tr>
                         {% endfor %}
                         
@@ -225,20 +282,48 @@
                     </table>
                     {% else %}
                     <p>
-                      Five recent booking would appear here when the time is right for reference purposes and so.
+                      Five recent booking would appear here when booking are availiable for reference purposes and so.
                     </p>
                     {% endif %}
                   </div>
                 </div>
 
                 <!-- Approach -->
+                {% if user.is_superuser or user.is_staff %}
                 <div class="card shadow mb-4">
                   <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">
-                      Development Messages
+                      Mail Messages
                     </h6>
                   </div>
                   <div class="card-body">
+                    {% if mail %}
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <td> Title </td>
+                          <td> Date Created </td>
+                          <td> Mail Today </td>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        {% for mails in mail %}
+                        <tr>
+                          <td> {{ mails.title }} </td>
+                          <td> {{ mails.date_created }} </td>
+                          <td> 
+                            {% if mails.date_created|is_old_date %}
+                              <span color="green"> New Mail </span>
+                            {% else %}
+                            <span color="red"> Old Mail </span>
+                            {% endif %}
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                    {% else %}
                     <p>
                       empty content for now, would be filled up once site is in production mode thanks
                       please remember to check back later.
@@ -248,9 +333,125 @@
                       with the site thanks
                       classes.
                     </p>
+                    {% endif %}
                   </div>
                 </div>
+                {% endif %}
               </div>
             </div>
           </div>
+
+          <!-- Page level plugins -->
+        <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+        <!-- Page level custom scripts -->
+        <script src="{% static 'js/demo/chart-bar-demo.js' %}"></script>
+        <script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
+
+        <script language="javascript"> 
+          var ctx = document.getElementById("myAreaChart");
+          var myLineChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: {% if room_name %} {{ room_name|safe }} {% else %} ['new', 'semi', 'more', 'time'] {% endif %},
+              datasets: [{
+                label: "Price",
+                lineTension: 0.3,
+                backgroundColor: "rgba(78, 223, 223, 0.5)",
+                borderColor: "rgba(78, 115, 223, 1)",
+                pointRadius: 3,
+                pointBackgroundColor: "rgba(78, 115, 223, 1)",
+                pointBorderColor: "rgba(78, 115, 223, 1)",
+                pointHoverRadius: 3,
+                pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+                pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+                pointHitRadius: 10,
+                pointBorderWidth: 2,
+                data: {% if price %} {{ price|safe }} {% else %} [10000,30000,40000,50000, 70000] {% endif %},
+              }],
+            },
+            options: {
+              maintainAspectRatio: false,
+              layout: {
+                padding: {
+                  left: 10,
+                  right: 25,
+                  top: 25,
+                  bottom: 0
+                }
+              },
+              scales: {
+                xAxes: [{
+                  time: {
+                    unit: 'room'
+                  },
+                  gridLines: {
+                    display: false,
+                    drawBorder: false
+                  },
+                  ticks: {
+                    maxTicksLimit: 7
+                  }
+                }],
+                yAxes: [{
+                  ticks: {
+                    maxTicksLimit: 5,
+                    padding: 10,
+                    // Include a naira sign in the ticks
+                    callback: function(value, index, values) {
+                      return '#' + number_format(value);
+                    }
+                  },
+                  gridLines: {
+                    color: "rgb(234, 236, 244)",
+                    zeroLineColor: "rgb(234, 236, 244)",
+                    drawBorder: false,
+                    borderDash: [2],
+                    zeroLineBorderDash: [2]
+                  }
+                }],
+              },
+              legend: {
+                display: true
+              },
+            }
+          });
+
+        </script>
+
+        <script language="javascript">
+          // Pie Chart Example
+          var ctx = document.getElementById("myPieChart");
+          var myPieChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+              labels: {% if estate %} {{ estate|safe }} {% else %} ['alpha-mead'] {% endif %},
+              datasets: [{
+                data: {% if city %} {{city|safe}} {% else %} ['lagos'] {% endif %},
+                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
+                hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
+                hoverBorderColor: "rgba(234, 236, 244, 1)",
+              }],
+            },
+            options: {
+              maintainAspectRatio: false,
+              tooltips: {
+                backgroundColor: "rgb(255,255,255)",
+                bodyFontColor: "#858796",
+                borderColor: '#dddfeb',
+                borderWidth: 1,
+                xPadding: 15,
+                yPadding: 15,
+                displayColors: false,
+                caretPadding: 10,
+              },
+              legend: {
+                display: false
+              },
+              cutoutPercentage: 80,
+            },
+          });
+
+        </script>
 {% endblock %}

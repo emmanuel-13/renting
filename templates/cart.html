@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--=============== FAVICON ===============-->
+    <link
+      rel="shortcut icon"
+      href="asset/img/favicon.png"
+      type="image/x-icon"
+    />
+    <!--=============== BOXICONS ===============-->
+    <link
+      href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+
+    <!--=============== SWIPER CSS ===============-->
+    <link rel="stylesheet" href="asset/css/swiper-bundle.min.css" />
+
+    <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="asset/css/styleing.css" />
+
+    <!-- Calendly badge widget begin -->
+    <link
+      href="https://assets.calendly.com/assets/external/widget.css"
+      rel="stylesheet"
+    />
+    <script
+      src="https://assets.calendly.com/assets/external/widget.js"
+      type="text/javascript"
+      async
+    ></script>
+    <script type="text/javascript">
+      window.onload = function () {
+        Calendly.initBadgeWidget({
+          url: "https://calendly.com/jhaydrille75/schedule-an-inspection?hide_gdpr_banner=1&primary_color=7ed56f",
+          text: "Schedule Inspection",
+          color: "#7ed56f",
+          textColor: "#ffffff",
+          branding: false,
+        });
+      };
+    </script>
+    <!-- Calendly badge widget end -->
+
+    <title>Rent4Less</title>
+  </head>
+  <body>
+    <!--==================== SPINNER ====================-->
+    <div class="spinner-wrapper">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- ======= TOAST ANIMATION ====== -->
+    <div class="toast">
+      <div class="toast-content">
+        <i class="bx bxs-check-circle check"></i>
+        <div class="message">
+          <span class="message-text text-1"></span>
+        </div>
+      </div>
+      <i class="bx bx-x close"></i>
+
+      <div class="progress"></div>
+    </div>
+    <!-- ======= END TOAST ANIMATION ====== -->
+
+    <!-- =============== SECONDARY NAV ============= -->
+    <div class="secondary__nav" id="navbar">
+      <nav class="nav secondary__navigation">
+        <a href="/" class="secondary__nav--logo">
+          <img
+            src="asset/img/rent4less-logo-small.png"
+            alt="rent4less-logo-small"
+          />
+        </a>
+
+        <div class="nav__menu" id="nav-menu">
+          <div class="nav__menu--lists">
+            <ul class="nav__list">
+              <li class="nav__item">
+                <a href="/index.html" class="nav__link">
+                  <i class="bx bx-home"></i>
+                  <span>Home</span>
+                </a>
+              </li>
+
+              <li class="nav__item">
+                <a href="/index.html" class="nav__link">
+                  <i class="bx bxs-dashboard"></i>
+                  <span>Dashboard</span>
+                </a>
+              </li>
+
+              <li class="nav__item">
+                <a href="/cart.html" class="nav__link">
+                  <i class="bx bxs-cart"></i>
+                  <span>Cart</span>
+                  <span class="ml-auto cart-quantity">2</span>
+                </a>
+              </li>
+
+              <li class="nav__item">
+                <a href="#about" class="nav__link">
+                  <i class="bx bx-message-square-dots"></i>
+                  <span>About</span>
+                </a>
+              </li>
+
+              <li class="nav__item">
+                <a href="/" class="nav__link">
+                  <i class="bx bxs-news"></i>
+                  <span>Blogs</span>
+                </a>
+              </li>
+
+              <li class="nav__item">
+                <a href="#contact" class="nav__link">
+                  <i class="bx bxs-contact"></i>
+                  <span>Contact</span>
+                </a>
+              </li>
+            </ul>
+
+            <ul class="nav__list nav__list--active">
+              <i class="bx bxs-bell bx-tada"></i>
+              <li class="nav__item">
+                <a href="/login.html" class="nav__link">
+                  <i class="bx bxs-user-pin"></i>
+                  <span>Become a tenant</span>
+                </a>
+              </li>
+              <li class="nav__item">
+                <a href="/login.html" class="nav__link">
+                  <i class="bx bx-building-house"></i>
+                  <span>List Your Property</span>
+                </a>
+              </li>
+            </ul>
+
+            <div class="nav__theme" id="nav__theme">
+              <a href="#" class="user-profile">
+                <img
+                  src="asset/img/realtor-1.jpeg"
+                  class="user-profile-img"
+                  alt="user"
+                />
+                <div class="user-profile-title">
+                  <h5>welcome back!</h5>
+                  <p>Johnny</p>
+                </div>
+              </a>
+              <i class="bx bx-moon change-theme" id="theme-button"></i>
+            </div>
+
+            <i class="bx bx-x nav__close" id="nav-close"></i>
+          </div>
+        </div>
+
+        <ul class="secondary__nav--lists">
+          <li class="secondary__nav--list dropdown">
+            <div>
+              <div class="secondary__nav--list contact">
+                <div class="nav__image">
+                  <img src="asset/img/contact-min.jpg" alt="" />
+                  <div>
+                    <span>you can call us for information</span>
+                    <p>+234 8121825297</p>
+                  </div>
+                </div>
+                <div class="dropdown">
+                  <ul class="secondary__nav--lists dropdown__lists">
+                    <li class="secondary__nav--list">
+                      <a
+                        href="https://wa.me/message/DPX4GUMWGJ7SC1"
+                        class="secondary__nav--link dropdown__item"
+                        ><span class="whatsapp">
+                          <i class="bx bxl-whatsapp"></i></span
+                        >+234 8121825297</a
+                      >
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="secondary__nav--list">
+            <a href="cart.html">
+              <span class="secondary__nav--icon">
+                <i class="bx bx-cart cart"></i>
+                <span>2</span>
+              </span>
+            </a>
+          </li>
+
+          <li class="secondary__nav--list account">
+            <span class="secondary__nav--icon"
+              ><i class="bx bxs-user-circle"></i
+            ></span>
+            <button>
+              <!-- <span>Jhaydrille7575@gmail.com</span> -->
+              <span> Account<i class="bx bx-chevron-down"></i></span>
+            </button>
+            <div class="dropdown">
+              <!-- <ul class="secondary__nav--lists dropdown__lists">
+                <li>sign in to access exclusive members deals</li>
+                <li class="secondary__nav--list">
+                  <a href="#" class="secondary__nav--link btn button"
+                    >Sign In</a
+                  >
+                </li>
+                <li>New Members? <a href="#">Sign Up</a></li>
+              </ul> -->
+              <ul class="secondary__nav--lists dropdown__lists">
+                <li>Are you sure you want to leave now?</li>
+                <li class="secondary__nav--list">
+                  <a href="#" class="secondary__nav--link btn button"
+                    >Sign Out</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </li>
+
+          <div class="sign">
+            <i class="bx bxs-widget color-light-black" id="nav-toggle"></i>
+          </div>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="main main__cart">
+      <div class="section cart__header">
+        <!-- this is if you have any reservation in your cart -->
+        <div class="cart__header-content">
+          <h2>Review Reservation</h2>
+          <p>You are about to reserve 4 item(s)</p>
+        </div>
+
+        <!-- this is if you dont have any reservation in your cart -->
+        <!-- <div class="cart__header-content">
+          <h2>Your Reservations</h2>
+          <p>you have no items in your cart</p>
+        </div> -->
+      </div>
+
+      <div class="main__wrapper">
+        <div class="cart__main">
+          <!-- if there are no items in cart! -->
+          <!-- <div class="search-widget">
+            <div class="search-widget-header">
+              <img src="/asset/img/empty-cart.png" alt="empty-cart" />
+              <div class="search-widget-header-content">
+                <h3>Your shopping cart is currently empty.</h3>
+                <p>
+                  Time to go booking for low-priced houses and properties at
+                  Rent4less
+                </p>
+              </div>
+            </div>
+            <form action="" class="search-widget-form">
+              <input
+                type="search"
+                name="location"
+                placeholder="find property in your prefferred location"
+                required
+              />
+              <button class="search-widget-form-submit" type="button">
+                Search
+              </button>
+            </form>
+          </div> -->
+
+          <!-- if there are items in cart! -->
+          <div class="cart__container">
+            <div class="cart__content">
+              <div class="cart__images">
+                <img src="asset/img/place-1.jpg" alt="cart image" />
+              </div>
+              <div class="cart__description">
+                <h3 class="cart__apartment-type text-capitalize">
+                  3 bedroom Apartment
+                </h3>
+                <h4
+                  class="cart__apartment-estate text-capitalize letter-spacing-1"
+                >
+                  Krusela Estate
+                </h4>
+                <h4
+                  class="cart__apartment-location letter-spacing-2 text-capitalize"
+                >
+                  Ikoyi
+                </h4>
+              </div>
+            </div>
+            <div class="cart__mode">
+              <div class="cart__select">
+                <select name="format" class="decorated" id="format">
+                  <option disabled>prefferred apartment mode</option>
+                  <option value="pdf">Shared</option>
+                  <option value="txt">Exclusive</option>
+                </select>
+              </div>
+            </div>
+            <div class="cart__price">
+              <span>
+                &#8358;
+                <span>25,000</span>
+              </span>
+              <p class="cart__price-actual">&#8358;15,750</p>
+            </div>
+            <i class="bx bx-x"></i>
+          </div>
+          <div class="cart__container">
+            <div class="cart__content">
+              <div class="cart__images">
+                <img src="asset/img/place-1.jpg" alt="cart image" />
+              </div>
+              <div class="cart__description">
+                <h3 class="cart__apartment-type text-capitalize">
+                  2 bedroom Apartment
+                </h3>
+                <h4
+                  class="cart__apartment-estate text-capitalize letter-spacing-1"
+                >
+                  Krusela Estate
+                </h4>
+                <h4
+                  class="cart__apartment-location letter-spacing-2 text-capitalize"
+                >
+                  Ikoyi
+                </h4>
+              </div>
+            </div>
+            <div class="cart__mode">
+              <div class="cart__select">
+                <select name="format" class="decorated" id="format">
+                  <option disabled>prefferred apartment mode</option>
+                  <option value="pdf">Shared</option>
+                  <option value="txt">Exclusive</option>
+                </select>
+              </div>
+            </div>
+            <div class="cart__price">
+              <!-- <span>
+                <sup>&#8358;</sup>
+                <span>25,000</span>
+              </span> -->
+              <p class="cart__price-actual">
+                <sup>&#8358;</sup>
+                15,750
+              </p>
+            </div>
+            <i class="bx bx-x"></i>
+          </div>
+          <div class="cart__container">
+            <div class="cart__content">
+              <div class="cart__images">
+                <img src="asset/img/place-1.jpg" alt="cart image" />
+              </div>
+              <div class="cart__description">
+                <h3 class="cart__apartment-type text-capitalize">
+                  1 bedroom Apartment
+                </h3>
+                <h4
+                  class="cart__apartment-estate text-capitalize letter-spacing-1"
+                >
+                  Banana Island
+                </h4>
+                <h4
+                  class="cart__apartment-location letter-spacing-2 text-capitalize"
+                >
+                  Lekki
+                </h4>
+              </div>
+            </div>
+            <div class="cart__mode">
+              <div class="cart__select">
+                <select name="format" class="decorated" id="format">
+                  <option disabled>prefferred apartment mode</option>
+                  <option value="pdf">Shared</option>
+                  <option value="txt">Exclusive</option>
+                </select>
+              </div>
+            </div>
+            <div class="cart__price">
+              <!-- <span>
+                <sup>&#8358;</sup>
+                <span>25,000</span>
+              </span> -->
+              <p class="cart__price-actual">
+                <sup>&#8358;</sup>
+                15,750
+              </p>
+            </div>
+            <i class="bx bx-x"></i>
+          </div>
+          <div class="cart__container">
+            <div class="cart__content">
+              <div class="cart__images">
+                <img src="asset/img/place-1.jpg" alt="cart image" />
+              </div>
+              <div class="cart__description">
+                <h3 class="cart__apartment-type text-capitalize">
+                  3 bedroom Apartment
+                </h3>
+                <h4
+                  class="cart__apartment-estate text-capitalize letter-spacing-1"
+                >
+                  Monty Estate
+                </h4>
+                <h4
+                  class="cart__apartment-location letter-spacing-2 text-capitalize"
+                >
+                  Victoria Island
+                </h4>
+              </div>
+            </div>
+            <div class="cart__mode">
+              <div class="cart__select">
+                <select name="format" class="decorated" id="format">
+                  <option disabled>prefferred apartment mode</option>
+                  <option value="pdf">Shared</option>
+                  <option selected value="txt">Exclusive</option>
+                </select>
+              </div>
+            </div>
+            <div class="cart__price">
+              <!-- <span>
+                <sup>&#8358;</sup>
+                <span>25,000</span>
+              </span> -->
+              <p class="cart__price-actual">
+                <sup>&#8358;</sup>
+                15,750
+              </p>
+            </div>
+            <i class="bx bx-x"></i>
+          </div>
+        </div>
+
+        <div class="cart__side">
+          <div class="cart__side-checkout">
+            <p class="cart__side-checkout-title text-capitalize">
+              your subtotal
+            </p>
+            <div class="cart__side-checkout-main">
+              <!-- IF THE CART DOES NOT HAVE AN ITEM DISPLAY THIS  -->
+              <!-- <div class="cart__side-checkout-main-content">
+                <span class="text-capitalize">subtotal </span>
+                <p class="cart__price-actual">
+                  <sup>&#8358;</sup>
+                  00.00
+                </p>
+              </div> -->
+
+              <!-- IF THE CART HAS AN ITEM DISPLAY THIS  -->
+              <div class="cart__side-checkout-main-content">
+                <span class="text-capitalize">subtotal </span>
+                <p class="cart__price-actual">
+                  <sup>&#8358;</sup>
+                  15,750
+                </p>
+              </div>
+
+              <div class="cart__side-checkout-main-button">
+                <a
+                  href="checkout.html"
+                  class="order-button order-button-secondary"
+                  >Confirm Order</a
+                >
+                <a id="open-modal" class="order-button">Schedule Inspection</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="featured section" id="featured">
+        <div class="featured__wrapper">
+          <h2 class="section__title">Featured Properties</h2>
+
+          <div class="featured__container swiper">
+            <div class="swiper-wrapper">
+              <!-- start loop of featured section -->
+              <a href="#" class="featured__card swiper-slide">
+                <div class="featured__badge">
+                  <span class="letter-spacing-2">featured</span>
+                </div>
+                <div class="featured__img">
+                  <img src="asset/img/gal-2.jpeg" alt="featured__img" />
+                </div>
+
+                <div class="featured__data">
+                  <div>
+                    <h3 class="featured__title">Garden City Assat</h3>
+                    <p class="featured__description">
+                      Street The Garden City Of Miraflores, Lima - Perú Av. Sol
+                      #9876
+                    </p>
+                  </div>
+                  <ul class="featured__content">
+                    <li class="featured__content-item">
+                      Bath <span> <i class="bx bx-bath"></i>2</span>
+                    </li>
+                    <li class="featured__content-item">
+                      Bed <span> <i class="bx bx-bed"></i>2</span>
+                    </li>
+                    <li class="featured__content-item">
+                      Rooms <span> <i class="bx bxs-door-open"></i>2</span>
+                    </li>
+                    <li class="featured__content-item">
+                      Area <span> <i class="bx bx-trip"></i>1450</span>
+                    </li>
+                  </ul>
+                </div>
+              </a>
+              <!-- end loop for featured section -->
+
+              <article class="featured__card swiper-slide">
+                <div class="featured__badge">
+                  <span class="letter-spacing-2">featured</span>
+                </div>
+                <div class="featured__img">
+                  <img src="asset/img/gal-3.jpeg" alt="featured__img" />
+                </div>
+
+                <div class="featured__data">
+                  <h3 class="featured__title">Gables Luxurious House</h3>
+                  <p class="featured__description">
+                    Street The Garden City Of Miraflores, Lima - Perú Av. Sol
+                    #9876
+                  </p>
+                  <ul class="featured__content">
+                    <li class="featured__content-item">
+                      Bath <span> <i class="bx bx-bath"></i>2</span>
+                    </li>
+                    <li class="featured__content-item">
+                      Bed <span> <i class="bx bx-bed"></i>2</span>
+                    </li>
+                    <li class="featured__content-item">
+                      Rooms <span> <i class="bx bxs-door-open"></i>2</span>
+                    </li>
+                    <li class="featured__content-item">
+                      Area <span> <i class="bx bx-trip"></i>1450</span>
+                    </li>
+                  </ul>
+                </div>
+              </article>
+              <article class="featured__card swiper-slide">
+                <div class="featured__badge">
+                  <span class="letter-spacing-2">featured</span>
+                </div>
+                <div class="featured__img">
+                  <img src="asset/img/gal-5.jpeg" alt="featured__img" />
+                </div>
+
+                <div class="featured__data">
+                  <h3 class="featured__title">Garden Orchard City</h3>
+                  <p class="featured__description">
+                    Street The Garden City Of Miraflores, Lima - Perú Av. Sol
+                    #9876
+                  </p>
+                  <ul class="featured__content">
+                    <li class="featured__content-item">
+                      Bath <span> <i class="bx bx-bath"></i>2</span>
+                    </li>
+                    <li class="featured__content-item">
+                      Bed <span> <i class="bx bx-bed"></i>2</span>
+                    </li>
+                    <li class="featured__content-item">
+                      Rooms <span> <i class="bx bxs-door-open"></i>2</span>
+                    </li>
+                    <li class="featured__content-item">
+                      Area <span> <i class="bx bx-trip"></i>1450</span>
+                    </li>
+                  </ul>
+                </div>
+              </article>
+              <article class="featured__card swiper-slide">
+                <div class="featured__badge">
+                  <span class="letter-spacing-2">featured</span>
+                </div>
+                <div class="featured__img">
+                  <img src="asset/img/gal-12.jpeg" alt="featured__img" />
+                </div>
+
+                <div class="featured__data">
+                  <h3 class="featured__title">Luxurious City Garden</h3>
+                  <p class="featured__description">
+                    Street The Garden City Of Miraflores, Lima - Perú Av. Sol
+                    #9876
+                  </p>
+                  <ul class="featured__content">
+                    <li class="featured__content-item">
+                      Bath <span> <i class="bx bx-bath"></i>2</span>
+                    </li>
+                    <li class="featured__content-item">
+                      Bed <span> <i class="bx bx-bed"></i>2</span>
+                    </li>
+                    <li class="featured__content-item">
+                      Rooms <span> <i class="bx bxs-door-open"></i>2</span>
+                    </li>
+                    <li class="featured__content-item">
+                      Area <span> <i class="bx bx-trip"></i>1450</span>
+                    </li>
+                  </ul>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="modal">
+      <div class="modal__container" id="modal-container">
+        <div class="modal__content">
+          <div class="modal__close close-modal" title="Close">
+            <i class="bx bx-x"></i>
+          </div>
+
+          <img
+            src="asset/img/finding-property.png"
+            alt="schedule-inspection"
+            class="modal__img"
+          />
+
+          <div class="modal__data">
+            <span class="instructional-text">
+              *INSTRUCTION: Please copy the booking detail below as you would
+              need it to complete your Inspection</span
+            >
+            <div class="modal__data--text">
+              <button class="textareacopybtn text-capitalize">
+                <i class="bx bx-copy"></i>Click Here to Copy Detail
+              </button>
+
+              <input
+                class="copytextarea"
+                type="text"
+                readonly
+                value="Hello Im some text and I not selectable. Hello you are a good mann"
+              />
+
+              <span class="address-text text-capitalize">Booking detail :</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--==================== FOOTER ====================-->
+    <footer class="footer section">
+      <div class="container">
+        <div class="footer__item">
+          <ul class="footer__list">
+            <li><a href="#"> About </a></li>
+            <li><a href="#"> Gallery </a></li>
+            <li><a href="#"> Faq </a></li>
+            <li><a href="#"> Our Vison & Mission </a></li>
+            <li><a href="#"> Contact Us </a></li>
+            <li><a href="#"> Terms & Condition </a></li>
+            <li><a href="#"> Property </a></li>
+          </ul>
+        </div>
+        <div class="footer__item footer__location">
+          <div class="footer__location--logo">
+            <img src="asset/img/rent4less-logo-small.png" alt="logo" />
+          </div>
+          <div class="footer__location--address">
+            <i class="bx bxs-map-alt"></i>
+            <span>6 Mobolaji Johnson avenue, Ikoyi , Lagos. Nigeria</span>
+          </div>
+          <div class="footer__location--address">
+            <i class="bx bx-phone"></i>
+            <span>+234 90 8456 3508, +234 81 2182 5297</span>
+          </div>
+          <div class="footer__location--address">
+            <i class="bx bxs-map-alt"></i>
+            <span>sales@rent4less.com, reservation@rent4less.com</span>
+          </div>
+        </div>
+        <div class="footer__item">
+          <div class="footer__subscribe">
+            <span class="section__subtitle letter-spacing-3 text-uppercase"
+              >Newsletter</span
+            >
+            <p class="footer__subscribe--description">
+              Subscribe to our email newsletter to receive updates and news on
+              special offers.
+            </p>
+            <form class="footer__subscribe--form">
+              <input type="email" placeholder="Email address" />
+              <button><i class="bx bx-send"></i></button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="footer__copyright">
+          <p>Copyright © 2022 Rent4Less</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ================ INLINE SCRIPT =============== -->
+    <script
+      src="//code.tidio.co/etuszgde4hdtn0rcdfwtkvfkptptgkoq.js"
+      async
+    ></script>
+    <script>
+      const spinnerWrapper = document.querySelector(".spinner-wrapper");
+
+      window.addEventListener("DOMContentLoaded", () => {
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        document.body.scrollTop = 0; // For Safari
+        spinnerWrapper.parentElement.removeChild(spinnerWrapper);
+      });
+    </script>
+
+    <!--========== SCROLL UP ==========-->
+    <a href="#" class="scrollup" id="scroll-up">
+      <i class="bx bx-chevrons-up"></i>
+    </a>
+
+    <!--=============== SWIPER JS ===============-->
+    <script src="asset/js/swiper-bundle.min.js"></script>
+
+    <!--=============== NAVIGATION JS ===============-->
+    <script src="asset/js/navigation.js"></script>
+
+    <!--=============== MAIN JS ===============-->
+    <script src="asset/js/cart.js"></script>
+  </body>
+</html>

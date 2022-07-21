@@ -1,3 +1,6 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/main2.css' %}">
+
 <ul class="navbar-nav bg-gradient-info sidebar sidebar-dark accordion" id="accordionSidebar">
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
@@ -5,15 +8,16 @@
             <i class="fas fa-hotel"></i>
         </div>
         <div class="sidebar-brand-text mx-3">
-            {% if user.is_superuseer or user.is_staff %} R4L Admin {% else %} R4L Guest {% endif %}<sup>v1</sup></div>
+          {% if user.username == "admin2" %} R4L Admin  {% elif user.is_superuser %} R4L Admin {% elif user.is_staff %} R4L Staff {% else %} R4L Guest {% endif %}<sup>v1</sup></div>
     </a>
 
     <!-- Divider -->
-    <hr class="sidebar-divider my-0" />
+    <hr class="sidebar-divider my-2" />
     <li class="nav-item active">
         <a class="nav-link" href="{% url 'home' %}">
             <i class="fas fa-gate fa-home"></i>
-            <span> Go Home</span></a>
+            <span> Go Home</span>
+        </a>
     </li>
 
     <!-- Nav Item - Dashboard -->
@@ -24,6 +28,23 @@
             <span>Dashboard</span>
         </a>
 
+        <a class="nav-link" href="{% url 'admin_messages' %}">
+            <i class="fas fa-book"></i> Admin Messages 
+        </a>
+        {% if user.is_staff and not user.is_superuser %}
+            <a class="nav-link" href="{% url 'dashboard' %}">
+                <i class="fas fa-info"></i>
+                <span>Manage Inspection</span>
+            </a>
+        {% endif %}
+
+        {% if user.username == "admin2" %}
+            <a class="nav-link" href="{% url 'dashboard' %}">
+                <i class="fas fa-info"></i>
+                <span>Manage Inspection</span>
+            </a>
+        {% endif %}
+
         {% elif user.is_authenticated %}
         <a class="nav-link" href="{% url 'user_dashboard' %}">
             <i class="fas fa-gate fa-tachometer-alt"></i>
@@ -33,34 +54,56 @@
     </li>
 
     <!-- Divider -->
+    {% if user.is_superuser or user.is_staff %}
+
+    {% if user.is_staff and user.is_superuser %}
     <hr class="sidebar-divider" />
 
     <!-- Heading -->
+
     <div class="sidebar-heading">Content</div>
 
-    {% if user.is_superuser and user.is_staff %}
+    
     <!-- Nav Item - Pages Collapse Menu -->
 
     <!-- Nav Item - Utilities Collapse Menu -->
+    
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
             <i class="fas fa-fw fa-home"></i>
-            <span>Estate Management</span>
+            <span>Estate</span>
         </a>
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Manage Estate</h6>
-                <a class="collapse-item" href="{% url 'estate_create' %}">Add Estate</a>
-        <a class="collapse-item" href="{% url 'estate_list' %}"> Estate List </a>
-        <a class="collapse-item" href="{% url 'estate_edit' %}">Delete Estate</a>
+                
+                
+                    {% if not user.username == "admin2" %}
+                        <a class="collapse-item" href="{% url 'estate_create' %}">Add Estate</a>
+                        <a class="collapse-item" href="{% url 'estate_list' %}"> Estate List </a>
+                    {% endif %}
+                
+                
+                {% if user.username == "admin2" %}
+                    <a class="collapse-item" href="{% url 'estate_list' %}"> Estate List </a>
+                {% endif %}
+
+
+                {% if user.is_superuser and user.is_staff %}
+                    {% if not user.username == "admin2" %}
+                        <a class="collapse-item" href="{% url 'estate_edit' %}"> Edit Estate </a>
+                    {% endif %}
+                {% endif %}
             </div>
         </div>
     </li>
+    {% endif %}
 
+    {% if user.is_staff and user.is_superuser %}
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-bed"></i>
-            <span>Apartment Management</span>
+            <span>Apartment</span>
         </a>
         <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
@@ -70,49 +113,151 @@
             </div>
         </div>
     </li>
-
+    {% endif %}
     <!-- Divider -->
+
+    {% if user.is_staff %}
     <hr class="sidebar-divider" />
 
     <!-- Heading -->
-    <div class="sidebar-heading">Manage Account</div>
+    
+    <div class="sidebar-heading"> Task </div>
+
+    <li class="nav-item">
+            <a class="nav-link" href="{% url 'user_booking' %}"> 
+                <i class="fas fa-book"></i>
+                View Booking
+            </a>
+
+            <a class="nav-link" href="{% url 'user_payment' %}">
+                <i class="fas fa-credit-card"></i>
+                 View Payment
+            </a>
+
+            <a class="nav-link" href="{% url 'room_list' %}"> 
+                <i class="fas fa-bed"></i>
+                View Rooms
+            </a>
+    </li>
+
+    
+
+    <hr class="sidebar-divider" />
+
+    <!-- Heading -->
+    <div class="sidebar-heading"> Users </div>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePager" aria-expanded="true" aria-controls="collapsePages">
+            <i class="fas fa-users"></i>
+            <span> Form/KYC </span>
+        </a>
+        <div id="collapsePager" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Account</h6>
+                <a class="collapse-item" href="{% url 'user_form' %}"> 
+                    <i class="fas fa-address-card"></i>
+                    Tanent
+                </a>
+                <a class="collapse-item" href="{% url 'landlord_form' %}">
+                    <i class="fas fa-address-card"></i>
+                    Landlord
+                </a>
+                <div class="collapse-divider"></div>
+                {% comment %} <h6 class="collapse-header">Other Info:</h6> {% endcomment %}
+            </div>
+        </div>
+    </li>
+    {% endif %}
+
+
+    <hr class="sidebar-divider" />
+
+    <!-- Heading -->
+    <div class="sidebar-heading"> Self Mgt</div>
 
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
-            <i class="fas fa-fw fa-folder"></i>
-            <span>Account Management</span>
+            <i class="fas fa-users"></i>
+            <span>Account</span>
         </a>
         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Account</h6>
-                <a class="collapse-item" href="#">Profile</a>
+                <a class="collapse-item" href="{% url 'profile_edit' user.username %}">Profile</a>
                 <a class="collapse-item" href="{% url 'logout' %}">Logout</a>
                 <div class="collapse-divider"></div>
-                <h6 class="collapse-header">Other Info:</h6>
-                <a class="collapse-item" href="#">Forgot Password</a>
+                {% comment %} <h6 class="collapse-header">Other Info:</h6> {% endcomment %}
             </div>
         </div>
     </li>
 
+    {% if user.is_superuser %}
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseT" aria-expanded="true" aria-controls="collapseTwo">
-            <i class="fas fa-book"></i>
-            <span>Booking</span>
+            <i class="fas fa-bookmark"></i>
+            <span>Bookings</span>
         </a>
         <div id="collapseT" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Check Booking</h6>
-                <a class="collapse-item" href="#">View Booking</a>
+                <a class="collapse-item" href="{% url 'user_booking' %}">View Booking</a>
             </div>
         </div>
     </li>
+    {% endif %}
+
+    {% if user.is_staff and user.is_superuser%}
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapses" aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-book"></i>
+            <span>{% if user.username == "admin2" %} Payment Mgt {% else %} Newsletter {% endif %}</span>
+        </a>
+        <div id="collapses" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Send Mail</h6>
+                {% if not user.username == "admin2" %}
+                <a class="collapse-item" href="{% url 'mails' %}">Create Newsletter</a>
+                <a class="collapse-item" href="{% url 'subscriber' %}"> Subscribers </a>
+                <a class="collapse-item" href="{% url 'admin_messages' %}">
+                    <i class="fas fa-book"></i> Admin Messages 
+                </a>
+                {% endif %}
+
+                {% if user.username == "admin2" %}
+                    <a class="collapse-item" href="{% url 'user_booking' %}">
+                        <i class="fas fa-book"></i> View Booking 
+                    </a>
+                    <a class="collapse-item" href="{% url 'user_payment' %}">
+                        <i class="fas fa-credit-card"></i>  View Payment
+                    </a>
+                    <a class="collapse-item" href="{% url 'user_form' %}">
+                        <i class="fas fa-address-card"></i> Tanent View
+                    </a>
+                    <a class="collapse-item" href="{% url 'landlord_form' %}">
+                        <i class="fas fa-address-card"></i>
+                        Landlord View
+                    </a>
+                    <a class="collapse-item" href="{% url 'listed' %}">
+                        <i class="fas fa-credit-card"></i> List Transaction 
+                    </a>
+
+                    <a class="collapse-item" href="{% url 'list_messages' %}">
+                        <i class="fas fa-credit-card"></i> My Messages 
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </li>
+    {% endif %}
 
     {% else %}
 
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseT" aria-expanded="true" aria-controls="collapseTwo">
-            <i class="fas fa-book"></i>
+        <a class="nav-link collapsed flex align-center" href="#" data-toggle="collapse" data-target="#collapseT" aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-bookmark"></i>
             <span>Booking</span>
         </a>
         <div id="collapseT" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
@@ -131,9 +276,29 @@
         <div id="collapseH" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Check History</h6>
-                <a class="collapse-item" href="#">View History</a>
+                <a class="collapse-item" href="{% url 'history_estate' %}">View History</a>
             </div>
         </div>
+    </li>
+
+    {% comment %} <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseU" aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-book"></i>
+            <span> My KYC </span>
+        </a>
+        <div id="collapseU" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Check Booking</h6>
+                <a class="collapse-item" href="{% url 'user_payment' user.username %}">View Booking</a>
+            </div>
+        </div>
+    </li> {% endcomment %}
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#">
+            <i class="fas fa-book"></i>
+            <span>Message</span>
+        </a>
     </li>
 
     {% endif %}

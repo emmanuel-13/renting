@@ -1,0 +1,468 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--=============== FAVICON ===============-->
+    <link
+      rel="shortcut icon"
+      href="{% static 'asseting/img/favicon.png' %}"
+      type="image/x-icon"
+    />
+    <!--=============== BOXICONS ===============-->
+    <link
+      href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+
+    <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="{% static 'asseting/css/styleing.css' %}" />
+    <link rel="stylesheet" href="{% static 'asseting/css/me.css' %}" />
+
+    <!-- Calendly badge widget begin -->
+    <link
+    href="https://assets.calendly.com/assets/external/widget.css"
+    rel="stylesheet"
+  />
+    <!-- Calendly badge widget end -->
+
+    <title>Rent4Less</title>
+  </head>
+  <body>
+    <!--==================== SPINNER ====================-->
+    <div class="spinner-wrapper">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- ======= TOAST ANIMATION ====== -->
+    <div class="toast">
+      <div class="toast-content">
+        <i class="bx bxs-check-circle check"></i>
+        <div class="message">
+          <span class="message-text text-1"></span>
+        </div>
+      </div>
+      <i class="bx bx-x close"></i>
+
+      <div class="progress"></div>
+    </div>
+    <!-- ======= END TOAST ANIMATION ====== -->
+
+    <!-- =============== SECONDARY NAV ============= -->
+      {% include 'secondary_navbar.html' %}
+
+    <div class="main main__cart">
+      <div class="section cart__header">
+        <!-- this is if you have any reservation in your cart -->
+        <div class="cart__header-content">
+          <h2>Review Reservation</h2>
+          <p>You have
+            <span class="button-qty" id="button-qty">
+              {% with total_qty=basket|length %}
+              {% if total_qty > 0 %}
+              {{ total_qty }} ite{{total_qty|pluralize:"m,ms"}} in your bookings
+              {% else %}
+               0 item in your booking
+              {% endif %}
+            {% endwith %}
+        </span>
+          </p>
+        </div>
+
+        <!-- this is if you dont have any reservation in your cart -->
+        <!-- <div class="cart__header-content">
+          <h2>Your Reservations</h2>
+          <p>you have no items in your cart</p>
+        </div> -->
+      </div>
+
+      <div class="main__wrapper">
+        <div class="cart__main">
+
+
+          <!-- if there are no items in cart! -->
+          {% if not request.session.basket|length %}
+           <div class="search-widget">
+            <div class="search-widget-header">
+              <img src="{% static 'asseting/img/empty-cart.png' %}" alt="empty-cart" />
+              <div class="search-widget-header-content">
+                <h3>Your shopping cart is currently empty.</h3>
+                <p>
+                  Time to go booking for low-priced houses and properties at
+                  Rent4less
+                </p>
+              </div>
+            </div>
+            <form action="" class="search-widget-form">
+              <input
+                type="search"
+                name="location"
+                placeholder="find property in your prefferred location"
+                required
+              />
+              <button class="search-widget-form-submit" type="button">
+                Search
+              </button>
+            </form>
+          </div>
+
+          {% else %}
+          <!-- if there are items in cart! -->
+          {% for item in basket %}
+                {% with room=item.room  %}
+                <div class="cart__container room-item" data-index="{{room.id}}">
+                  <div class="cart__content">
+                    <div class="cart__images">
+                      {% if room.image1 %}
+                        <img src="{{ room.image1.url }}" alt="cart image" />
+                      {% else %}
+                        <img src="{% static 'asset_detail/img/place-1.jpg' %}" alt="cart image" />
+                      {% endif %}
+                    </div>
+                    <div class="cart__description">
+                          <h3 class="cart__apartment-type text-capitalize">
+                            {{ room.bedroom_type }} bedroom Apartment
+                          </h3>
+                          <h4
+                            class="cart__apartment-estate text-capitalize letter-spacing-1"
+                          >
+                            {{ room.apartment_name_rooms }}
+                          </h4>
+                          <h4
+                            class="cart__apartment-location letter-spacing-2 text-capitalize"
+                          >
+                          {% if room.apartment_type  == "S" %}
+                            {{ room.room_types }}
+                          {% else %}
+                            {{ room.exclusive_room }}
+                          {% endif %}
+                        </h4>
+                    </div>
+                  </div>
+                  <div class="cart__mode">
+                    <div class="cart__select">
+                      <select name="format" class="decorated" id="format">
+                        <option disabled>prefferred apartment mode</option>
+                        <option value="pdf">Shared</option>
+                        <option value="txt">Exclusive</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="cart__price">
+                    {% if room.discount != "0" %}
+                    <span>
+                      &#8358;
+                      <span>{{ room.price }}</span>
+                    </span>
+                    <p class="cart__price-actual">&#8358;{{ room.new_price }}</p>
+                    {% else %}
+                    <p class="cart__price-actual">&#8358;{{ room.price }}</p>
+                    {% endif %}
+                  </div>
+                  <a data-room={{room.id}} data-action="remove" class="delete-button text-decoration-none small delete-cart">
+                    <i class="bx bx-x"></i>
+                  </a>
+                </div>
+                {% endwith %}
+          {% endfor %}
+
+          {% endif %}
+        </div>
+
+        <div class="cart__side">
+          <div class="cart__side-checkout">
+            <p class="cart__side-checkout-title text-capitalize">
+              Your Subtotal
+            </p>
+            <div class="cart__side-checkout-main">
+              {% if not request.session.basket %}
+              <!-- IF THE CART DOES NOT HAVE AN ITEM DISPLAY THIS  -->
+              <div class="cart__side-checkout-main-content">
+                <span class="text-capitalize">subtotal </span>
+                <p class="cart__price-actual">
+                  <sup>&#8358;</sup>
+                  00.00
+                </p>
+              </div>
+
+              {% else %}
+              <!-- IF THE CART HAS AN ITEM DISPLAY THIS  -->
+              <div class="cart__side-checkout-main-content">
+                Sub Total:
+                <div class="d-block">
+                  <span class="fw-bold">NGN </span>
+                  <span id="subtotal" class="d-inline-flex fw-bold">
+                      {{ basket.get_subtotal_price }}
+                  </span>
+                </div>
+                {% comment %} <div id="">Tax: <span class="small"></span> <span class="fw-bold" id="tax">20%</span></div>
+                <div class="pt-2">Total: <span class="fw-bold h5">NGN</span><span id="total"
+                    class="fw-bold">
+                    {% if basket.get_total_discounted_price %} 
+                        {{ basket.get_total_discounted_price }} 
+                    {% else %}
+                      {{ basket.get_total_price }} 
+                    {% endif %}
+                  </span>
+                </div> {% endcomment %}
+              </div>
+
+              <div class="cart__side-checkout-main-button">
+                {% if user.is_authenticated and not user.is_superuser and not user.is_staff %}
+                <a
+                  href="{% url 'payment' %}"
+                  class="order-button order-button-secondary"
+                  >Confirm Order</a
+                >
+
+                <a id="open-modal" class="order-button">Schedule Inspection</a>
+
+                {% elif user.is_anonymous %} 
+                <a href="{% url 'login' %}"> 
+                  <button class="order-button">Proceed To checkout</button>
+                </a>
+                {% endif %}
+              </div>
+
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="property container section property-home">
+      <span class="section__subtitle text-center"
+        >A selection of the best Property deals, only available today</span
+      >
+      <h2 class="section__title text-center mb-4">
+        Top Estate Deals <span>.</span>
+      </h2>
+
+      <div class="property--wrapper">
+        {% if estate %}
+          {% for estate in estate %}
+          <a href="{% url 'apartment_detail' estate.apartment_name_rooms %}" class="property--wrapper-card">
+            <div class="card__image">
+              <img src="{{ estate.image1.url }}" alt="estate" />
+            </div>
+            <div class="card__content">
+
+              <h4 class="text-capitalize mb-1">
+                  {{ estate.bedroom_type }} bedroom apartment
+              </h4>
+              <span>{{ estate.location }}, {{ estate.city }}</span>
+              <span class="card__content--estate">{{ estate.apartment_name_rooms }}</span>
+              <p class="price__data text-uppercase mt-1 mb-1">
+                &#8358;{{ estate.price }}
+              </p>
+            </div>
+            {% if estate.discount != "0" %}
+            <div class="card__discount">
+              <div>
+                <p class="estate-discount text-uppercase">
+                  up to <span>{{ estate.discount }}%</span>off
+                </p>
+                <div class="slant"></div>
+              </div>
+            </div>
+            {% endif %}
+          </a>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </section>
+
+    <div class="modal">
+      <div class="modal__container" id="modal-container">
+        <div class="modal__content">
+          <div class="modal__close close-modal" title="Close">
+            <i class="bx bx-x"></i>
+          </div>
+
+          <img
+            src="{% static 'asseting/img/finding-property.png' %}"
+            alt="schedule-inspection"
+            class="modal__img"
+          />
+
+          <div class="modal__data">
+            <span class="instructional-text">
+              *INSTRUCTION: Please copy the booking detail below as you would
+              need it to complete your Inspection</span
+            >
+            <div class="modal__data--text">
+              <button class="textareacopybtn text-capitalize">
+                <i class="bx bx-copy"></i>Click Here to Copy Detail
+              </button>
+
+              <input
+                class="copytextarea"
+                type="text"
+                readonly
+                value="
+                  {% for item in basket %} 
+                    {{ item.room.apartment_name_rooms }}
+                    {{ item.room.bedroom_type }}-bedroom 
+                  {% endfor %}
+                "
+              />
+
+              <span class="address-text text-capitalize">Booking detail :</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--==================== FOOTER ====================-->
+    <footer class="footer section">
+      <div class="container">
+        <div class="footer__item">
+          <ul class="footer__list">
+            <li><a href="{% url 'about' %}"> About </a></li>
+            <li><a href="#"> Gallery </a></li>
+            <li><a href="#"> Faq </a></li>
+            <li><a href="#"> Our Vison & Mission </a></li>
+            <li><a href="{% url 'contact' %}"> Contact Us </a></li>
+            <li><a href="#"> Terms & Condition </a></li>
+            <li><a href="{% url 'property' %}"> Property </a></li>
+          </ul>
+        </div>
+        <div class="footer__item footer__location">
+          <div class="footer__location--logo">
+            <img src="{% static 'asseting/img/rent4less-logo-small.png' %}" alt="logo" />
+          </div>
+          <div class="footer__location--address">
+            <i class="bx bxs-map-alt"></i>
+            <span>6 Mobolaji Johnson avenue, Ikoyi , Lagos. Nigeria</span>
+          </div>
+          <div class="footer__location--address">
+            <i class="bx bx-phone"></i>
+            <span>+234 90 8456 3508, +234 81 2182 5297</span>
+          </div>
+          <div class="footer__location--address">
+            <i class="bx bxs-map-alt"></i>
+            <span>sales@rent4less.com, reservation@rent4less.com</span>
+          </div>
+        </div>
+        <div class="footer__item">
+          <div class="footer__subscribe">
+            <span class="section__subtitle letter-spacing-3 text-uppercase"
+              >Newsletter</span
+            >
+            <p class="footer__subscribe--description">
+              Subscribe to our email newsletter to receive updates and news on
+              special offers.
+            </p>
+            <form class="footer__subscribe--form" id="sub" method="post">
+              <input type="email" placeholder="Email address" id="email" name="email" />
+              <button><i class="bx bx-send"></i></button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="footer__copyright">
+          <p>Copyright © 2022 Rent4Less</p>
+        </div>
+      </div>
+    </footer>
+
+    <script
+    src="https://assets.calendly.com/assets/external/widget.js"
+    type="text/javascript"
+    async
+  ></script>
+    <script type="text/javascript">
+      window.onload = function () {
+        Calendly.initBadgeWidget({
+          url: "https://calendly.com/rent4less/schedule-inspection?hide_gdpr_banner=1&primary_color=7ed56f",
+          text: "Start Inspection",
+          color: "#7ed56f",
+          textColor: "#ffffff",
+          branding: false,
+        });
+      };
+    </script>
+
+    <!-- ================ INLINE SCRIPT =============== -->
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <script>
+      const spinnerWrapper = document.querySelector(".spinner-wrapper");
+
+      window.addEventListener("DOMContentLoaded", () => {
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        document.body.scrollTop = 0; // For Safari
+        spinnerWrapper.parentElement.removeChild(spinnerWrapper);
+      });
+    </script>
+
+
+    <script>
+      $("#sub").on('submit', function(e) {
+        e.preventDefault();
+  
+        $.ajax({
+          type: "POST",
+          url: "{% url 'email_verify' %}",
+          data: {
+            email: $('#email').val(),
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            dataType: "json",
+          },
+          success: function(data){
+            alert(data.msg);
+            $('#email').val('');
+          },
+          failure: function(data) {
+            alert(data.msg)
+          }
+        })
+      })
+    </script> 
+
+    <script type="text/javascript" src="{% static 'js/cart_delete.js' %}">
+
+    </script>
+    <script type="text/javascript">
+      var user = '{{ request.user}}'
+
+      function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+          var cookies = document.cookie.split(';');
+          for(var i = 0; i < cookies.length; i++){
+            var cookie = cookies[i].trim();
+
+            if (cookie.substring(0, name.length + 1) === (name + '='))
+              {
+                cookieValue = decodeURIComponent(cookie.substring(
+                  name.length + 1
+                ));
+                break;
+              }
+          }
+        }
+        return cookieValue;
+      }
+
+      var csrftoken = getCookie('csrftoken'); 
+    </script>
+
+    
+    
+
+    <!--========== SCROLL UP ==========-->
+    <a href="#" class="scrollup" id="scroll-up">
+      <i class="bx bx-chevrons-up"></i>
+    </a>
+
+    <!--=============== NAVIGATION JS ===============-->
+    <script src="{% static 'asseting/js/navigation.js' %}"></script>
+    <script src="{% static 'asseting/js/cart.js' %}"></script>
+  </body>
+</html>

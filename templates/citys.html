@@ -1,0 +1,217 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--=============== FAVICON ===============-->
+    <link
+      rel="shortcut icon"
+      href="{% static 'asseting/img/favicon.png' %}"
+      type="image/x-icon"
+    />
+    <!--=============== BOXICONS ===============-->
+    <link
+      href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+
+    <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="{% static 'asseting/css/styleing.css' %}" />
+    <title>Rent4Less</title>
+  </head>
+  <body>
+    <!--==================== SPINNER ====================-->
+    <div class="spinner-wrapper">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- ======= TOAST ANIMATION ====== -->
+    <div class="toast">
+      <div class="toast-content">
+        <i class="bx bxs-check-circle check"></i>
+        <div class="message">
+          <span class="message-text text-1"></span>
+        </div>
+      </div>
+      <i class="bx bx-x close"></i>
+
+      <div class="progress"></div>
+    </div>
+    <!-- ======= END TOAST ANIMATION ====== -->
+
+    <!--==================== NAVBAR ====================-->
+      {% include 'primary_navbar.html' %}
+
+    <!--==================== MASK ====================-->
+    <img src="{% static 'asseting/img/bg-mask-1x.png' %}" alt="mask-1" class="mask-1" />
+
+    <!--==================== HEADER ====================-->
+    <header class="city" id="city ">
+      <div class="city__data">
+        <div class="city__title">
+          <div class="city__title--wrapper">
+            <h3>Discover</h3>
+            <div class="flip">
+              <span>Cities</span>
+              <span>Estates</span>
+              <span>Rooms</span>
+              <span>Apartment</span>
+              <span>Cities</span>
+            </div>
+          </div>
+          <h3>Where we Operate Fully</h3>
+        </div>
+        <p class="city__description">
+          Traditionally, renting comes with compromise – space, décor, location, 
+          pets… Add to this the times we live in and now more than ever, 
+          we are all trying to find our balance and improve our quality of life. 
+          Whatever your living is, you can find your perfect balance with us.
+          You can hear comfort and flexibility call your name when you open our
+          doors. 
+        </p>
+        <a href="{% url 'contact' %}" class="city__button">Contact Us Today </a>  
+      </div>
+
+      <div class="city__images">
+        <img src="{% static 'asseting/img/MAP.png' %}" alt="city__img" />
+
+        {% for estate in estates %}
+        <div class="cities__{{forloop.counter}} tooltip"></div>
+        <div class="cities cities__{{forloop.counter}}">
+          <img src="{{estate.image.url}}" alt="city-1" />
+          <div class="cities__content">
+            <h3>{{ estate.estate_name}}</h3>
+            <span>{{estate.city }}</span>
+          </div>
+        </div>
+        {% endfor %}
+
+      </div>
+    </header>
+
+    <!--==================== CITIES ====================-->
+    <section id="cities" class="city__list container section">
+      <span class="section__subtitle"
+        >Which City Do You Want To Book A Property?</span
+      >
+      <h2 class="section__title">Cities <span>.</span></h2>
+
+      <div class="city__list--wrapper">
+        {% for city in city %}
+        <a href="{% url 'property_detail' city.pk %}" class="city__list--wrapper-article">
+          <h4>Property in {{ city.citys }}</h4>
+          {% if city.estate_set <= "0" %}
+          <p> no properties found</p>
+          {% else %}
+          <p> {{ city.estate_set.count }} properties </p>
+          {% endif %}
+        </a>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!--==================== ESTATE ====================-->
+    <section class="city__estate section container">
+      <span class="section__subtitle"
+        >A selection of the best Estate deals, only available today</span
+      >
+      <h2 class="section__title">Top Estate Deals <span>.</span></h2>
+
+      <div class="city__estate--wrapper">
+        {% for estate in estate %}
+        <a href="{% url 'apartment_detail' estate.pk %}" class="city__estate--wrapper-card">
+          <div class="card__image">
+            <img src="{{ estate.image.url }}" alt="estate" />
+          </div>
+          <div class="card__content">
+            <h3>{{estate.estate_name}}</h3>
+            <p>{{estate.location}}, {{ estate.city }}</p>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!--==================== FOOTER ====================-->
+    <footer class="footer section">
+      <div class="container">
+        <div class="footer__item">
+          <ul class="footer__list">
+            <li><a href="{% url 'about' %}"> About </a></li>
+            <li><a href="#"> Gallery </a></li>
+            <li><a href="#"> Faq </a></li>
+            <li><a href="{% url 'contact' %}"> Contact Us </a></li>
+            <li><a href="#"> Property </a></li>
+            <li><a href="#"> Tenancy Terms </a></li>
+            <li><a href="#"> Privacy Terms </a></li>
+            <li><a href="#"> Terms & Condition </a></li>
+          </ul>
+        </div>
+        <div class="footer__item footer__location">
+          <div class="footer__location--logo">
+            <img src="{% static 'asseting/img/rent4less-logo-small.png' %}" alt="logo" />
+          </div>
+          <div class="footer__location--address">
+            <i class="bx bxs-map-alt"></i>
+            <span>6 Mobolaji Johnson avenue, Ikoyi , Lagos. Nigeria</span>
+          </div>
+          <div class="footer__location--address">
+            <i class="bx bx-phone"></i>
+            <span>+234 90 8456 3508, +234 81 2182 5297</span>
+          </div>
+          <div class="footer__location--address">
+            <i class="bx bxs-map-alt"></i>
+            <span>sales@rent4less.com, reservation@rent4less.com</span>
+          </div>
+        </div>
+        <div class="footer__item">
+          <div class="footer__subscribe">
+            <span class="section__subtitle letter-spacing-3 text-uppercase"
+              >Newsletter</span
+            >
+            <p class="footer__subscribe--description">
+              Subscribe to our email newsletter to receive updates and news on
+              special offers.
+            </p>
+            <form class="footer__subscribe--form">
+              <input type="email" placeholder="Email address" />
+              <button><i class="bx bx-send"></i></button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="footer__copyright">
+          <p>Copyright © 2022 Rent4Less</p>
+        </div>
+      </div>
+    </footer>
+
+    <!--========== SCROLL UP ==========-->
+    <a href="#" class="scrollup" id="scroll-up">
+      <i class="bx bx-chevrons-up"></i>
+    </a>
+
+    <!--================ INLINE SPINNER SCRIPT ===============-->
+    <script
+      src="//code.tidio.co/etuszgde4hdtn0rcdfwtkvfkptptgkoq.js"
+      async
+    ></script>
+
+    <script>
+      const spinnerWrapper = document.querySelector(".spinner-wrapper");
+
+      window.addEventListener("DOMContentLoaded", () => {
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        document.body.scrollTop = 0; // For Safari
+        spinnerWrapper.parentElement.removeChild(spinnerWrapper);
+      });
+    </script>
+
+    <!--=============== MAIN JS ===============-->
+    <script src="{% static 'asseting/js/navigation.js' %}"></script>
+  </body>
+</html>

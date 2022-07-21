@@ -1,0 +1,875 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--=============== FAVICON ===============-->
+    <link
+      rel="shortcut icon"
+      href="{% static 'asset_detail/img/favicon.png' %}"
+      type="image/x-icon"
+    />
+
+    <!--=============== BOXICONS ===============-->
+    <link
+      href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+
+    <!--=============== SWIPER CSS ===============-->
+    <link rel="stylesheet" href="{% static 'asset_detail/css/swiper-bundle.min.css' %}" />
+
+    <!--=============== LIGHTBOX CSS ===============-->
+    <link rel="stylesheet" href="{% static 'asset_detail/css/lightbox.css' %}" />
+
+    <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="{% static 'asset_detail/css/style.css' %}" />
+
+    <!--=============== Jquery CSS ===============-->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+
+    <title> Rent4Less|Home </title>
+  </head>
+  <body>
+    <!--==================== NAVBAR ====================-->
+    <div class="navbar" id="navbar">
+      <nav class="nav container">
+        <a href="/" class="nav__logo">
+          <img
+            src="{% static 'asset_detail/img/rent4less-logo-small.png' %}"
+            alt="rent4less-logo-small"
+          />
+        </a>
+
+        <div class="nav__menu">
+          <ul class="nav__list">
+            <li class="nav__item">
+              <a href="/" class="nav__link">
+                <i class="bx bx-home-alt-2"></i>
+                <span>Home</span>
+              </a>
+            </li>
+
+            <li class="nav__item">
+              <a href="#about" class="nav__link">
+                <i class="bx bx-building-house"></i>
+                <span>About</span>
+              </a>
+            </li>
+
+            <li class="nav__item">
+              <a href="#faq" class="nav__link">
+                <i class="bx bx-award"></i>
+                <span>Faq</span>
+              </a>
+            </li>
+
+            <li class="nav__item">
+              <a href="{% url 'contact' %}" class="nav__link">
+                <i class="bx bx-phone"></i>
+                <span>Contact</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Theme Change Button -->
+
+        <div class="sign">
+          {% if not user.is_authenticated %}
+          <a href="{% url 'register' %}" class="nav__button">Sign Up</a>
+          <a href="{% url 'login' %}" class="nav__button nav__button--outlined">Log In</a>
+          <i class="bx bx-moon change-theme" id="theme-button"></i>
+          {% else %}
+            <p class="sub__title"> welcome {{ user.username }} </p>
+            <a href="{% url 'logout' %}" class="nav__button nav__button--outlined">Logout</a>
+            <i class="bx bx-moon change-theme" id="theme-button"></i>
+            <a href="{% url 'cart_detail' %}">
+              <button type="button" class="btn btn-b-n navbar-toggle-box navbar-toggle-box-collapse ml-2" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02">
+                {{request.session.basket|length}}
+              </button>
+            </a>
+          {% endif %}
+        </div>
+      </nav>
+    </div>
+
+    <!--==================== HEADER ====================-->
+    <header class="header" id="header">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4 text-center">
+            {% if messages %}
+              {% for message in messages %}
+                  <div class="text-center alert alert-{{ message.tags }}" id="msg">
+                      {{ message|safe }}
+                  </div>
+              {% endfor %}
+            {% endif %}
+            </div>
+            <div class="col-sm-4"></div>
+          </div>
+        </div>
+      </div>
+      <div class="header__container container grid">
+        
+        <div class="header__data">
+          <h1 class="header__title">
+            discover<br />
+            Most <span>Suitable</span> <br />
+            Property
+          </h1>
+          <p class="header__description">
+            Find a variety of properties that suit you very easily, forget all
+            difficulties in finding a residence for you.
+          </p>
+
+          <form action="{% url 'estate-search' %}" method="POST" class="header__search">
+            {% csrf_token %}
+            <i class="bx bxs-map"></i>
+            <input
+              type="search"
+              placeholder="Search by location..."
+              class="header__search-input"
+              id="search-estate"
+              required
+              name="search"
+            />
+            <button type="submit" class="btn button">Search</button>
+          </form>
+
+          <div class="header__value">
+            <div>
+              <span class="header__value-description">
+                Premium <br />
+                Product
+              </span>
+            </div>
+            <div>
+              <span class="header__value-description">
+                Happy <br />
+                Customer
+              </span>
+            </div>
+
+            <div>
+              <span class="header__value-description">
+                Awards <br />
+                Winning
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="header__images">
+          <div class="header__orbe"></div>
+          <div class="header__img">
+            <img src="{% static 'asset_detail/img/home.jpg' %}" alt="header__img" />
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!--==================== MAIN ====================-->
+    <main class="main">
+      <!--==================== DESTINATION ====================-->
+      <section class="destination section">
+        <div class="destination__wrapper">
+          <span class="section__subtitle"
+            >Which City Do You Want To Book A Property?</span
+          >
+          <h2 class="section__title">Explore City <span>.</span></h2>
+
+          <div class="destination__container">
+            <!-- start loop from here -->
+            {% for city in city %}
+            <a href="{% url 'property_detail' city.pk %}" class="destination__item">
+              <div class="destination__img">
+                <img src="{% if city.image %} {{city.image.url}} {% else %} {% static 'asset_detail/img/city4.jpg' %} {% endif %}" alt="destination" />
+              </div>
+              <div class="destination__content">
+                <h3 class="destination__title"> {{ city }}</h3>
+                <p class="destination__description"> </p>
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+            <!-- stop loop from here -->
+
+          <!-- start explore city button -->
+          <a href="{% url 'city' %}" class="btn button__outlined destination__button"
+            >Explore City</a
+          >
+          <!-- end explore city button -->
+        </div>
+      </section>
+
+      <!--==================== POPULAR ====================-->
+      <section class="popular section" id="popular">
+        <div class="popular__wrapper">
+          <span class="section__subtitle">Best Choice</span>
+          <h2 class="section__title">Popular Residences<span>.</span></h2>
+
+          <div class="popular__container swiper">
+            <div class="swiper-wrapper">
+              <!-- start loop from here -->
+              {% for estate in estate %}
+              {% if user.is_authenticated %}
+              <form action="{% url 'history_estate' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="estate_id" value="{{estate.pk}}">
+                <button type="submit" class="popular__card swiper-slide">
+                  <div class="popular__img">
+                    {% if estate.image %}
+                      <img src="{{ estate.image.url }}" alt="popular__img" />
+                    {% endif %}
+              </div>
+
+              <div class="popular__data">
+                <h3 class="popular__title">
+                  <span><i class="bx bx-home-circle"></i></span> {{ estate.estate_name }}
+                </h3>
+                <p class="popular__description">
+                  {{ estate.location }} in {{ estate.city }}
+                </p>
+              </div>
+            </button>
+          </form>
+              {% else %}
+              <a href="{% url 'apartment_detail' estate.pk %}" class="popular__card swiper-slide">
+                <div class="popular__img">
+                      {% if estate.image%}
+                        <img src="{{ estate.image.url }}" alt="popular__img" />
+                      {% endif %}
+                </div>
+
+                <div class="popular__data">
+                  <h3 class="popular__title">
+                    <span><i class="bx bx-home-circle"></i></span> {{ estate.estate_name }}
+                  </h3>
+                  <p class="popular__description">
+                    {{ estate.location }} in {{ estate.city }}
+                  </p>
+                </div>
+              </a>
+              {% endif %}
+              {% endfor %}
+              <!-- end loop from here -->
+
+            </div>
+          </div>
+          <div class="swiper-button-next">
+            <i class="bx bx-chevron-right"></i>
+          </div>
+          <div class="swiper-button-prev">
+            <i class="bx bx-chevron-left"></i>
+          </div>
+        </div>
+      </section>
+
+      <!--==================== FEATURED ====================-->
+      <section class="featured" id="featured">
+        <div class="featured__wrapper">
+          <span class="section__subtitle"
+            >Handpicked TopNotch Properties By Our Team.</span
+          >
+          <h2 class="section__title">Featured Properties<span>.</span></h2>
+
+          <div class="featured__container swiper">
+            <div class="swiper-wrapper">
+              <!-- start loop of featured section -->
+              {% for testamonial in testemonial %}
+              {% if user.is_authenticated %}
+                  <form action="{% url 'history_estate' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="estate_id" value="{{ testamonial.pk }}">
+                    <button type="submit" class="featured__card swiper-slide">
+                  </form>
+                <div class="featured__badge">
+                  <span class="letter-spacing-2">featured</span>
+                </div>
+                <div class="featured__img">
+                  {% if testamonial.image %}
+                    <img src="{{ testamonial.image.url }}" alt="featured__img" />
+                  {% endif %}
+                </div>
+
+                <div class="featured__data">
+                  <div>
+                    <h3 class="featured__title">{{testamonial.estate_name}}</h3>
+                    <p class="featured__description">
+                      {{ testamonial.location }} in {{ testemonial.city }}
+                    </p>
+                  </div>
+                  <ul class="featured__content">
+                    <li class="featured__content-item">
+                      Bath <span> <i class="bx bx-bath"></i>2</span>
+                    </li>
+                    <li class="featured__content-item">
+                      Bed <span> <i class="bx bx-bed"></i>2</span>
+                    </li>
+                    <li class="featured__content-item">
+                      Rooms <span> <i class="bx bxs-door-open"></i>2</span>
+                    </li>
+                    <li class="featured__content-item">
+                      Area <span> <i class="bx bx-trip"></i>1450</span>
+                    </li>
+                  </ul>
+                </div>
+              </button>
+              {% else %}
+                <a href="{% url 'apartment_detail' testamonial.pk %}" class="featured__card swiper-slide">
+                </form>
+              <div class="featured__badge">
+                <span class="letter-spacing-2">featured</span>
+              </div>
+              <div class="featured__img">
+                {% if testamonial.image %}
+                  <img src="{{ testamonial.image.url }}" alt="featured__img" />
+                {% endif %}
+              </div>
+
+              <div class="featured__data">
+                <div>
+                  <h3 class="featured__title">{{testamonial.estate_name}}</h3>
+                  <p class="featured__description">
+                    {{ testamonial.location }} in {{ testemonial.city }}
+                  </p>
+                </div>
+                <ul class="featured__content">
+                  <li class="featured__content-item">
+                    Bath <span> <i class="bx bx-bath"></i>2</span>
+                  </li>
+                  <li class="featured__content-item">
+                    Bed <span> <i class="bx bx-bed"></i>2</span>
+                  </li>
+                  <li class="featured__content-item">
+                    Rooms <span> <i class="bx bxs-door-open"></i>2</span>
+                  </li>
+                  <li class="featured__content-item">
+                    Area <span> <i class="bx bx-trip"></i>1450</span>
+                  </li>
+                </ul>
+              </div>
+            </a>
+              {% endif %}
+              {% endfor %}
+              <!-- end loop for featured section -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!--==================== EXCLUSIVE PICKS ====================-->
+      <section class="exclusive section" id="exclusive">
+        <div class="exclusive__wrapper">
+          <span class="section__subtitle"
+            >Most Exclusive Properties By Our Team.</span
+          >
+          <h2 class="section__title">Exclusive Picks<span>.</span></h2>
+
+          <div class="exclusive__container">
+
+            {% for estate in apartment %}
+            <article class="exclusive__card">
+              <div class="exclusive__img">
+                {% if estate.image1 %}
+                <img src="{{ estate.image1.url }}" alt="exclusive__img" />
+                {% endif %}
+              </div>
+              <div class="exclusive__data">
+                <h3 class="exclusive__title letter-spacing-2"> Exclusive </h3>
+                <p class="section__subtitle"> {{ estate.apartment_name_rooms }} </p>
+                <p class="exclusive__description">
+                 {{ estate.bedroom_type }} bedroom Flat at {{ estate.apartment_name_rooms }} in Lagos
+                </p>
+                {% comment %} <a href="{% url 'apartment_detail' estate.pk %}" class="btn button__outlined">View Now</a> {% endcomment %}
+              </div>
+            </article>
+            {% endfor %}
+
+          </div>
+          <a href="#" class="btn button__outlined exclusive__button"
+            >See All Exclusive Deals</a
+          >
+        </div>
+      </section>
+
+      <!--==================== ABOUT ====================-->
+      <section class="about section" id="about">
+        <div class="about__img">
+          <div class="about__img-1">
+            <img src="{% static 'asset_detail/img/gal-2.jpeg' %}" alt="about" class="about__images" />
+          </div>
+          <div class="about__img-2">
+            <img src="{% static 'asset_detail/img/gal-3.jpeg' %}" alt="about" class="about__images" />
+          </div>
+        </div>
+        <div class="about__content">
+          <span class="section__subtitle letter-spacing-2 text-uppercase"
+            >About Us</span
+          >
+          <h2 class="section__title about__title">
+            The Most Preferred Real Esate Realtors in West Africa<span>.</span>
+          </h2>
+          <p class="section__description">
+            Rent4Less by Alpha Mead is a rental scheme designed to provide a
+            flexible and convenient option for middle income Nigerians to rent
+            homes. With this scheme, you can now spread out payment for
+            apartments in choice locations, by paying a specified rate, on a
+            monthly basis.
+          </p>
+
+          <a href="{% url 'about' %}" class="btn button">Learn More</a>
+        </div>
+      </section>
+
+      <!--==================== JOIN TODAY ====================-->
+      <section class="join section" id="join">
+        <div class="join__wrapper">
+          <div class="join__content">
+            <span class="section__subtitle">Join Our Community Today.</span>
+            <h2 class="section__title join__title">Join Today<span>.</span></h2>
+            <p class="join__description">
+              Join our growing community. Pay rent monthly.
+            </p>
+            <ul class="join__description">
+              <li><i class="bx bx-cross"></i>No Agency Fee</li>
+              <li><i class="bx bx-cross"></i>No Commission</li>
+              <li><i class="bx bx-cross"></i>Pay & Pack In</li>
+            </ul>
+            <a href="{% url 'register' %}" class="btn button__outlined join__button">
+              Sign Up Now
+            </a>
+          </div>
+          <div class="join__img">
+            <img src="{% static 'asset_detail/img/place-4.jpg' %}" alt="join__img" />
+          </div>
+        </div>
+      </section>
+
+      <!--==================== GALLERY ====================-->
+      <section class="gallery section" id="gallery">
+        <div class="gallery__wrapper">
+          <span class="section__subtitle"
+            >Most Exclusive Properties that suits your budget.</span
+          >
+          <h2 class="section__title">OUR GALLERY<span>.</span></h2>
+
+          <div class="gallery__container">
+            <a
+              href="{% static 'asset_detail/img/gal-1.jpeg' %}"
+              data-lightbox="models"
+              data-title="Caption1"
+              class="gallery__item gallery__item--1"
+            >
+              <img
+                src="{% static 'asset_detail/img/gal-1.jpeg' %}"
+                alt="Gallery image 1"
+                class="gallery__img"
+              />
+            </a>
+            <a
+              href="{% static 'asset_detail/img/gal-2.jpeg' %}"
+              data-lightbox="models"
+              data-title="Caption2"
+              class="gallery__item gallery__item--2"
+            >
+              <img
+                src="{% static 'asset_detail/img/gal-2.jpeg' %}"
+                alt="Gallery image 2"
+                class="gallery__img"
+              />
+            </a>
+            <a
+              href="{% static 'asset_detail/img/gal-3.jpeg' %}"
+              data-lightbox="models"
+              data-title="Caption3"
+              class="gallery__item gallery__item--3"
+            >
+              <img
+                src="{% static 'asset_detail/img/gal-3.jpeg' %}"
+                alt="Gallery image 3"
+                class="gallery__img"
+              />
+            </a>
+            <a
+              href="{% static 'asset_detail/img/gal-4.jpeg' %}"
+              data-lightbox="models"
+              data-title="Caption4"
+              class="gallery__item gallery__item--4"
+            >
+              <img
+                src="{% static 'asset_detail/img/gal-4.jpeg' %}"
+                alt="Gallery image 4"
+                class="gallery__img"
+              />
+            </a>
+            <a
+              href="{% static 'asset_detail/img/gal-5.jpeg' %}"
+              data-lightbox="models"
+              data-title="Caption1"
+              class="gallery__item gallery__item--5"
+            >
+              <img
+                src="{% static 'asset_detail/img/gal-5.jpeg' %}"
+                alt="Gallery image 5"
+                class="gallery__img"
+              />
+            </a>
+            <a
+              href="{% static 'asset_detail/img/gal-6.jpeg' %}"
+              data-lightbox="models"
+              data-title="Caption6"
+              class="gallery__item gallery__item--6"
+            >
+              <img
+                src="{% static 'asset_detail/img/gal-6.jpeg' %}"
+                alt="Gallery image 6"
+                class="gallery__img"
+              />
+            </a>
+            <a
+              href="{% static 'asset_detail/img/gal-7.jpeg' %}"
+              data-lightbox="models"
+              data-title="Caption7"
+              class="gallery__item gallery__item--7"
+            >
+              <img
+                src="{% static 'asset_detail/img/gal-7.jpeg' %}"
+                alt="Gallery image 7"
+                class="gallery__img"
+              />
+            </a>
+            <a
+              href="{% static 'asset_detail/img/gal-8.jpeg' %}"
+              data-lightbox="models"
+              data-title="Caption8"
+              class="gallery__item gallery__item--8"
+            >
+              <img
+                src="{% static 'asset_detail/img/gal-8.jpeg' %}"
+                alt="Gallery image 8"
+                class="gallery__img"
+              />
+            </a>
+            <a
+              href="{% static 'asset_detail/img/gal-9.jpeg' %}"
+              data-lightbox="models"
+              data-title="Caption9"
+              class="gallery__item gallery__item--9"
+            >
+              <img
+                src="{% static 'asset_detail/img/gal-9.jpeg' %}"
+                alt="Gallery image 9"
+                class="gallery__img"
+              />
+            </a>
+            <a
+              href="{% static 'asset_detail/img/gal-10.jpeg' %}"
+              data-lightbox="models"
+              data-title="Caption10"
+              class="gallery__item gallery__item--10"
+            >
+              <img
+                src="{% static 'asset_detail/img/gal-10.jpeg' %}"
+                alt="Gallery image 10"
+                class="gallery__img"
+              />
+            </a>
+            <a
+              href="{% static 'asset_detail/img/gal-11.jpeg' %}"
+              data-lightbox="models"
+              data-title="Caption11"
+              class="gallery__item gallery__item--11"
+            >
+              <img
+                src="{% static 'asset_detail/img/gal-11.jpeg' %}"
+                alt="Gallery image 11"
+                class="gallery__img"
+              />
+            </a>
+            <a
+              href="{% static 'asset_detail/img/gal-12.jpeg' %}"
+              data-lightbox="models"
+              data-title="Caption12"
+              class="gallery__item gallery__item--12"
+            >
+              <img
+                src="{% static 'asset_detail/img/gal-12.jpeg' %}"
+                alt="Gallery image 12"
+                class="gallery__img"
+              />
+            </a>
+            <a
+              href="{% static 'asset_detail/img/gal-13.jpeg' %}"
+              data-lightbox="models"
+              data-title="Caption13"
+              class="gallery__item gallery__item--13"
+            >
+              <img
+                src="{% static 'asset_detail/img/gal-13.jpeg' %}"
+                alt="Gallery image 13"
+                class="gallery__img"
+              />
+            </a>
+            <a
+              href="{% static 'asset_detail/img/gal-14.jpeg' %}"
+              data-lightbox="models"
+              data-title="Caption14"
+              class="gallery__item gallery__item--14"
+            >
+              <img
+                src="{% static 'asset_detail/img/gal-14.jpeg' %}"
+                alt="Gallery image 14"
+                class="gallery__img"
+              />
+            </a>
+          </div>
+        </div>
+      </section>
+      <!--==================== Faq ====================-->
+      <section class="faq section" id="faq">
+        <div class="faq__container">
+          <div class="faq__images">
+            <div class="faq__orbe"></div>
+            <div class="faq__img">
+              <img src="{% static 'asset_detail/img/value.jpg' %}" alt="faq__img" />
+            </div>
+          </div>
+          <div class="faq__content">
+            <div class="faq__data">
+              <span class="section__subtitle">Faqs</span>
+              <h2 class="section__title">
+                Frequently Asked Questions<span>.</span>
+              </h2>
+              <p class="faq__description">
+                We always ready to help by providing the best service for you.
+                We believe a good place to live can make your life better.
+              </p>
+            </div>
+            <div class="faq__accordion">
+              <div class="faq__accordion-item">
+                <header class="faq__accordion-header">
+                  <i class="bx bxs-shield-x faq__accordion-icon"></i>
+                  <h3 class="faq__accordion-title">
+                    Best interest rates on the market
+                  </h3>
+                  <div class="faq__accordion-arrow">
+                    <i class="bx bxs-down-arrow"></i>
+                  </div>
+                </header>
+                <div class="faq__accordion-content">
+                  <p class="faq__accordion-description">
+                    Price we provides is the best for you, we guarantee no price
+                    changes on your property due to various unexpected costs
+                    that may come.
+                  </p>
+                </div>
+              </div>
+
+              <div class="faq__accordion-item">
+                <header class="faq__accordion-header">
+                  <i class="bx bxs-x-square faq__accordion-icon"></i>
+                  <h3 class="faq__accordion-title">Prevent unstable prices</h3>
+                  <div class="faq__accordion-arrow">
+                    <i class="bx bxs-down-arrow"></i>
+                  </div>
+                </header>
+                <div class="faq__accordion-content">
+                  <p class="faq__accordion-description">
+                    Price we provides is the best for you, we guarantee no price
+                    changes on your property due to various unexpected costs
+                    that may come.
+                  </p>
+                </div>
+              </div>
+
+              <div class="faq__accordion-item">
+                <header class="faq__accordion-header">
+                  <i class="bx bxs-bar-chart-square faq__accordion-icon"></i>
+                  <h3 class="faq__accordion-title">
+                    Best prices on the market
+                  </h3>
+                  <div class="faq__accordion-arrow">
+                    <i class="bx bxs-down-arrow"></i>
+                  </div>
+                </header>
+                <div class="faq__accordion-content">
+                  <p class="faq__accordion-description">
+                    Price we provides is the best for you, we guarantee no price
+                    changes on your property due to various unexpected costs
+                    that may come.
+                  </p>
+                </div>
+              </div>
+
+              <div class="faq__accordion-item">
+                <header class="faq__accordion-header">
+                  <i class="bx bxs-check-square faq__accordion-icon"></i>
+                  <h3 class="faq__accordion-title">Security of your data</h3>
+                  <div class="faq__accordion-arrow">
+                    <i class="bx bxs-down-arrow"></i>
+                  </div>
+                </header>
+                <div class="faq__accordion-content">
+                  <p class="faq__accordion-description">
+                    Price we provides is the best for you, we guarantee no price
+                    changes on your property due to various unexpected costs
+                    that may come.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!--==================== CONTACT ====================-->
+      <!-- <section class="contact section" id="contact"></section> -->
+
+      <!--==================== SUBSCRIBE ====================-->
+      <!-- <section class="subscribe section"></section> -->
+    </main>
+
+    <!--==================== FOOTER ====================-->
+    <footer class="footer section">
+      <div class="container">
+        <div class="footer__item">
+          <ul class="footer__list">
+            <li><a href="{# url 'about' %}"> About </a></li>
+            <li><a href="#"> Gallery </a></li>
+            <li><a href="#"> Faq </a></li>
+            <li><a href="#"> Our Vison & Mission </a></li>
+            <li><a href="{% url 'contact' %}"> Contact Us </a></li>
+            <li><a href="#"> Terms & Condition </a></li>
+            <li><a href="#"> Property </a></li>
+          </ul>
+        </div>
+        <div class="footer__item footer__location">
+          <div class="footer__location--logo">
+            <img src="{% static 'asset_detail/img/rent4less-logo-small.png' %}" alt="logo" />
+          </div>
+          <div class="footer__location--address">
+            <i class="bx bxs-map-alt"></i>
+            <span>6 Mobolaji Johnson avenue, Ikoyi , Lagos. Nigeria</span>
+          </div>
+          <div class="footer__location--address">
+            <i class="bx bx-phone"></i>
+            <span>+234 90 8456 3508, +234 81 2182 5297</span>
+          </div>
+          <div class="footer__location--address">
+            <i class="bx bxs-map-alt"></i>
+            <span>sales@rent4less.com, reservation@rent4less.com</span>
+          </div>
+        </div>
+        <div class="footer__item">
+          <div class="footer__subscribe">
+            <span class="section__subtitle letter-spacing-3 text-uppercase"
+              >Newsletter</span
+            >
+            <p class="footer__subscribe--description">
+              Subscribe to our email newsletter to receive updates and news on
+              special offers.
+            </p>
+            <p id="basket-qty2"> {{ msg }} </p>
+            <form class="footer__subscribe--form" method="post">
+              {% csrf_token %}
+              <input type="email" placeholder="Email address" name="email"/>
+              <button type="submit" class="update"><i class="bx bx-send"></i></button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="footer__copyright">
+          <p>Copyright © 2022 Rent4Less</p>
+          <p> designed by team mastertech </p>
+        </div>
+      </div>
+    </footer>
+
+    <!--========== SCROLL UP ==========-->
+    <a href="#" class="scrollup" id="scroll-up">
+      <i class="bx bx-chevrons-up"></i>
+    </a>
+
+    <script type="text/javascript">
+      updatebtns = document.getElementsByClassName('update')
+
+for (let i = 0; i < updatebtns.length; i++) {
+    updatebtns[i].addEventListener('click', function(e) {
+        e.preventDefault();
+    })
+    
+}
+
+
+function updateUserOrder(roomid, action){
+    console.log('sending data')
+
+
+    var url = '/';
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,
+        }
+    })
+
+    .then((response) =>{
+        return response.json()
+    })
+
+    .then((data) => {
+        console.log(data.qty)
+        const messageButton = document.getElementById('update');
+        messageButton.textContent = data.qty;
+    })
+} 
+
+
+
+    </script>
+
+    <!--=============== SCROLLREVEAL ===============-->
+    <script src="{% static 'asset_detail/js/scrollreveal.min.js' %}"></script>
+
+    <!--=============== SWIPER JS ===============-->
+    <script src="{% static 'asset_detail/js/swiper-bundle.min.js' %}"></script>
+
+    <!--=============== lIGHTBOX ===============-->
+    <script src="{% static 'asset_detail/js/lightbox.js' %}"></script>
+
+    <!--=============== MAIN JS ===============-->
+    <script src="{% static 'asset_detail/js/main.js' %}"></script>
+
+    <!--=============== Ajax JS ===============-->
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+
+    <script>
+      var availableTags = [];
+      $.ajax({
+		type: "GET",
+		url: "{% url 'estate-listing' %}",
+		success: function (response) {
+            startAutocomplete(response);
+		}
+		});
+
+	function startAutocomplete(availableTags)
+	{
+        $( "#search-estate" ).autocomplete({
+          source: availableTags
+        });
+     }
+  </script>
+  </body>
+</html>

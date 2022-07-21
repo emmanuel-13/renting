@@ -1,0 +1,17 @@
+{% autoescape off %}
+Hello Esteemed User,
+
+{{ title }}
+
+remember you can book an apartment/room at your own time.
+{{ description }}
+
+Sincerely,
+{% if user.is_staff  %}
+    The Rent4Less Staff Team
+{% else %}
+    The Rent4Less Admin Team
+{% endif %}
+
+
+{% endautoescape %}

@@ -1,9 +1,23 @@
 {% extends "Dashboard/base.html" %}
 
-{% block content %}
- {% if booking %}
 
- {{ booking }}
+{% block content %}
+<p style="display: flex; justify-content: flex-end">
+   <a href="{% url 'history_clear' %}">
+      <button class="button">
+      Clear History
+      </button>
+   </a>
+</p>
+ {% if estate %}
+   {% for estate in estate %}
+   {% if estate.image %}
+   <img src="{{ estate.image.url }}" height="200px" width="200px">
+   {% endif %}   
+      <p style="padding-left: 20px;"> {{ estate.estate_name }} </p>
+      <p style="padding-left: 20px;"> {{ estate.city }} </p>
+      <p style="padding-left: 20px;"> {{ estate.location }} </p>
+   {% endfor %}
 
  {% else %}
     no history found

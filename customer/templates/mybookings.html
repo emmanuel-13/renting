@@ -3,55 +3,180 @@
 {% block content %}
 
 {% comment %} {%  app_tags %} {% endcomment %}
-<h3 class="text-center  text-success"> My Bookings </h3>
+{% if user.is_authenticated and not user.is_superuser and not user.is_staff %}
 {% if bookings %}
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Room</th>
-            <th>Price</th>
-            <th>Check in</th>
-            <th>Status</th>
-            {% if bookings.status == False %}
-            <th> Checkout </th>
-            <th> Cancel </th>
-            {% else %}
-            <th> Checkout </th>
-            <th> proccess </th>
-            {% endif %}
-        </tr>
-    </thead>
-    <tbody>
-        {% for bookings in bookings %}
-        <tr>
-            <td> {{ bookings.guest }}
-            <td>{{bookings.room}}</td>
-            <td>#{{bookings.room.price }}</td>
-            <td>{{bookings.check_in}}</td>
-            <td>{% if bookings.status == False %} Incompleted {% else %} Completed {% endif %}</td>
-            {% if bookings.status == False %}
-            <td><button class="btn btn-info">  Checkout </button></td>
-            <td><button class="btn btn-danger"> Cancel Booking </button></td>
-            {% else %}
-            <td><button class="btn btn-success">  Completed </button></td>
-            <td><button class="btn btn-success">  Running </button></td>
-            {% endif %}
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-{% else %}
-{% for message in messages %}
-        <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert" id="msgs">
-        {{message}}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-        </button>
-        </div>
-{% endfor %}
-<p> no booking found </p>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h3 class="m-0 font-weight-medium text-success">
+        My Bookings
+      </h3>
+    </div>
+    
+    <div class="card-body overflow-auto">
+        {% if bookings %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Room</th>
+                    <th>Price</th>
+                    <th>Check in</th>
+                    <th>Status</th>
+                    {% if bookings.status == False %}
+                    <th> Checkout </th>
+                    <th> Renew </th>
+                    {% else %}
+                    <th> Checkout </th>
+                    <th> proccess </th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for bookings in bookings %}
+                <tr>
+                    <td>{{bookings.room.unique_room_id }}</td>
+                    <td>{{bookings.prices }}</td>
+                    <td>{{bookings.book_date}}</td>
+                    <td>{% if bookings.room.occupied == "expired" %} Expired {% else %} Running {% endif %}</td>
+                    {% if bookings.room.occupied == "expired" %}
+                    <td>  {{ bookings.checkout }} </td>
+                    <td>
+                        <form>
+                            <script src="https://js.paystack.co/v1/inline.js"></script>
+                            <button class="btn btn-danger" onclick="payWithPayStack()"> Renew Payment </button>
+                        </form>
+                    </td>
+                    {% else %}
+                    <td>  {{ bookings.checkout }} </td>
+                    <td><button class="btn btn-success">  Running </button></td>
+                    
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p> no booking found </p>
+    </div>
+</div>
 
+        {% endif %}
+    {% else %}
+    <p> no booking found </p>
 {% endif %}
 
+{% endif %}
+    {% if user.is_superuser or user.is_staff %}
+        {% if booking %}
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h3 class="m-0 font-weight-bold text-primary">
+                 Bookin{{booking|pluralize:"g,g\'s"}}
+              </h3>
+            </div>
+
+            
+            <div class="card-body overflow-auto">
+                {% if booking %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th> S/N </th>
+                            <th>Name</th>
+                            <th>Room</th>
+                            <th>Price</th>
+                            <th>Check in</th>
+                            {% if booking.status == False %}
+                            <th> Make Payment </th>
+                            {% else %}
+                            <th> Checkout </th>
+                            <th> proccess </th>
+                            {% endif %}
+                            <th>More</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for bookings in booking %}
+                        <tr>
+                            <td> {{ forloop.counter }} </td>
+                            <td> {{ bookings.payment.username }}
+                            <td> {{bookings.room.unique_room_id}} </td>
+                            <td>{{bookings.prices }}</td>
+                            <td>{{bookings.book_date}}</td>
+                            {% if bookings.status == False %}
+                            <td><button class="btn btn-danger"> Proceed </button></td>
+                            {% else %}
+                            <td>  {{ bookings.checkout }} </td>
+                            {% if bookings.room.occupied == "running" %}
+                                <td><button class="btn btn-success">  {{bookings.room.occupied }} </button></td>
+                            {% elif bookings.room.occupied == "pending" %}
+                                <td><button class="btn btn-success">  {{bookings.room.occupied }} </button></td>
+                            {% elif bookings.room.occupied == "expired" %}
+                                <td><button class="btn btn-success">  {{bookings.room.occupied }} </button></td>
+                            {% else %}
+                                <td><button class="btn btn-success">  {{bookings.room.occupied }} </button></td>
+                            {% endif %}
+                            {% endif %}
+                            <td class="dropdown no-arrow">
+                                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-buttom shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                                    <div class="dropdown-header"> Booking:</div>
+                                    {% if bookings.room.occupied == "expired" %}
+                                        <a class="dropdown-item" href="{% url 'make_vacant' bookings.id %}"> Make Room Vacant</a>
+                                    {% endif %}
+                                    <a class="dropdown-item" href="{% url 'booking_views' bookings.id %}">View Bookings</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Something else</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p> no booking found </p>
+                {% endif %}
+            </div>
+        </div>
+        {% else %}
+        <p> no booking found </p>
+        {% endif %}
+    {% endif %}
+
+
+    <script>
+        function paywithPayStack() {
+            let currency = "NGN";
+            let plan = "";
+            let ref = "{{ bookings.reference }}";
+            let obj = {
+                key: '{{ paystack_public_key }}',
+                email: '{{ bookings.payment.email }}',
+                firstname: '{{ bookings.payment.name }}',
+                amount: '{{ bookings.payment.price }}' * 100,
+                phone: '{{ bookings.payment.phone_no}}',
+                ref: ref,
+   
+                callback: function(response) {
+                        window.location.href = "{% url 'make_payment' %}"
+                }
+            }
+   
+            if (Boolean(currency)) {
+                obj.currency = currency.toUpperCase()
+            }
+   
+            if (Boolean(plan)) {
+               obj.plan = plan;
+           }
+   
+            var handler = PaystackPop.setup(obj)
+            handler.openIframe();
+        }
+    </script>
 {% endblock  %}
+
+
+            

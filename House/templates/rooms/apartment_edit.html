@@ -5,28 +5,35 @@
 
 
 {% if messages %}
-        {% for message in messages %}
-            <div class="text-center alert alert-{{ message.tags }}" id="msg">
-                {{ message|safe }}
-            </div>
-        {% endfor %}
+    {% for message in messages %}
+        <div class="text-center alert alert-{{ message.tags }}" id="msg">
+            {{ message|safe }}
+        </div>
+    {% endfor %}
  {% endif %}
+
  {% if estate %}
-    <h3> Estate List|Edit </h3>
+    <div class="card-header">
+        <p class="text-white py-1 px-2 bg-green d-inline-block"> Estate List | Edit </p>
+    </div>
+
     <div class="row" style="margin-bottom: 150px">
             {% for apartment in estate %}
-            <div class="col-sm-4 mt-4">
-                <div class="card text-center" style="border-radius: 40px;">
-                    <div class="card-body">
-                        {{apartment }}
-                    </div>
-                    <div class="text-center mb-4">
-                        <a href="{% url 'estate_delete' apartment.pk %}">
-                            <button class="btn btn-danger"> Delete</button>
-                        </a>
+                <div class="col-sm-3 mt-4">
+                    <div class="card card-dense shadow rounded py-3 mb-4 link text-center" style="border-radius: 40px;">
+                        <h5 class="card-body text-light">
+                            {{apartment }}
+                        </h5>
+                        <div class="mb-4">
+                            {% comment %} <a href="{% url 'estate_update' apartment.pk %}">
+                                <button class="btn btn-success"> Update </button>
+                            </a> {% endcomment %}
+                            <a href="{% url 'estate_delete' apartment.pk %}">
+                                <button class="btn btn-danger">Delete</button>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
             {% endfor %}
             {% else %}
             <h3 class="card-header"> Estate Edit </h3>
@@ -43,4 +50,7 @@
         }, 2000);
     </script>
 {% endblock %}
+
+
+
 

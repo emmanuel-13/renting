@@ -1,0 +1,84 @@
+{% extends 'Dashboard/base.html' %}
+{% load crispy_forms_tags static bootstrap3 %}
+
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/main2.css' %}">
+
+
+    {% if admin_create_form %}
+        {% if admin_create_form.error %}
+                <p> please correct the error below </p>
+        {% endif %}
+    <span><a href="{% url 'admin_messages' %}" style="text-decoration: none">  Back </a></span>
+    <h2 class="card-header text-center mr-4">
+        
+        <a href="#" style="text-decoration: none"> Create Message </a>
+    </h2>
+    <form action="" method="post" class="mt-4" autocomplete="off">
+        {% csrf_token %}
+    
+    <div class="row">
+        <div class="col-sm-2"></div>
+
+        <div class="col-sm-8">
+        <fieldset> 
+                {{ admin_create_form.non_field_errors }}
+                {% for field in admin_create_form %}
+                <div class="row">
+                    <div class="col-md-2">{% bootstrap_label field.label %}</div>
+                    <div class="col-md-8">{% bootstrap_field field show_label=False %}</div>
+                </div>
+                {% endfor %}
+        </fieldset>
+        </div>
+        <div class="col-sm-2"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4 mt-3">
+                <button type="submit" class="btn btn-success text-center form-control" name="button"> Send </button>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+    </form>
+    {% else %}
+            {% if admin_update_form.error %}
+            <p> please correct the error below </p>
+        {% endif %}
+        <span><a href="{% url 'admin_messages' %}" style="text-decoration: none">  Back </a></span>
+        <h2 class="card-header text-center mr-4"><a href="#" style="text-decoration: none"> Update {{ dev|truncatechars:20 }} </a></h2>
+        <form action="" method="post" class="mt-4" autocomplete="off">
+        {% csrf_token %}
+
+        <div class="row">
+        <div class="col-sm-2"></div>
+
+        <div class="col-sm-8">
+        <fieldset> 
+            {{ admin_update_form.non_field_errors }}
+            {% for field in admin_update_form %}
+            <div class="row">
+                <div class="col-md-2">{% bootstrap_label field.label %}</div>
+                <div class="col-md-8">{% bootstrap_field field show_label=False %}</div>
+            </div>
+            {% endfor %}
+        </fieldset>
+        </div>
+        <div class="col-sm-2"></div>
+        </div>
+
+        <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4 mt-3">
+            <button type="submit" class="btn btn-success text-center form-control" name="button"> Update </button>
+        </div>
+        <div class="col-md-4"></div>
+        </div>
+        </form>
+    {% endif %}
+
+{% endblock %}
+
+

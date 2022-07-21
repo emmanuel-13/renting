@@ -1,0 +1,25 @@
+.booking-card-body::-webkit-scrollbar{
+    /* scrollbar-width: none; */
+    width: 0.5rem;
+    height: 0.3rem;
+    border-radius: 0.5rem;
+    border-color: hsl(228, 8%, 76%);
+}
+
+.booking-card-body::-webkit-scrollbar-thumb{
+    border-radius: 0.5rem;
+    background-color: hsla(226, 7%, 53%, 0.395);
+}
+
+.booking-card-body::-webkit-scrollbar-thumb:hover{
+    border-radius: 0.5rem;
+    background-color: hsl(228, 8%, 54%);
+}
+/* .booking-card-body::-webkit-scrollbar:horizontal {
+    height: 0;
+    width: 0;
+    display: none;
+} */
+
+
+

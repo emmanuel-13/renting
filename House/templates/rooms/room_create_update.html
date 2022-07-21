@@ -15,15 +15,17 @@
             <img src="{{ room.image1.url }}" height="200px" width="200px" style="margin-left: 20px">
         {% endif %}
 
-        {% if room.image2 %}
-            <p class="mt-3"> <img src="{{ room.image2.url }}" height="200px" width="200px" style="margin-left: 20px"> </p>
-        {% endif %}
         {% else %}
         <p class="pt-4"> Room ID: <span style="margin-left: 70px;"> {{room.room_id}} </span></p>
+
+        <p class="pt-4"> Service Charge: <span style="margin-left: 70px;"> {{room.service_charge}} </span></p>
+
+        <p class="pt-4"> Power Charge: <span style="margin-left: 70px;"> {{room.power_charge}} </span></p>
 
         {% endif %}
     </div>
 
+    {% if form %}
     <div class="col-sm-8">
         <form action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
@@ -34,9 +36,18 @@
                 <div class="col-md-8">{% bootstrap_field field show_label=False %}</div>
             </div>
             {% endfor %}
-            <button type="submit" class="btn btn-info form-control"> Update </button>
+
+            {% if room.roomimages_set.all  %}
+                <p> Images Avaliable </p>
+            {% endif %}
+            <label for=""> Estate Images </label>
+            <input type="file" name="image" multiple accept="image/*">
+            <button type="submit" class="btn btn-info form-control mt-4"> Update </button>
         </form>
     </div>
+    {% endif %}
     </div>
 
     {% endblock content %}
+
+

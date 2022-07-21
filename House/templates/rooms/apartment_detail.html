@@ -8,30 +8,30 @@
                 </div>
             {% endfor %}
     {% endif %}
-<div class="card-header">
-    <a href="{% url 'estate_list' %}" style="text-decoration: none;">{{estate|upper }}</a>
-</div>
+    
+    <div class="card-header">
+        <a href="{% url 'estate_list' %}" class="text-white py-1 px-2 bg-green" style="text-decoration: none;">{{estate|upper }}</a>
+    </div>
 
     <div class="row mt-4">
         {% if estate.block_set.all %}
             {% for block in estate.block_set.all %}
-            <div class="col-sm-4">
-                <div class="card mb-4">
-                    <a href="{% url 'block_details' estate.pk block.pk %}" style="text-decoration: none;">
+            <div class="col-sm-3">
+                <a href="{% url 'block_details' estate.pk block.pk %}" class="card card-dense shadow rounded py-3 mb-4 link" style="text-decoration: none;">
                     <div class="card-body text-center">
-                    <br> Block {{ block|upper }}<br>
-                    Total Flat {{ block.total_flat }}
+                        <h4 class="text-dark fw-bold text-capitalize"> Block {{ block|upper }}</h4>
+                        <p class="text-white text-capitalize">Total Flat {{ block.total_flat }}</p> 
+                        <i class="fa fa-home text-light fs-1 abs-icon" aria-hidden="true"></i>
                     </div>
-                    </a>
-
-                </div>
+                </a>
             </div>
             {% endfor %}
         {% else %}
-        <p> {{msg}}</p>
+
+        <p class="container"> no block for this estate please delete the estate and try again </p>
         {% endif %}
 
-</div>
+    </div>
 <script>
     setTimeout(function(){
         if ($('#msg').length > 0) {
@@ -42,3 +42,5 @@
 </script>
 
 {% endblock content %}
+
+

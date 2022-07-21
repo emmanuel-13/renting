@@ -1,0 +1,2 @@
+django_middleware_global_request
+django_middleware_global_request_example

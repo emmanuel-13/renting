@@ -25,7 +25,11 @@
                     <th> Room ID </th>
                     <th> Edit Room </th>
                     <th> Unique Room ID </th>
+                    {% if room.apartment_type == "S" %}
                     <th> Room Type </th>
+                    {% else %}
+                    <th> Exclusive Type </th>
+                    {% endif %}
                     <th> Price </th>
                 </tr>
             </thead>
@@ -39,14 +43,23 @@
                         </a>
                     </td>
                     <td>
+                        {% if room.apartment_type == "S" %}
                         <a href="{% url 'room_update' room.room_id %}">
-                                <button class="btn btn-success"> Update </button>
+                            <button class="btn btn-success"> Update </button>
                         </a>
+                        {% else %}
+                        <a href="{% url 'room_update2' room.room_id %}">
+                            <button class="btn btn-success"> Update </button>
+                        </a>
+                        {% endif %}
                     </td>
                     {% if room.unique_room_id %}
                     <td> {{room.unique_room_id }} </td>
-
+                    {% if room.apartment_type == "S" %}
                     <td> {{room.room_types }} </td>
+                    {% else %}
+                    <td> {{room.exclusive_room }} </td>
+                    {% endif %}
                     <td> {{ room.price }}</td>
                     {% endif %}
                 </tr>

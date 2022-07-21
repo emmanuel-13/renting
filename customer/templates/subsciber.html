@@ -1,0 +1,24 @@
+{% extends 'Dashboard/base.html' %}
+{% load crispy_forms_tags static bootstrap3 %}
+
+
+{% block content %}
+    <h2> Subscribers </h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th> EMAIL </th>
+                <th> DATE CREATED </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for subscriber in subscriber %}
+            <tr>
+                <td scope="row"> {{ subscriber.email }}</td>
+                <td> {{ subscriber.date_subcribe }} </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

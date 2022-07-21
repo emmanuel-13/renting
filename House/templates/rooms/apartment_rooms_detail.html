@@ -4,7 +4,16 @@
 
 {% if apartment %}
 
-<p class="card-header" style="text-transform: uppercase;"><a href="{% url 'estate_detailing'  apartment %}" style="text-decoration:none;color: green">{{ apartment.estate_name }} </a> >>>>
+{% if messages %}
+        {% for message in messages %}
+            <div class="text-center alert alert-{{ message.tags }}" id="msg">
+                {{ message|safe }}
+            </div>
+        {% endfor %}
+{% endif %}
+
+
+<p class="card-header" style="text-transform: uppercase;"><a href="{% url 'estate_detailing'  estate %}" style="text-decoration:none;color: green">{{ apartment.estate_name }} </a> >>>>
 <!--    {{estate.id}}|-->
 <!--    {{ b }}-->
      |<a href="{% url 'block_details' estate.pk  b %}" style="text-decoration:none;color: blue"> Block  {{ apartment.block }}</a> >>>> {{ apartment.flat_id }}</p>
@@ -21,6 +30,8 @@
                     <th> Unique Room ID </th>
                     <th> Room Type </th>
                     <th> Price </th>
+                    <th> Dicount Price </th>
+                    <th> Room Update </th>
                 </tr>
             </thead>
 
@@ -30,10 +41,31 @@
                     <td> {{ room.room_id }}</td>
                     {% if room.unique_room_id %}
                     <td> {{room.unique_room_id }} </td>
-
+                    
+                    {% if room.apartment_type == "S" %}
                     <td> {{room.room_types }} </td>
-                    <td> {{ room.price }}</td>
+
+                    {% else %}
+                    <td> {{room.exclusive_room }} </td>
                     {% endif %}
+                    <td> {{ room.price }}</td>
+                    {% if room.discount == "0" %}
+                    <td> no discounted price </td>
+                    {% else %}
+                    <td> {{ room.new_price }} </td>
+                    {% endif %}
+                    {% endif %}
+                    <td> 
+                        {% if room.room_types %}
+                            <a href="{% url 'room_update_per_shared' room.pk %}">
+                            <button class="btn btn-primary"> Update Room </button>
+                            </a>
+                        {% else %}
+                            <a href="{% url 'room_updater_per_exclusive' room.pk %}">
+                                <button class="btn btn-primary"> Update Room </button>
+                            </a>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -50,4 +82,13 @@
 
 {% endif %}
 {% endif %}
+
+<script>
+    setTimeout(function(){
+        if ($('#msg').length > 0) {
+            $('#msg').remove();
+        }
+        
+    }, 2000);
+</script>
 {% endblock content %}

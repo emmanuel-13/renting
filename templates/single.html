@@ -1,4 +1,5 @@
-{% load static custom_tags %}
+{% load static House_extras %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -8,7 +9,7 @@
     <!--=============== FAVICON ===============-->
     <link
       rel="shortcut icon"
-      href="{% static 'asset_detail/img/favicon.png' %}"
+      href="{% static 'asseting/img/favicon.png' %}"
       type="image/x-icon"
     />
 
@@ -19,179 +20,295 @@
     />
 
     <!--=============== SWIPER CSS ===============-->
-    <link rel="stylesheet" href="{% static 'asset_detail/css/swiper-bundle.min.css' %}" />
-
-    <!--=============== LIGHTBOX CSS ===============-->
-    <link rel="stylesheet" href="{% static 'asset_detail/css/lightbox.css' %}" />
+    <link rel="stylesheet" href="{% static 'asseting/css/swiper-bundle.min.css' %}" />
 
     <!--=============== CSS ===============-->
-    <link rel="stylesheet" href="{% static 'asset_detail/css/style.css' %}" />
-    <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-    <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'asseting/css/styleing.css' %}" />
 
     <title>Rent4Less</title>
   </head>
   <body>
-    <div class="secondary__nav">
-      <nav class="container secondary__navigation">
-        <div class="secondary__nav--logo">
-          <img src="{% static 'asset_detail/img/rent4less-logo-small.png' %}" alt="" />
+    <!--==================== SPINNER ====================-->
+    <div class="spinner-wrapper">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- ======= TOAST ANIMATION ====== -->
+    <div class="toast">
+      <div class="toast-content">
+        <i class="bx bxs-check-circle check"></i>
+        <div class="message">
+          <span class="message-text text-1"></span>
         </div>
+      </div>
 
+      <div class="progress"></div>
+    </div>
+    <!-- ======= END TOAST ANIMATION ====== -->
 
-        <ul class="secondary__nav--lists">
-          <li class="secondary__nav--list">
-            <button type="button" class="btn btn-b-n navbar-toggle-box navbar-toggle-box-collapse ml-2" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02">
-              <a href="{% url 'cart_display' %}">
-                  <i class="bi bi-book"></i><sup>{% if total_cart %} {{total_cart }} {% else %} 0 {% endif %} </sup>
-              </a>
-            </button>
+    <!-- =============== SECONDARY NAV ============= -->
+<div class="secondary__nav" id="navbar">
+  <nav class="nav secondary__navigation">
+    <a href="/" class="secondary__nav--logo">
+      <img
+        src="{% static 'asseting/img/rent4less-logo-small.png' %}"
+        alt="rent4less-logo-small"
+      />
+    </a>
+
+    <div class="nav__menu" id="nav-menu">
+      <div class="nav__menu--lists">
+        <ul class="nav__list">
+          <li class="nav__item">
+            <a href="/" class="nav__link">
+              <i class="bx bx-home"></i>
+              <span>Home</span>
+            </a>
           </li>
-          <li class="secondary__nav--list">
-            <a
-              href="https://wa.me/message/DPX4GUMWGJ7SC1"
-              class="skype-link"
-              target="_blank"
-            >
-              <span class="">
-                <!-- whatsapp-image /> -->
-                <img src="{% static 'asset_detail/img/whatsapp.svg' %}" alt="whatsapp img" />
+
+          <li class="nav__item">
+            {% if user.is_authenticated %}
+            <a href="{% url 'user_dashboard' %}" class="nav__link">
+              <i class="bx bxs-dashboard"></i>
+              <span>Dashboard</span>
+            </a>
+            {% elif user.is_staff %}
+            <a href="{% url 'dashboard' %}" class="nav__link">
+                <i class="bx bxs-dashboard"></i>
+                <span>Dashboard</span>
+              </a>
+            {% elif user.is_superuser %}
+                <a href="{% url 'dashboard' %}" class="nav__link">
+                    <i class="bx bxs-dashboard"></i>
+                    <span>Dashboard</span>
+                </a>
+            {% else %}
+                <a href="#" class="nav__link">
+                    <i class="bx bxs-dashboard"></i>
+                    <span>Dashboard</span>
+                </a>
+            {% endif %}
+          </li>
+
+          <li class="nav__item">
+            <a href="{% url 'property' %}" class="nav__link">
+              <i class="bx bxs-landmark"></i>
+              <span>All Properties</span>
+            </a>
+          </li>
+
+          <li class="nav__item">
+            <a href="{% url 'city' %}" class="nav__link">
+              <i class="bx bxs-city"></i>
+              <span>Cities</span>
+            </a>
+          </li>
+
+          <li class="nav__item">
+            <a href="{% url 'cart_detail' %}" class="nav__link">
+              <i class="bx bxs-cart"></i>
+              <span>Cart</span>
+              <span class="ml-auto cart-quantity basket-qty" id="basket-qty2">
+                {% with total_qty=basket|length %}
+
+                {% if total_qty > 0 %}
+
+                  {{ total_qty }}
+                {% else %}
+                0
+                {% endif %}
+              {% endwith %}
               </span>
             </a>
           </li>
-          <li class="secondary__nav--list dropdown">
-            <div>
-              <div class="secondary__nav--list contact">
-                <div class="nav__image">
-                  <img src="{% static 'asset_detail/img/contact-min.jpg' %}" alt="" />
-                  <div>
-                    <span>you can call us for information</span>
-                    <p>+234 8121825297</p>
-                  </div>
-                </div>
-                <div class="dropdown">
-                  <ul class="secondary__nav--lists dropdown__lists">
-                    <li class="secondary__nav--list">
-                      <a
-                        href="https://wa.me/message/DPX4GUMWGJ7SC1"
-                        class="secondary__nav--link dropdown__item"
-                        ><span><img src="{% static 'asset_detail/img/whatsapp.svg' %}" alt="" /></span
-                        >+234 8121825297</a
-                      >
-                    </li>
-                    <li class="secondary__nav--list">
-                      <a
-                        href="tel:+234 812 182 5297"
-                        class="secondary__nav--link dropdown__item"
-                        ><span><i class="bx bxs-phone"></i></span>+234
-                        8121825297</a
-                      >
-                    </li>
-                    <li class="secondary__nav--list">
-                      <a
-                        href="tel:+234 812 182 5297"
-                        class="secondary__nav--link dropdown__item"
-                      >
-                        <span><i class="bx bxs-phone"></i></span>+234
-                        8121825297</a
-                      >
-                    </li>
-                    <li class="secondary__nav--list">
-                      <a
-                        href="tel:+234 812 182 5297"
-                        class="secondary__nav--link dropdown__item"
-                      >
-                        <span><i class="bx bxs-phone"></i></span>+234
-                        8121825297</a
-                      >
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="secondary__nav--list account">
-            <span><i class="bx bxs-user-circle"></i></span>
-            {% if user.is_authenticated %}
-            <button>
-              <span> {{ user.username }}</span>
-              <!-- <span> Account<i class="bx bx-chevron-down"></i></span> -->
-            </button>
-            {% endif %}
-            <div class="dropdown">
-              {% if not user.is_authenticated %}
-              <ul class="secondary__nav--lists dropdown__lists">
-                <li>sign in to access exclusive members deals</li>
-                <li class="secondary__nav--list">
-                  <a href="{% url 'login' %}" class="secondary__nav--link btn button"
-                    >Sign In</a
-                  >
-                </li>
-                <li>New Members? <a href="{% url 'register' %}">Sign Up</a></li>
-              </ul>
-              {% else %}
-              <ul class="secondary__nav--lists dropdown__lists">
-                <li>Are you sure you want to leave now?</li>
-                <li class="secondary__nav--list">
-                  <a href="{% url 'logout' %}" class="secondary__nav--link btn button"
-                    >Sign Out</a
-                  >
-                </li>
-              </ul>
 
-              {% endif %}
-              
-            </div>
+          <li class="nav__item">
+            <a href="{% url 'about' %}" class="nav__link">
+              <i class="bx bx-message-square-dots"></i>
+              <span>About</span>
+            </a>
+          </li>
+
+          <li class="nav__item">
+            <a href="{% url 'contact' %}" class="nav__link">
+              <i class="bx bxs-contact"></i>
+              <span>Contact</span>
+            </a>
           </li>
         </ul>
-      </nav>
+
+        <ul class="nav__list nav__list--active">
+          <i class="bx bxs-bell bx-tada"></i>
+          <li class="nav__item">
+            <a href="{% url 'login' %}" class="nav__link">
+              <i class="bx bxs-user-pin"></i>
+              <span>Become a tenant</span>
+            </a>
+          </li>
+          <li class="nav__item">
+            <a href="{% url 'landlord_create' %}" class="nav__link">
+              <i class="bx bx-building-house"></i>
+              <span>List Your Property</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="nav__theme" id="nav__theme">
+          {% if user.is_authenticated %}
+            <div class="user-profile">
+              <img
+                src="{{user.profile.image.url}}"
+                class="user-profile-img"
+                alt="user"
+              />
+              <div class="user-profile-title">
+                <a href="{% url 'logout' %}" class="user-logout">
+                  Logout
+                </a>
+                <h5>welcome back!</h5>
+                <p>{{user.username}}</p>
+              </div>  
+            </div>
+
+          {% else %}
+          <div class="user-profile-title">
+            <p>Hi, &#128515; </p>
+            <h5> Welcome to R4L! </h5>
+            <a href="{% url 'login' %}" class="user-login">
+                Login
+            </a>
+          </div>
+          {% endif %}
+
+          <i class="bx bx-moon change-theme" id="theme-button"></i>
+        </div>
+
+        <i class="bx bx-x nav__close" id="nav-close"></i>
+      </div>
     </div>
 
-    {% if messages %}
-          {% for message in messages %}
-            <div class="text-center alert alert-{{ message.tags }}" id="msg">
-                {{ message|safe }}
+    <ul class="secondary__nav--lists">
+      <li class="secondary__nav--list dropdown">
+        <div>
+          <div class="secondary__nav--list contact">
+            <div class="nav__image">
+              <img src="{% static 'asseting/img/contact-min.jpg' %}" alt="" />
+              <div>
+                <span>you can call us for information</span>
+                <p>0700-25742-6323</p>
+              </div>
             </div>
-          {% endfor %}
-      {% endif %}
-    
-    
-    <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <a href="{% url 'home' %}">Home</a>
-        </li>
-        <li class="breadcrumb-item">
-          <a href="{% url 'property' %}">All Estate</a>
-        </li>
-        <li class="breadcrumb-item">
-          <a href="{% url 'property_detail' city.pk %}"> {{ estate.city }} </a>
-        </li>
-        {% comment %} <li class="breadcrumb-item">
-          <a href="{% url 'estate_detail' estate.pk %}"> {{ estate.estate_name }} </a>
-        </li> {% endcomment %}
-      </ol>
-    </nav>
+            <div class="dropdown">
+              <ul class="secondary__nav--lists dropdown__lists">
+                <li class="secondary__nav--list">
+                  <a
+                    href="tel:+234 812 182 5297"
+                    class="secondary__nav--link dropdown__item"
+                    ><span class="secondary__nav--icon"
+                      ><i class="bx bxs-phone"></i></span
+                    >0700-25742-6323</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </li>
+     {% comment %} <li class="secondary__nav--list">
+        <a href="{% url 'cart_detail' %}">
+          <span class="secondary__nav--icon">
+            <i class="bx bx-cart cart"></i>
+            <sup class="basket-qty" id="basket-qty2">
+              
+            </sup>
+          </span>
+        </a>
+      </li> {% endcomment %}
+
+      <li class="secondary__nav--list account">
+        <span class="secondary__nav--icon"
+          ><i class="bx bxs-user-circle"></i
+        ></span>
+        <button>
+          <!-- <span>Jhaydrille7575@gmail.com</span> -->
+          <span> Account<i class="bx bx-chevron-down"></i></span>
+        </button>
+        <div class="dropdown">
+          {% if not user.is_authenticated %}
+          <ul class="secondary__nav--lists dropdown__lists">
+            <li>sign in to access exclusive members deals</li>
+            <li class="secondary__nav--list">
+              <a href="{% url 'login' %}" class="secondary__nav--link btn button"
+                >Sign In</a
+              >
+            </li>
+            <li>New Members? <a href="{% url 'register' %}">Sign Up</a></li>
+          </ul>
+          {% else %}
+          <ul class="secondary__nav--lists dropdown__lists">
+            <li>Are you sure you want to leave now?</li>
+            <li class="secondary__nav--list">
+              <a href="#" class="secondary__nav--link btn button"
+                >Sign Out</a
+              >
+            </li>
+          </ul>
+          {% endif %}
+        </div>
+      </li>
+
+      <div class="sign">
+        <i class="bx bxs-widget color-light-black" id="nav-toggle"></i>
+      </div>
+    </ul>
+  </nav>
+</div>
+
+    <!-- =============== MAIN ============= -->
     <main class="main main__single">
+      <div class="single__sidebar--footer no-cart-item">
+        <i class="bx bxs-bookmark-minus bx-tada"></i>
+        <a
+          href="#showBookings"
+          id="start__booking-mobile"
+          class="start__booking text-capitalize"
+        >
+          start Booking
+        </a>
+      </div>
       <div class="main__wrapper">
+        <!-- SINGLE PHOTOS -->
         <div class="section single">
+          <!-- SWIPER -->
+
+          <!-- MAIN SWIPER -->
           <div class="swiper single__slider mainSwiper">
             <div class="single__slider--description">
-              <figure>
-                <img src="{% static 'asset_detail/img/profile-pics.jpeg' %}" alt="profile-pics" />
+              <figure class="estate-agent">
+                <!-- if agent has an image use this -->
+                <!-- <img src="{% static 'asseting/img/user.png' %}" alt="profile-pics" /> -->
+
+                <!-- if no image, use this -->
+                <i class="bx bxs-user-circle"></i>
               </figure>
+              <div class="estate-name">
+                <h3 class="title text-capitalize letter-spacing-1">
+                   {{ estate.estate_name }}
+                </h3>
+                <span>{{ estate.location }}, {{ estate.city }}</span>
+              </div>
             </div>
             <div class="swiper-wrapper">
-              {% for apartment in apartment %}
+              {% for apartment in estate.estateimage_set.all %}
               <div class="swiper-slide">
-                
-                  {% if apartment.apartment_image %}
-                    <img src="{{ apartment.apartment_image.url }}" />
-                  {% else %}
-                    <img src="{% static 'asset_detail/img/place-1.jpg' %}" />
-                  {% endif %}
+                {% if apartment.images %}
+                  <img src="{{ apartment.images.url }}" />
+                {% else %}
+                  <img src="{% static 'asseting/img/place-1.jpg' %}" />
+                {% endif %}
               </div>
               {% endfor %}
+
             </div>
             <div class="swiper-button-single-next">
               <i class="bx bx-chevron-right"></i>
@@ -200,50 +317,55 @@
               <i class="bx bx-chevron-left"></i>
             </div>
           </div>
+          <!-- END MAIN SWIPER -->
 
+          <!-- THUMB SWIPER -->
           <div thumbsSlider="" class="swiper single__thumb thumbSwiper">
             <div class="swiper-wrapper">
-              {% for apartment in apartment %}
+              {% for apartment in estate.estateimage_set.all  %}
               <div class="swiper-slide">
-                {% if apartment.apartment_image %}
-                  <img src="{{ apartment.apartment_image.url }}" />
+                {% if apartment.images %}
+                    <img src="{{ apartment.images.url }}" />
                 {% else %}
-                <img src="{% static 'asset_detail/img/place-1.jpg' %}" />
+                    <img src="{% static 'asseting/img/place-1.jpg' %}" />
                 {% endif %}
               </div>
+
               {% endfor %}
             </div>
           </div>
+          <!-- THUMB SWIPER -->
+
+          <!-- END SWIPER -->
         </div>
+
+        <!-- SINGLE DATA -->
         <div class="single__data">
           <div class="single__detail">
             <div class="text">
               <h3 class="title text-capitalize letter-spacing-1">
-                Luxury Family home in {{ estate.estate_name }}
+                {{ estate.estate_name }}
               </h3>
-              <span>{{ estate.location }}, {{ estate.city }}</span>
+              <span> {{ estate.location }}, {{ estate.city }}</span>
             </div>
-            {% comment %} <div class="price">
-              <h3 class="price__data text-uppercase">₦13.000/Mo</h3>
-            </div> {% endcomment %}
+            <div class="price">
+              <h3 class="price__data text-uppercase">
+                &#8358;12k - &#8358;5M /mo
+              </h3>
+            </div>
           </div>
-          <div class="section single__description">
-            <h6 class="text-capitalize description__heading">description</h6>
-            <p> {{ estate.description }} </p>
-            <div class="show__more" id="show-more">
-              {% if estate.description %}
 
-                <p> {{ estate.description }} </p>
+          <div class="section single__description">
+            <h6 class="text-capitalize description__heading">Description</h6>
+            <div class="show__more" id="show-more">
+
+              {% if estate %}
+              <p>
+                {{ estate.description|markdown|safe|linebreaks }}
+              </p>
 
               {% else %}
               <p>
-                Evans Tower very high demand corner junior one bedroom plus a
-                large balcony boasting full open NYC views. You need to see the
-                views to believe them. Mint condition with new hardwood floors.
-                Lots of closets plus washer and dryer.
-              </p>
-
-              <p>
                 Fully furnished. Elegantly appointed condominium unit situated
                 on premier location. PS6. The wide entry hall leads to a large
                 living room with dining area. This expansive 2 bedroom and 2
@@ -253,133 +375,103 @@
                 master suite is surrounded by handcrafted milkwork and features
                 incredible walk-in closet and storage space.
               </p>
-              <p>
-                Evans Tower very high demand corner junior one bedroom plus a
-                large balcony boasting full open NYC views. You need to see the
-                views to believe them. Mint condition with new hardwood floors.
-                Lots of closets plus washer and dryer.
-              </p>
-
-              <p>
-                Fully furnished. Elegantly appointed condominium unit situated
-                on premier location. PS6. The wide entry hall leads to a large
-                living room with dining area. This expansive 2 bedroom and 2
-                renovated marble bathroom apartment has great windows. Despite
-                the interior views, the apartments Southern and Eastern
-                exposures allow for lovely natural light to fill every room. The
-                master suite is surrounded by handcrafted milkwork and features
-                incredible walk-in closet and storage space.
-              </p>
-              <a
-                href="#propertydetails"
-                class="show__more--button"
-                id="show-more-btn"
-                >Read More</a
-              >
               {% endif %}
+                
+              <a class="show__more--button" id="show-more-btn">Read More</a>
             </div>
           </div>
-          <div class="single__description mb-3">
-            <h6 class="text-capitalize description__heading">
-              Property Details
-            </h6>
-            <div class="single__info">
-              <div class="info__list-1">
+
+          <div class="single__description mb-3 single__info">
+            <!-- Property Details -->
+            <div class="div">
+              <h6 class="text-capitalize description__heading">
+                Property Details
+              </h6>
+              <div class="info__list">
+                {% for estate in estate.estate_property_set.all %}
+                {% if estate.property_detail %}
                 <ul>
-                  <li><b>Property ID:</b> {{ estate.id }}</li>
+                  <li> {{ estate.property_detail|markdown|safe }}</li>
+                </ul>
+                {% else %}
+                <ul>
+                  <li><b>Garage Size:</b> 458 SqFt</li>
+                  <li><b>Year Built:</b> 2019-01-09</li>
+                  <li><b>Property Type:</b> Full Family Home Property</li>
+                  <li><b>Status: </b> For rent</li>
+                </ul>
+                {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+
+            <!-- Additional Properties Detail-->
+            <div class="div">
+              <h6 class="text-capitalize description__heading">
+                Additional Details
+              </h6>
+              <div class="info__list">
+                <ul>
+                  <li><b>Property ID:</b> RV151</li>
                   <li><b>Price:</b> $484,400</li>
                   <li><b>Property Size:</b> 1466 Sq Ft</li>
                   <li><b>Bedrooms:</b> 4</li>
                   <li><b>Bathrooms:</b> 2</li>
                 </ul>
               </div>
-
-              <div class="info__list--2">
-                <ul>
-                  <li><b>Garage:</b> 1</li>
-                  <li><b>Garage Size:</b> 458 SqFt</li>
-                  <li><b>Year Built:</b> 2019-01-09</li>
-                  <li><b>Property Type:</b> Full Family Home Property</li>
-                  <li><b>Status: </b> For rent</li>
-                </ul>
-              </div>
             </div>
           </div>
-          <div class="single__description mb-3">
-            <h6 class="text-capitalize description__heading">
-              Additional Details
-            </h6>
-            <div class="single__info">
-              <div class="info__list-1">
-                <ul>
-                  <li><b>Property ID:</b> {{ estate.id }}</li>
-                  <li><b>Price:</b> $484,400</li>
-                  <li><b>Property Size:</b> 1466 Sq Ft</li>
-                  <li><b>Bedrooms:</b> 4</li>
-                  <li><b>Bathrooms:</b> 2</li>
-                </ul>
-              </div>
 
-              <div class="info__list--2">
-                <ul>
-                  <li><b>Garage:</b> 1</li>
-                  <li><b>Garage Size:</b> 458 SqFt</li>
-                  <li><b>Year Built:</b> 2019-01-09</li>
-                  <li><b>Property Type:</b> Full Family Home Property</li>
-                  <li><b>Status: </b> For rent</li>
-                </ul>
-              </div>
-            </div>
-          </div>
           <div class="single__description mb-3">
             <h6 class="text-capitalize description__heading">Features</h6>
             <ul class="single__feature">
-              <li><i class="bx bxs-checkbox-checked"></i> Air Conditioning</li>
-              <li><i class="bx bxs-checkbox-checked"></i> Pets Allow</li>
-              <li><i class="bx bxs-checkbox-checked"></i> Window Covering</li>
-              <li><i class="bx bxs-checkbox-checked"></i> Swiming Pool</li>
-              <li><i class="bx bxs-checkbox-checked"></i> Air Conditioning</li>
-              <li><i class="bx bxs-checkbox-checked"></i> Free WiFi</li>
-              <li><i class="bx bxs-checkbox-checked"></i> Central Heating</li>
-              <li><i class="bx bxs-checkbox-checked"></i> Gym</li>
-              <li><i class="bx bxs-checkbox-checked"></i> Car Parking</li>
-              <li><i class="bx bxs-checkbox-checked"></i> Spa & Massage</li>
-              <li><i class="bx bxs-checkbox-checked"></i> Alarm</li>
+              <li><i class="bx bxs-check-shield"></i> Air Conditioning</li>
+              <li><i class="bx bxs-check-shield"></i> Pets Allow</li>
+              <li><i class="bx bxs-check-shield"></i> Window Covering</li>
+              <li><i class="bx bxs-check-shield"></i> Swiming Pool</li>
+              <li><i class="bx bxs-check-shield"></i> Air Conditioning</li>
+              <li><i class="bx bxs-check-shield"></i> Free WiFi</li>
+              <li><i class="bx bxs-check-shield"></i> Central Heating</li>
+              <li><i class="bx bxs-check-shield"></i> Gym</li>
+              <li><i class="bx bxs-check-shield"></i> Car Parking</li>
+              <li><i class="bx bxs-check-shield"></i> Spa & Massage</li>
+              <li><i class="bx bxs-check-shield"></i> Alarm</li>
             </ul>
           </div>
+
           <div class="single__description mb-3">
             <h6 class="text-capitalize description__heading">Property Video</h6>
             <div class="single__video">
               <figure>
                 <div class="single__video--container">
-                  <img src="{% if estate.image %}  {{ estate.image.url }} {% else %} {% static 'asset_detail/img/video-overlay.jpg' %} {% endif %}" alt="video-overlay" />
+                  <img src="{{ estate.image.url }}" alt="video-overlay" />
+
+                  {% for estate in estate.estate_property_set.all  %}
                   <a
                     target="_blank"
                     class="play-video"
-                    href="https://www.youtube.com/watch?v=WDQ0cPwHYDA&list=TLPQMDIwNjIwMjJUBAfeUOF_LA&index=1"
+                    href="{{ estate.property_video}}"
                   >
                     <i class="bx bx-play"></i>
                   </a>
+                  {% endfor %}
                 </div>
               </figure>
             </div>
           </div>
+
           <div class="single__description mb-3">
             <h6 class="text-capitalize description__heading">Location</h6>
             <div class="single__map">
+              <p class="address mb-1 text-capitalize">
+                  {{ estate.location }}, {{ estate.city }}
+              </p>
               <figure>
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3964.5541760635338!2d3.4236494147405936!3d6.451234095332785!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103bf5e023e3f347%3A0x5722f3fab5122e8f!2s6%20Mobolaji%20Johnson%20Ave%2C%20Ikoyi%20106104%2C%20Lagos!5e0!3m2!1sen!2sng!4v1654209000359!5m2!1sen!2sng"
-                  width="600"
-                  height="450"
-                  style="border: 0"
-                  allowfullscreen
-                  loading="lazy"
-                  referrerpolicy="no-referrer-when-downgrade"
-                ></iframe>
+                <div class="map-holder" id="map" style="height: 100%"></div>
               </figure>
             </div>
           </div>
+
           <div class="single__description mb-3">
             <h6 class="text-capitalize description__heading">Whats Nearby</h6>
             <div class="single__nearby mb-2">
@@ -393,11 +485,11 @@
                   <p><i class="bx bxs-map"></i> 2.5 km</p>
                 </li>
                 <li>
-                  <span>Eladia's Kids </span>
+                  <span>Brooklyn Brainery</span>
                   <p><i class="bx bxs-map"></i> 3.5 km</p>
                 </li>
                 <li>
-                  <span>Eladia's Kids </span>
+                  <span>Wikdom Senior High Scool</span>
                   <p><i class="bx bxs-map"></i> 2.5 km</p>
                 </li>
               </ul>
@@ -426,196 +518,2098 @@
             </div>
           </div>
         </div>
+
+        <!-- SINGLE SIDEBAR -->
         <div class="single__sidebar section">
           <div class="single__sidebar--wrapper">
-            <div class="single__sidebar--header">
+            <div class="single__sidebar--content single__sidebar--header">
               <div class="single__sidebar--header--title">
                 <figure>
-                  {% if estate.image %}
-                    <img src="{{ estate.image.url }}" alt="agent-1" />
-                  {% else %}
-                    <img src="{% static 'asset_detail/img/agent-1.jpeg' %}" alt="agent-1" />
-                  {% endif %}
+                  <i class="bx bxs-phone-call"></i>
                 </figure>
               </div>
               <div class="single__sidebar--header--agent-info">
-                <h4 class="text-capitalize"> {{ estate.estate_name }} Estate</h4>
+                <p class="text-capitalize letter-spacing-1">
+                  Have any issues with your booking? Call
+                </p>
                 <div>
                   <i class="bx bx-phone-call"></i>
-                  <a href="#">+234 813-813-813</a>
-                </div>
-                <div>
-                  <i class="bx bx-envelope"></i>
-                  <a href="#">Agent Email: Jhaydrille75@amfacilities.com</a>
+                  <a href="#">0700-25742-6323</a>
                 </div>
               </div>
             </div>
 
-            <div class="single__sidebar--body">
-              <h6 class="text-Capitalize">
-               <select name="apartment" id="">
-                 <option value="{{ apartment.id }}">3</option>
-               </select> 
-               <ul style="display: flex; gap: 2rem">
-                 <li>Shared</li>
-                 <li>Exclusive</li>
-               </ul>
-              </h6>
+            <div class="single__sidebar--content single__sidebar--body">
+                <!-- If you have an Item in your cart display this -->
+                <div class="single__sidebar--body-empty cart-items">
+                  <div class="img-full">
+                    <img src="{% static 'asseting/img/add-to-cart.png' %}" alt="empty-booking" />
+                  </div>
+                  <h4>Hurray</h4>
+                  <p>
+                    You have items in your cart
+                    <a class="text-capitalize" href="{% url 'cart_detail' %}">go to cart</a>
+                  </p>
 
-              {% comment %} start loop {% endcomment %}
-              {% if room %}
-                  {% for room in room %}
-                    {% if room.image1 %}
-                      {% if room.price %}
-                          {% if room.room_types == "Executives" %}
-                          <div class="single__sidebar--body-content">
-                            <div class="single__sidebar--body-content-main">
-                              <div class="room-img">
-                                {% if room.image1 %}
-                                <img src="{{ room.image1.url }}" alt="single-img" />
-                                {% endif %}
-                              </div>
-                              <div class="room-details">
-                                <h5 class="text-capitalize mb-5">
-                                  <a href="#"> {{ room.room_types }} </a>
-                                </h5>
-                                <span>
-                                  {{ room.bedroom_type }} bedroom Flat
-                                </span>
-                                {% comment %}
-                                  <div class="room-discount-badge">
-                                    <span> 37% off only on Rent4less.com</span>
-                                  </div>
-                                {% endcomment %}
-                                <div class="room-original-price">
-                                     <span>#{{ room.price }} </span> 
-                                     <span>#{{ room.count }} </span> 
-                                </div>
-                              </div>
-                              <div class="room-button">
-                                <a href="{% url 'add_to_cart' room.pk %}">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"> 
-                                  add rooms
-                                </button>
-                              </a>
-                              </div>
-                            </div>
-                          </div>
-                          {% endif %}
-                          {% if room.room_types == "Standard" %}
-                          <div class="single__sidebar--body-content">
-                            <div class="single__sidebar--body-content-main">
-                              <div class="room-img">
-                                {% if room.image1 %}
-                                <img src="{{ room.image1.url }}" alt="single-img" />
-                                {% endif %}
-                              </div>
-                              <div class="room-details">
-                                <h5 class="text-capitalize mb-5">
-                                  <a href="#"> {{ room.room_types }} </a>
-                                </h5>
-                                <span>
-                                  {{ room.bedroom_type }} bedroom Flat
-                                </span>
-                                {% comment %}
-                                  <div class="room-discount-badge">
-                                    <span> 37% off only on Rent4less.com</span>
-                                  </div>
-                                {% endcomment %}
-                                <div class="room-original-price">
-                                     <span>#{{ room.price }} </span> 
-                                     <span>#{{ room.count }} </span> 
-                                </div>
-                              </div>
-                              <div class="room-button">
-                                <a href="{% url 'add_to_cart' room.pk %}">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"> 
-                                  add rooms
-                                </button>
-                              </a>
-                              </div>
-                            </div>
-                          </div>
-                          {% endif %}
-                          {% if room.room_types == "Delux" %}
-                          <div class="single__sidebar--body-content">
-                            <div class="single__sidebar--body-content-main">
-                              <div class="room-img">
-                                {% if room.image1 %}
-                                <img src="{{ room.image1.url }}" alt="single-img" />
-                                {% endif %}
-                              </div>
-                              <div class="room-details">
-                                <h5 class="text-capitalize mb-5">
-                                  <a href="#"> {{ room.room_types }} </a>
-                                </h5>
-                                <span>
-                                  {{ room.bedroom_type }} bedroom Flat
-                                </span>
-                                {% comment %}
-                                  <div class="room-discount-badge">
-                                    <span> 37% off only on Rent4less.com</span>
-                                  </div>
-                                {% endcomment %}
-                                <div class="room-original-price">
-                                     <span>#{{ room.price }} </span> 
-                                     <span>#{{ room.count }} </span> 
-                                </div>
-                              </div>
-                              <div class="room-button">
-                                <a href="{% url 'add_to_cart' room.pk %}">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"> 
-                                  add rooms
-                                </button>
-                              </a>
-                              </div>
-                            </div>
-                          </div>
-                          {% endif %}
-                          {% endif %}
-                    {% endif %}
-                  {% endfor %}
-                {% endif %}
+                  <a
+                    href="#showBookings"
+                    id="start__booking"
+                    class="start__booking text-capitalize"
+                  >
+                    continue Booking
+                  </a>
+                </div>
+                <!-- End here -->
+                <!-- If you have no item in your cart display this-->
+                <div class="single__sidebar--body-empty no-cart-items">
+                  <div class="img-empty">
+                    <img src="{% static 'asseting/img/empty-booking.png' %}" alt="empty-booking" />
+                  </div>
+                  <h4>No Bookings yet</h4>
+                  <p>You currently do not have any bookings.</p>
+
+                  <a
+                    href="#showBookings"
+                    id="start__booking"
+                    class="start__booking text-capitalize"
+                  >
+                    start Booking
+                  </a>
+                </div>
+              <!-- end here -->
             </div>
           </div>
         </div>
       </div>
     </main>
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        {% for apartmen in apartment %}
+    <!--==================== HOT ESTATE DEALS ====================-->
+    <section class="property section container section mt-5">
+      <span class="section__subtitle"
+        >A selection of the best Estate deals, only available today</span
+      >
+      <h2 class="section__title">All Properties Avaliable <span>.</span></h2>
 
-            <!-- {{ apartment.bedroom_type }} -->
-            {% for room in room %}
-              {% if room == apartmen %}
-                  <p>{{ room }} </p>
-              {% endif %}
-            {% endfor %}
-          
+      {% if estates %}
+      <div class="property--wrapper">
+        {% for room in estates %}
+        <a href="{% url 'apartment_detail' room.estate_name %}" class="property--wrapper-card">
+          <div class="card__image">
+            {% if room.image %}
+                <img src="{{ room.image.url }}" alt="estate" />
+            {% else %}
+                <img src="{% static 'asseting/img/place-1.jpg' %}" alt="estate" />
+            {% endif %}
+          </div>
+          <div class="card__content">
+            <h4 class="text-capitalize mb-1">{{ room.estate_name }}
+            </h4>
+            <span class="card__content--estate"> {{ room.location}} in {{ room.city }}</span>
+          </div>
+        </a>
         {% endfor %}
-
+        
+        {% else %}
+        <a href="/" class="property--wrapper-card">
+          <div class="card__image">
+            <img src="{% static 'asseting/img/place-1.jpg' %}" alt="estate" />
+          </div>
+          <div class="card__content">
+            <h4 class="text-capitalize mb-1">3 bedroom apartment</h4>
+            <span>24 adeshina street, off ijeshatedo, surulere, Lagos</span>
+            <span class="card__content--estate">Chevy Hills Estate</span>
+            <p class="price__data text-uppercase mt-1 mb-1">
+              &#8358;12k - &#8358;5M /mo
+            </p>
+          </div>
+          <div class="card__discount">
+            <div>
+              <p class="estate-discount text-uppercase">
+                up to <span>13%</span>off
+              </p>
+              <div class="slant"></div>
+            </div>
+          </div>
+        </a>
+        {% endif %}
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    </section>
+
+    <!-- =============== SLIDING WIDGET ============= -->
+    <div class="sliding__widget" id="showBookings">
+      <!-- SLIDING SIDEBAR -->
+      <div class="sliding__widget--wrapper">
+
+        <!-- SLIDING WIDGET FILTER FOR SEARCH ROOMS & APT -->
+        <div class="sliding__widget--filters">
+          <span
+            data-filter=".shared-single"
+            class="sliding__widget--filter-item letter-spacing-1 text-capitalize active"
+            >Search Rooms</span
+          >
+          <span
+            data-filter=".exclusives-single"
+            class="sliding__widget--filter-item letter-spacing-1 text-capitalize"
+            >Search Apartment</span
+          >
+        </div>
+        <!-- END SLIDING WIDGET FILTER FOR SEARCH ROOMS & APT -->
+
+        <!-- SLIDING WIDGET CONTAINER-->
+        <div class="sliding__widget--container">
+          <!-- SLIDING WIDGET SHARED ROOMS -->
+          <div
+            class="sliding__widget--container-item sliding__widget--container-shared shared-single"
+          >
+
+
+
+            {% if room_executives or room_standard or room_executives_3 or room_standard_3 or room_deluxe_3 or room_mini_3 or room_deluxe or room_mini or room_executives_4 or room_standard_4 or room_deluxe_4 or room_mini_4 or room_executives_1 or room_standard_1 or room_deluxe_1 or room_mini_1 %}
+            
+            <!-- one -->
+              {% if room_executives_1 %}
+                <div class="room__type">
+                  <h3 class="room__type--title text-capitalize letter-spacing-1">
+                    {{room_executives_1.bedroom_type}} bedroom
+                  </h3>
+                  <div class="room__type--content shared-single">
+                    <div class="room__type--content-main">
+                      <div class="room-img">
+                        {% if room_executives_1.image1 %}
+                          <img src="{{ room_executives_1.image1.url }}" alt="single-img" />
+                        {% endif %}
+                      </div>
+                      <div class="room__details">
+                        <h5 class="text-capitalize mb-1">
+                          <a href="#">{{ room_executives_1.room_types }}</a>
+                          <span class="room__type--remaining"
+                            ><i class="bx bx-radio-circle-marked"></i> {{room_executives_count_1}} units
+                            remaining</span
+                          >
+                        </h5>
+
+                        {% if room_executives_1.ammenities %}
+                          <p class="room__details--info">
+                            {{room_executives_1.ammenities}}
+                          </p>
+                        {% else %}
+                          <ul class="room__type--features">
+                            <li><i class="bx bxs-car-garage"></i> Car Garage</li>
+                            <li><i class="bx bx-bath"></i> Bathrobe</li>
+                            <li><i class="bx bx-closet"></i> Closet</li>
+                            <li><i class="bx bx-swim"></i> Swimming Pool</li>
+                          </ul>
+                        {% endif %}
+
+                        <div class="room__details--price">
+
+                          {% if  room_executives_1.discount != "0" %}
+                          <div class="room-discount-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{room_executives_1.price }}</span>
+                            </span>
+                          </div>
+                          <div class="room-discount-badge">
+                            <span> {{ room_executives_1.discount }}% off only on Rent4less.com</span>
+                          </div>
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_executives_1.new_price }}</span>
+                            </span>
+                          </div>
+                          {% else %}
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_executives_1.price }}</span>
+                            </span>
+                          </div>
+                          {% endif %}
+                        </div>
+                      </div>
+
+                      {% if not user.is_superuser  %}
+                        {% if not user.is_staff %}  
+                        <div class="room-button update-cart" data-room={{room_executives_1.id}} data-action="add">
+                          <span class="add-to-cart">Select Room</span>
+                          <span class="added">Added To Cart</span>
+                          <i class="bx bxs-cart-alt cart-icon"></i>
+                          <i class="bx bx-shopping-bag cart-item"></i>
+                        </div>
+                        {% endif %}
+                      {% endif %}
+                    </div>     
+                  </div>
+                </div>
+              {% endif %}
+
+              {% if room_standard_1 %}
+                <div class="room__type">
+                  <h3 class="room__type--title text-capitalize letter-spacing-1">
+                    {{room_standard_1.bedroom_type}} bedroom
+                  </h3>
+                  <div class="room__type--content shared-single">
+                    <div class="room__type--content-main">
+                      <div class="room-img">
+                        {% if room_standard_1.image1 %}
+                          <img src="{{ room_standard_1.image1.url }}" alt="single-img" />
+                        {% endif %}
+                      </div>
+                      <div class="room__details">
+                        <h5 class="text-capitalize mb-1">
+                          <a href="#">{{ room_standard_1.room_types }}</a>
+                          <span class="room__type--remaining"
+                            ><i class="bx bx-radio-circle-marked"></i> {{room_standard_count_1}} units
+                            remaining</span
+                          >
+                        </h5>
+
+                        {% if room_standard_1.ammenities %}
+                          <p class="room__details--info">
+                            {{room_standard_1.ammenities}}
+                          </p>
+                        {% else %}
+                          <ul class="room__type--features">
+                            <li><i class="bx bxs-car-garage"></i> Car Garage</li>
+                            <li><i class="bx bx-bath"></i> Bathrobe</li>
+                            <li><i class="bx bx-closet"></i> Closet</li>
+                            <li><i class="bx bx-swim"></i> Swimming Pool</li>
+                          </ul>
+                        {% endif %}
+
+                        <div class="room__details--price">
+
+                          {% if  room_standard_1.discount != "0" %}
+                          <div class="room-discount-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{room_standard_1.price }}</span>
+                            </span>
+                          </div>
+                          <div class="room-discount-badge">
+                            <span> {{ room_standard_1.discount }}% off only on Rent4less.com</span>
+                          </div>
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_standard_1.new_price }}</span>
+                            </span>
+                          </div>
+                          {% else %}
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_standard_1.price }}</span>
+                            </span>
+                          </div>
+                          {% endif %}
+                        </div>
+                      </div>
+
+                      {% if not user.is_superuser  %}
+                        {% if not user.is_staff %}  
+                        <div class="room-button update-cart" data-room={{room_standard_1.id}} data-action="add">
+                          <span class="add-to-cart">Select Room</span>
+                          <span class="added">Added To Cart</span>
+                          <i class="bx bxs-cart-alt cart-icon"></i>
+                          <i class="bx bx-shopping-bag cart-item"></i>
+                        </div>
+                        {% endif %}
+                      {% endif %}
+                    </div>     
+                  </div>
+                </div>
+              {% endif %}
+
+
+              {% if room_deluxe_1 %}
+                <div class="room__type">
+                  <h3 class="room__type--title text-capitalize letter-spacing-1">
+                    {{room_deluxe_1.bedroom_type}} bedroom
+                  </h3>
+                  <div class="room__type--content shared-single">
+                    <div class="room__type--content-main">
+                      <div class="room-img">
+                        {% if room_deluxe_1.image1 %}
+                          <img src="{{ room_deluxe_1.image1.url }}" alt="single-img" />
+                        {% endif %}
+                      </div>
+                      <div class="room__details">
+                        <h5 class="text-capitalize mb-1">
+                          <a href="#">{{ room_deluxe_1.room_types }}</a>
+                          <span class="room__type--remaining"
+                            ><i class="bx bx-radio-circle-marked"></i> {{room_deluxe_count_1}} units
+                            remaining</span
+                          >
+                        </h5>
+
+                        {% if room_deluxe_1.ammenities %}
+                          <p class="room__details--info">
+                            {{ room_deluxe_1.ammenities }}
+                          </p>
+                        {% else %}
+                          <ul class="room__type--features">
+                            <li><i class="bx bxs-car-garage"></i> Car Garage</li>
+                            <li><i class="bx bx-bath"></i> Bathrobe</li>
+                            <li><i class="bx bx-closet"></i> Closet</li>
+                            <li><i class="bx bx-swim"></i> Swimming Pool</li>
+                          </ul>
+                        {% endif %}
+
+                        <div class="room__details--price">
+
+                          {% if  room_deluxe_1.discount != "0" %}
+                          <div class="room-discount-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{room_deluxe_1.price }}</span>
+                            </span>
+                          </div>
+                          <div class="room-discount-badge">
+                            <span> {{ room_deluxe_1.discount }}% off only on Rent4less.com</span>
+                          </div>
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_deluxe_1.new_price }}</span>
+                            </span>
+                          </div>
+                          {% else %}
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_deluxe_1.price }}</span>
+                            </span>
+                          </div>
+                          {% endif %}
+                        </div>
+                      </div>
+
+                      {% if not user.is_superuser  %}
+                        {% if not user.is_staff %}  
+                        <div class="room-button update-cart" data-room={{room_deluxe_1.id}} data-action="add">
+                          <span class="add-to-cart">Select Room</span>
+                          <span class="added">Added To Cart</span>
+                          <i class="bx bxs-cart-alt cart-icon"></i>
+                          <i class="bx bx-shopping-bag cart-item"></i>
+                        </div>
+                        {% endif %}
+                      {% endif %}
+                    </div>     
+                  </div>
+                </div>
+              {% endif %}
+
+
+              {% if room_mini_1  %}
+                <div class="room__type">
+                  <h3 class="room__type--title text-capitalize letter-spacing-1">
+                    {{room_mini_1.bedroom_type}} bedroom
+                  </h3>
+                  <div class="room__type--content shared-single">
+                    <div class="room__type--content-main">
+                      <div class="room-img">
+                        {% if room_mini_1.image1 %}
+                          <img src="{{ room_mini_1.image1.url }}" alt="single-img" />
+                        {% endif %}
+                      </div>
+                      <div class="room__details">
+                        <h5 class="text-capitalize mb-1">
+                          <a href="#">{{ room_mini_1.room_types }}</a>
+                          <span class="room__type--remaining"
+                            ><i class="bx bx-radio-circle-marked"></i> {{room_mini_count_1}} units
+                            remaining</span
+                          >
+                        </h5>
+
+                        {% if room_mini_1.ammenities %}
+                          <p class="room__details--info">
+                            {{room_mini_1.ammenities}}
+                          </p>
+                        {% else %}
+                          <ul class="room__type--features">
+                            <li><i class="bx bxs-car-garage"></i> Car Garage</li>
+                            <li><i class="bx bx-bath"></i> Bathrobe</li>
+                            <li><i class="bx bx-closet"></i> Closet</li>
+                            <li><i class="bx bx-swim"></i> Swimming Pool</li>
+                          </ul>
+                        {% endif %}
+
+                        <div class="room__details--price">
+
+                          {% if  room_mini_1.discount != "0" %}
+                          <div class="room-discount-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{room_mini_1.price }}</span>
+                            </span>
+                          </div>
+                          <div class="room-discount-badge">
+                            <span> {{ room_mini_1.discount }}% off only on Rent4less.com</span>
+                          </div>
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_mini_1.new_price }}</span>
+                            </span>
+                          </div>
+                          {% else %}
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_mini_1.price }}</span>
+                            </span>
+                          </div>
+                          {% endif %}
+                        </div>
+                      </div>
+
+                      {% if not user.is_superuser  %}
+                        {% if not user.is_staff %}  
+                        <div class="room-button update-cart" data-room={{room_mini_1.id}} data-action="add">
+                          <span class="add-to-cart">Select Room</span>
+                          <span class="added">Added To Cart</span>
+                          <i class="bx bxs-cart-alt cart-icon"></i>
+                          <i class="bx bx-shopping-bag cart-item"></i>
+                        </div>
+                        {% endif %}
+                      {% endif %}
+                    </div>     
+                  </div>
+                </div>
+              {% endif %}
+
+            
+            <!-- two -->
+            
+              {% if room_executives %}
+                <div class="room__type">
+                  <h3 class="room__type--title text-capitalize letter-spacing-1">
+                    {{room_executives.bedroom_type}} bedroom
+                  </h3>
+                  <div class="room__type--content shared-single">
+                    <div class="room__type--content-main">
+                      <div class="room-img">
+                        {% if room_executives.image1 %}
+                          <img src="{{ room_executives.image1.url }}" alt="single-img" />
+                        {% endif %}
+                      </div>
+                      <div class="room__details">
+                        <h5 class="text-capitalize mb-1">
+                          <a href="#">{{ room_executives.room_types }}</a>
+                          <span class="room__type--remaining"
+                            ><i class="bx bx-radio-circle-marked"></i> {{room_executives_count}} units
+                            remaining</span
+                          >
+                        </h5>
+
+                        {% if room_executives.ammenities %}
+                          <p class="room__details--info">
+                            {{room_executives.ammenities}}
+                          </p>
+                        {% else %}
+                          <ul class="room__type--features">
+                            <li><i class="bx bxs-car-garage"></i> Car Garage</li>
+                            <li><i class="bx bx-bath"></i> Bathrobe</li>
+                            <li><i class="bx bx-closet"></i> Closet</li>
+                            <li><i class="bx bx-swim"></i> Swimming Pool</li>
+                          </ul>
+                        {% endif %}
+
+                        <div class="room__details--price">
+
+                          {% if  room_executives.discount != "0" %}
+                          <div class="room-discount-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{room_executives.price }}</span>
+                            </span>
+                          </div>
+                          <div class="room-discount-badge">
+                            <span> {{ room_executives.discount }}% off only on Rent4less.com</span>
+                          </div>
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_executives.new_price }}</span>
+                            </span>
+                          </div>
+                          {% else %}
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_executives.price }}</span>
+                            </span>
+                          </div>
+                          {% endif %}
+                        </div>
+                      </div>
+
+                      {% if not user.is_superuser  %}
+                        {% if not user.is_staff %}  
+                        <div class="room-button update-cart" data-room={{room_executives.id}} data-action="add">
+                          <span class="add-to-cart">Select Room</span>
+                          <span class="added">Added To Cart</span>
+                          <i class="bx bxs-cart-alt cart-icon"></i>
+                          <i class="bx bx-shopping-bag cart-item"></i>
+                        </div>
+                        {% endif %}
+                      {% endif %}
+                    </div>     
+                  </div>
+                </div>
+              {% endif %}
+
+              {% if room_standard %}
+                <div class="room__type">
+                  <h3 class="room__type--title text-capitalize letter-spacing-1">
+                    {{room_standard.bedroom_type}} bedroom
+                  </h3>
+                  <div class="room__type--content shared-single">
+                    <div class="room__type--content-main">
+                      <div class="room-img">
+                        {% if room_standard.image1 %}
+                          <img src="{{ room_standard.image1.url }}" alt="single-img" />
+                        {% endif %}
+                      </div>
+                      <div class="room__details">
+                        <h5 class="text-capitalize mb-1">
+                          <a href="#">{{ room_standard.room_types }}</a>
+                          <span class="room__type--remaining"
+                            ><i class="bx bx-radio-circle-marked"></i> {{room_standard_count}} units
+                            remaining</span
+                          >
+                        </h5>
+
+                        {% if room_standard.ammenities %}
+                          <p class="room__details--info">
+                            {{room_standard.ammenities}}
+                          </p>
+                        {% else %}
+                          <ul class="room__type--features">
+                            <li><i class="bx bxs-car-garage"></i> Car Garage</li>
+                            <li><i class="bx bx-bath"></i> Bathrobe</li>
+                            <li><i class="bx bx-closet"></i> Closet</li>
+                            <li><i class="bx bx-swim"></i> Swimming Pool</li>
+                          </ul>
+                        {% endif %}
+
+                        <div class="room__details--price">
+
+                          {% if  room_standard.discount != "0" %}
+                          <div class="room-discount-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{room_standard.price }}</span>
+                            </span>
+                          </div>
+                          <div class="room-discount-badge">
+                            <span> {{ room_standard.discount }}% off only on Rent4less.com</span>
+                          </div>
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_standard.new_price }}</span>
+                            </span>
+                          </div>
+                          {% else %}
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_standard.price }}</span>
+                            </span>
+                          </div>
+                          {% endif %}
+                        </div>
+                      </div>
+
+                      {% if not user.is_superuser  %}
+                        {% if not user.is_staff %}  
+                        <div class="room-button update-cart" data-room={{room_standard.id}} data-action="add">
+                          <span class="add-to-cart">Select Room</span>
+                          <span class="added">Added To Cart</span>
+                          <i class="bx bxs-cart-alt cart-icon"></i>
+                          <i class="bx bx-shopping-bag cart-item"></i>
+                        </div>
+                        {% endif %}
+                      {% endif %}
+                    </div>     
+                  </div>
+                </div>
+              {% endif %}
+
+
+              {% if room_deluxe %}
+                <div class="room__type">
+                  <h3 class="room__type--title text-capitalize letter-spacing-1">
+                    {{room_deluxe.bedroom_type}} bedroom
+                  </h3>
+                  <div class="room__type--content shared-single">
+                    <div class="room__type--content-main">
+                      <div class="room-img">
+                        {% if room_deluxe.image1 %}
+                          <img src="{{ room_deluxe.image1.url }}" alt="single-img" />
+                        {% endif %}
+                      </div>
+                      <div class="room__details">
+                        <h5 class="text-capitalize mb-1">
+                          <a href="#">{{ room_deluxe.room_types }}</a>
+                          <span class="room__type--remaining"
+                            ><i class="bx bx-radio-circle-marked"></i> {{room_deluxe_count}} units
+                            remaining</span
+                          >
+                        </h5>
+
+                        {% if room_deluxe_1.ammenities %}
+                          <p class="room__details--info">
+                            {{ room_deluxe.ammenities }}
+                          </p>
+                        {% else %}
+                          <ul class="room__type--features">
+                            <li><i class="bx bxs-car-garage"></i> Car Garage</li>
+                            <li><i class="bx bx-bath"></i> Bathrobe</li>
+                            <li><i class="bx bx-closet"></i> Closet</li>
+                            <li><i class="bx bx-swim"></i> Swimming Pool</li>
+                          </ul>
+                        {% endif %}
+
+                        <div class="room__details--price">
+
+                          {% if  room_deluxe.discount != "0" %}
+                          <div class="room-discount-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{room_deluxe.price }}</span>
+                            </span>
+                          </div>
+                          <div class="room-discount-badge">
+                            <span> {{ room_deluxe.discount }}% off only on Rent4less.com</span>
+                          </div>
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_deluxe.new_price }}</span>
+                            </span>
+                          </div>
+                          {% else %}
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_deluxe.price }}</span>
+                            </span>
+                          </div>
+                          {% endif %}
+                        </div>
+                      </div>
+
+                      {% if not user.is_superuser  %}
+                        {% if not user.is_staff %}  
+                        <div class="room-button update-cart" data-room={{room_deluxe.id}} data-action="add">
+                          <span class="add-to-cart">Select Room</span>
+                          <span class="added">Added To Cart</span>
+                          <i class="bx bxs-cart-alt cart-icon"></i>
+                          <i class="bx bx-shopping-bag cart-item"></i>
+                        </div>
+                        {% endif %}
+                      {% endif %}
+                    </div>     
+                  </div>
+                </div>
+              {% endif %}
+
+
+              {% if room_mini  %}
+                <div class="room__type">
+                  <h3 class="room__type--title text-capitalize letter-spacing-1">
+                    {{room_mini.bedroom_type}} bedroom
+                  </h3>
+                  <div class="room__type--content shared-single">
+                    <div class="room__type--content-main">
+                      <div class="room-img">
+                        {% if room_mini.image1 %}
+                          <img src="{{ room_mini.image1.url }}" alt="single-img" />
+                        {% endif %}
+                      </div>
+                      <div class="room__details">
+                        <h5 class="text-capitalize mb-1">
+                          <a href="#">{{ room_mini.exclusive_room }}</a>
+                          <span class="room__type--remaining"
+                            ><i class="bx bx-radio-circle-marked"></i> {{room_mini_count}} units
+                            remaining</span
+                          >
+                        </h5>
+
+                        {% if room_mini_1.ammenities %}
+                          <p class="room__details--info">
+                            {{room_mini.ammenities}}
+                          </p>
+                        {% else %}
+                          <ul class="room__type--features">
+                            <li><i class="bx bxs-car-garage"></i> Car Garage</li>
+                            <li><i class="bx bx-bath"></i> Bathrobe</li>
+                            <li><i class="bx bx-closet"></i> Closet</li>
+                            <li><i class="bx bx-swim"></i> Swimming Pool</li>
+                          </ul>
+                        {% endif %}
+
+                        <div class="room__details--price">
+
+                          {% if  room_mini.discount != "0" %}
+                          <div class="room-discount-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{room_mini.price }}</span>
+                            </span>
+                          </div>
+                          <div class="room-discount-badge">
+                            <span> {{ room_mini.discount }}% off only on Rent4less.com</span>
+                          </div>
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_mini.new_price }}</span>
+                            </span>
+                          </div>
+                          {% else %}
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_mini.price }}</span>
+                            </span>
+                          </div>
+                          {% endif %}
+                        </div>
+                      </div>
+
+                      {% if not user.is_superuser  %}
+                        {% if not user.is_staff %}  
+                        <div class="room-button update-cart" data-room={{room_mini.id}} data-action="add">
+                          <span class="add-to-cart">Select Room</span>
+                          <span class="added">Added To Cart</span>
+                          <i class="bx bxs-cart-alt cart-icon"></i>
+                          <i class="bx bx-shopping-bag cart-item"></i>
+                        </div>
+                        {% endif %}
+                      {% endif %}
+                    </div>     
+                  </div>
+                </div>
+              {% endif %}
+
+              <!-- three -->
+
+              {% if room_executives_3 %}
+                <div class="room__type">
+                  <h3 class="room__type--title text-capitalize letter-spacing-1">
+                    {{room_executives_3.bedroom_type}} bedroom
+                  </h3>
+                  <div class="room__type--content shared-single">
+                    <div class="room__type--content-main">
+                      <div class="room-img">
+                        {% if room_executives_3.image1 %}
+                          <img src="{{ room_executives_3.image1.url }}" alt="single-img" />
+                        {% endif %}
+                      </div>
+                      <div class="room__details">
+                        <h5 class="text-capitalize mb-1">
+                          <a href="#">{{ room_executives_3.room_types }}</a>
+                          <span class="room__type--remaining"
+                            ><i class="bx bx-radio-circle-marked"></i> {{room_executives_count_3}} units
+                            remaining</span
+                          >
+                        </h5>
+
+                        {% if room_executives_3.ammenities %}
+                          <p class="room__details--info">
+                            {{room_executives_3.ammenities}}
+                          </p>
+                        {% else %}
+                          <ul class="room__type--features">
+                            <li><i class="bx bxs-car-garage"></i> Car Garage</li>
+                            <li><i class="bx bx-bath"></i> Bathrobe</li>
+                            <li><i class="bx bx-closet"></i> Closet</li>
+                            <li><i class="bx bx-swim"></i> Swimming Pool</li>
+                          </ul>
+                        {% endif %}
+
+                        <div class="room__details--price">
+
+                          {% if  room_executives_3.discount != "0" %}
+                          <div class="room-discount-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{room_executives_3.price }}</span>
+                            </span>
+                          </div>
+                          <div class="room-discount-badge">
+                            <span> {{ room_executives_3.discount }}% off only on Rent4less.com</span>
+                          </div>
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_executives_3.new_price }}</span>
+                            </span>
+                          </div>
+                          {% else %}
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_executives_3.price }}</span>
+                            </span>
+                          </div>
+                          {% endif %}
+                        </div>
+                      </div>
+
+                      {% if not user.is_superuser  %}
+                        {% if not user.is_staff %}  
+                        <div class="room-button update-cart" data-room={{room_executives_3.id}} data-action="add">
+                          <span class="add-to-cart">Select Room</span>
+                          <span class="added">Added To Cart</span>
+                          <i class="bx bxs-cart-alt cart-icon"></i>
+                          <i class="bx bx-shopping-bag cart-item"></i>
+                        </div>
+                        {% endif %}
+                      {% endif %}
+                    </div>     
+                  </div>
+                </div>
+              {% endif %}
+
+              {% if room_standard_3 %}
+                <div class="room__type">
+                  <h3 class="room__type--title text-capitalize letter-spacing-1">
+                    {{room_standard_3.bedroom_type}} bedroom
+                  </h3>
+                  <div class="room__type--content shared-single">
+                    <div class="room__type--content-main">
+                      <div class="room-img">
+                        {% if room_standard_3.image1 %}
+                          <img src="{{ room_standard_3.image1.url }}" alt="single-img" />
+                        {% endif %}
+                      </div>
+                      <div class="room__details">
+                        <h5 class="text-capitalize mb-1">
+                          <a href="#">{{ room_standard_3.room_types }}</a>
+                          <span class="room__type--remaining"
+                            ><i class="bx bx-radio-circle-marked"></i> {{ room_standard_count_3 }} units
+                            remaining
+                          </span
+                          >
+                        </h5>
+
+                        {% if room_standard_3.ammenities %}
+                          <p class="room__details--info">
+                            {{room_standard_3.ammenities}}
+                          </p>
+                        {% else %}
+                          <ul class="room__type--features">
+                            <li><i class="bx bxs-car-garage"></i> Car Garage</li>
+                            <li><i class="bx bx-bath"></i> Bathrobe</li>
+                            <li><i class="bx bx-closet"></i> Closet</li>
+                            <li><i class="bx bx-swim"></i> Swimming Pool</li>
+                          </ul>
+                        {% endif %}
+
+                        <div class="room__details--price">
+
+                          {% if  room_standard_3.discount != "0" %}
+                          <div class="room-discount-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{room_standard_3.price }}</span>
+                            </span>
+                          </div>
+                          <div class="room-discount-badge">
+                            <span> {{ room_standard_3.discount }}% off only on Rent4less.com</span>
+                          </div>
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_standard_3.new_price }}</span>
+                            </span>
+                          </div>
+                          {% else %}
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_standard_3.price }}</span>
+                            </span>
+                          </div>
+                          {% endif %}
+                        </div>
+                      </div>
+
+                      {% if not user.is_superuser  %}
+                        {% if not user.is_staff %}  
+                        <div class="room-button update-cart" data-room={{room_standard_3.id}} data-action="add">
+                          <span class="add-to-cart">Select Room</span>
+                          <span class="added">Added To Cart</span>
+                          <i class="bx bxs-cart-alt cart-icon"></i>
+                          <i class="bx bx-shopping-bag cart-item"></i>
+                        </div>
+                        {% endif %}
+                      {% endif %}
+                    </div>     
+                  </div>
+                </div>
+              {% endif %}
+
+
+              {% if room_deluxe_3 %}
+                <div class="room__type">
+                  <h3 class="room__type--title text-capitalize letter-spacing-1">
+                    {{room_deluxe_3.bedroom_type}} bedroom
+                  </h3>
+                  <div class="room__type--content shared-single">
+                    <div class="room__type--content-main">
+                      <div class="room-img">
+                        {% if room_deluxe_3.image1 %}
+                          <img src="{{ room_deluxe_3.image1.url }}" alt="single-img" />
+                        {% endif %}
+                      </div>
+                      <div class="room__details">
+                        <h5 class="text-capitalize mb-1">
+                          <a href="#">{{ room_deluxe_3.room_types }}</a>
+                          <span class="room__type--remaining"
+                            ><i class="bx bx-radio-circle-marked"></i> {{room_deluxe_count_3 }} units
+                            remaining</span
+                          >
+                        </h5>
+
+                        {% if room_deluxe_3.ammenities %}
+                          <p class="room__details--info">
+                            {{ room_deluxe_3.ammenities }}
+                          </p>
+                        {% else %}
+                          <ul class="room__type--features">
+                            <li><i class="bx bxs-car-garage"></i> Car Garage</li>
+                            <li><i class="bx bx-bath"></i> Bathrobe</li>
+                            <li><i class="bx bx-closet"></i> Closet</li>
+                            <li><i class="bx bx-swim"></i> Swimming Pool</li>
+                          </ul>
+                        {% endif %}
+
+                        <div class="room__details--price">
+
+                          {% if  room_deluxe_3.discount != "0" %}
+                          <div class="room-discount-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{room_deluxe_3.price }}</span>
+                            </span>
+                          </div>
+                          <div class="room-discount-badge">
+                            <span> {{ room_deluxe_3.discount }}% off only on Rent4less.com</span>
+                          </div>
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_deluxe_3.new_price }}</span>
+                            </span>
+                          </div>
+                          {% else %}
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_deluxe_3.price }}</span>
+                            </span>
+                          </div>
+                          {% endif %}
+                        </div>
+                      </div>
+
+                      {% if not user.is_superuser  %}
+                        {% if not user.is_staff %}  
+                        <div class="room-button update-cart" data-room={{room_deluxe_3.id}} data-action="add">
+                          <span class="add-to-cart">Select Room</span>
+                          <span class="added">Added To Cart</span>
+                          <i class="bx bxs-cart-alt cart-icon"></i>
+                          <i class="bx bx-shopping-bag cart-item"></i>
+                        </div>
+                        {% endif %}
+                      {% endif %}
+                    </div>     
+                  </div>
+                </div>
+              {% endif %}
+
+
+              {% if room_mini_3  %}
+                <div class="room__type">
+                  <h3 class="room__type--title text-capitalize letter-spacing-1">
+                    {{room_mini_3.bedroom_type}} bedroom
+                  </h3>
+                  <div class="room__type--content shared-single">
+                    <div class="room__type--content-main">
+                      <div class="room-img">
+                        {% if room_mini_3.image1 %}
+                          <img src="{{ room_mini_3.image1.url }}" alt="single-img" />
+                        {% endif %}
+                      </div>
+                      <div class="room__details">
+                        <h5 class="text-capitalize mb-1">
+                          <a href="#">{{ room_mini_3.room_types }}</a>
+                          <span class="room__type--remaining"
+                            ><i class="bx bx-radio-circle-marked"></i> {{room_mini_count_3}} units
+                            remaining</span
+                          >
+                        </h5>
+
+                        {% if room_mini_3.ammenities %}
+                          <p class="room__details--info">
+                            {{room_mini_3.ammenities}}
+                          </p>
+                        {% else %}
+                          <ul class="room__type--features">
+                            <li><i class="bx bxs-car-garage"></i> Car Garage</li>
+                            <li><i class="bx bx-bath"></i> Bathrobe</li>
+                            <li><i class="bx bx-closet"></i> Closet</li>
+                            <li><i class="bx bx-swim"></i> Swimming Pool</li>
+                          </ul>
+                        {% endif %}
+
+                        <div class="room__details--price">
+
+                          {% if  room_mini_3.discount != "0" %}
+                          <div class="room-discount-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{room_mini_3.price }}</span>
+                            </span>
+                          </div>
+                          <div class="room-discount-badge">
+                            <span> {{ room_mini_3.discount }}% off only on Rent4less.com</span>
+                          </div>
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_mini_3.new_price }}</span>
+                            </span>
+                          </div>
+                          {% else %}
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_mini_3.price }}</span>
+                            </span>
+                          </div>
+                          {% endif %}
+                        </div>
+                      </div>
+
+                      {% if not user.is_superuser  %}
+                        {% if not user.is_staff %}  
+                        <div class="room-button update-cart" data-room={{room_mini_3.id}} data-action="add">
+                          <span class="add-to-cart">Select Room</span>
+                          <span class="added">Added To Cart</span>
+                          <i class="bx bxs-cart-alt cart-icon"></i>
+                          <i class="bx bx-shopping-bag cart-item"></i>
+                        </div>
+                        {% endif %}
+                      {% endif %}
+                    </div>     
+                  </div>
+                </div>
+              {% endif %}
+            
+              <!-- #four room -->
+
+            
+              {% if room_executives_4 %}
+                <div class="room__type">
+                  <h3 class="room__type--title text-capitalize letter-spacing-1">
+                    {{room_executives_4.bedroom_type}} bedroom
+                  </h3>
+                  <div class="room__type--content shared-single">
+                    <div class="room__type--content-main">
+                      <div class="room-img">
+                        {% if room_executives_4.image1 %}
+                          <img src="{{ room_executives_4.image1.url }}" alt="single-img" />
+                        {% endif %}
+                      </div>
+                      <div class="room__details">
+                        <h5 class="text-capitalize mb-1">
+                          <a href="#">{{ room_executives_4.room_types }}</a>
+                          <span class="room__type--remaining"
+                            ><i class="bx bx-radio-circle-marked"></i> {{room_executives_count_4}} units
+                            remaining</span
+                          >
+                        </h5>
+
+                        {% if room_executives_4.ammenities %}
+                          <p class="room__details--info">
+                            {{room_executives_4.ammenities}}
+                          </p>
+                        {% else %}
+                          <ul class="room__type--features">
+                            <li><i class="bx bxs-car-garage"></i> Car Garage</li>
+                            <li><i class="bx bx-bath"></i> Bathrobe</li>
+                            <li><i class="bx bx-closet"></i> Closet</li>
+                            <li><i class="bx bx-swim"></i> Swimming Pool</li>
+                          </ul>
+                        {% endif %}
+
+                        <div class="room__details--price">
+
+                          {% if  room_executives_4.discount != "0" %}
+                          <div class="room-discount-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{room_executives_4.price }}</span>
+                            </span>
+                          </div>
+                          <div class="room-discount-badge">
+                            <span> {{ room_executives_4.discount }}% off only on Rent4less.com</span>
+                          </div>
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_executives_4.new_price }}</span>
+                            </span>
+                          </div>
+                          {% else %}
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_executives_4.price }}</span>
+                            </span>
+                          </div>
+                          {% endif %}
+                        </div>
+                      </div>
+
+                      {% if not user.is_superuser  %}
+                        {% if not user.is_staff %}  
+                        <div class="room-button update-cart" data-room={{room_executives_4.id}} data-action="add">
+                          <span class="add-to-cart">Select Room</span>
+                          <span class="added">Added To Cart</span>
+                          <i class="bx bxs-cart-alt cart-icon"></i>
+                          <i class="bx bx-shopping-bag cart-item"></i>
+                        </div>
+                        {% endif %}
+                      {% endif %}
+                    </div>     
+                  </div>
+                </div>
+              {% endif %}
+
+              {% if room_standard_4 %}
+                <div class="room__type">
+                  <h3 class="room__type--title text-capitalize letter-spacing-1">
+                    {{room_standard_4.bedroom_type}} bedroom
+                  </h3>
+                  <div class="room__type--content shared-single">
+                    <div class="room__type--content-main">
+                      <div class="room-img">
+                        {% if room_standard_4.image1 %}
+                          <img src="{{ room_standard_3.image1.url }}" alt="single-img" />
+                        {% endif %}
+                      </div>
+                      <div class="room__details">
+                        <h5 class="text-capitalize mb-1">
+                          <a href="#">{{ room_standard_4.room_types }}</a>
+                          <span class="room__type--remaining"
+                            ><i class="bx bx-radio-circle-marked"></i> {{ room_standard_count_4 }} units
+                            remaining</span
+                          >
+                        </h5>
+
+                        {% if room_standard_4.ammenities %}
+                          <p class="room__details--info">
+                            {{room_standard_4.ammenities}}
+                          </p>
+                        {% else %}
+                          <ul class="room__type--features">
+                            <li><i class="bx bxs-car-garage"></i> Car Garage</li>
+                            <li><i class="bx bx-bath"></i> Bathrobe</li>
+                            <li><i class="bx bx-closet"></i> Closet</li>
+                            <li><i class="bx bx-swim"></i> Swimming Pool</li>
+                          </ul>
+                        {% endif %}
+
+                        <div class="room__details--price">
+
+                          {% if  room_standard_4.discount != "0" %}
+                          <div class="room-discount-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{room_standard_4.price }}</span>
+                            </span>
+                          </div>
+                          <div class="room-discount-badge">
+                            <span> {{ room_standard_4.discount }}% off only on Rent4less.com</span>
+                          </div>
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_standard_4.new_price }}</span>
+                            </span>
+                          </div>
+                          {% else %}
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_standard_4.price }}</span>
+                            </span>
+                          </div>
+                          {% endif %}
+                        </div>
+                      </div>
+
+                      {% if not user.is_superuser  %}
+                        {% if not user.is_staff %}  
+                        <div class="room-button update-cart" data-room={{room_standard_4.id}} data-action="add">
+                          <span class="add-to-cart">Select Room</span>
+                          <span class="added">Added To Cart</span>
+                          <i class="bx bxs-cart-alt cart-icon"></i>
+                          <i class="bx bx-shopping-bag cart-item"></i>
+                        </div>
+                        {% endif %}
+                      {% endif %}
+                    </div>     
+                  </div>
+                </div>
+              {% endif %}
+
+
+              {% if room_deluxe_4 %}
+                <div class="room__type">
+                  <h3 class="room__type--title text-capitalize letter-spacing-1">
+                    {{room_deluxe_4.bedroom_type}} bedroom
+                  </h3>
+                  <div class="room__type--content shared-single">
+                    <div class="room__type--content-main">
+                      <div class="room-img">
+                        {% if room_deluxe_4.image1 %}
+                          <img src="{{ room_deluxe_4.image1.url }}" alt="single-img" />
+                        {% endif %}
+                      </div>
+                      <div class="room__details">
+                        <h5 class="text-capitalize mb-1">
+                          <a href="#">{{ room_deluxe_4.room_types }}</a>
+                          <span class="room__type--remaining"
+                            ><i class="bx bx-radio-circle-marked"></i> {{room_deluxe_count_4 }} units
+                            remaining</span
+                          >
+                        </h5>
+
+                        {% if room_deluxe_4.ammenities %}
+                          <p class="room__details--info">
+                            {{ room_deluxe_4.ammenities }}
+                          </p>
+                        {% else %}
+                          <ul class="room__type--features">
+                            <li><i class="bx bxs-car-garage"></i> Car Garage</li>
+                            <li><i class="bx bx-bath"></i> Bathrobe</li>
+                            <li><i class="bx bx-closet"></i> Closet</li>
+                            <li><i class="bx bx-swim"></i> Swimming Pool</li>
+                          </ul>
+                        {% endif %}
+
+                        <div class="room__details--price">
+
+                          {% if  room_deluxe_4.discount != "0" %}
+                          <div class="room-discount-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{room_deluxe_4.price }}</span>
+                            </span>
+                          </div>
+                          <div class="room-discount-badge">
+                            <span> {{ room_deluxe_4.discount }}% off only on Rent4less.com</span>
+                          </div>
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_deluxe_4.new_price }}</span>
+                            </span>
+                          </div>
+                          {% else %}
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_deluxe_4.price }}</span>
+                            </span>
+                          </div>
+                          {% endif %}
+                        </div>
+                      </div>
+
+                      {% if not user.is_superuser  %}
+                        {% if not user.is_staff %}  
+                        <div class="room-button update-cart" data-room={{room_deluxe_4.id}} data-action="add">
+                          <span class="add-to-cart">Select Room</span>
+                          <span class="added">Added To Cart</span>
+                          <i class="bx bxs-cart-alt cart-icon"></i>
+                          <i class="bx bx-shopping-bag cart-item"></i>
+                        </div>
+                        {% endif %}
+                      {% endif %}
+                    </div>     
+                  </div>
+                </div>
+              {% endif %}
+
+
+              {% if room_mini_4  %}
+                <div class="room__type">
+                  <h3 class="room__type--title text-capitalize letter-spacing-1">
+                    {{room_mini_4.bedroom_type}} bedroom
+                  </h3>
+                  <div class="room__type--content shared-single">
+                    <div class="room__type--content-main">
+                      <div class="room-img">
+                        {% if room_mini_4.image1 %}
+                          <img src="{{ room_mini_4.image1.url }}" alt="single-img" />
+                        {% endif %}
+                      </div>
+                      <div class="room__details">
+                        <h5 class="text-capitalize mb-1">
+                          <a href="#">{{ room_mini_4.exclusive_room }}</a>
+                          <span class="room__type--remaining"
+                            ><i class="bx bx-radio-circle-marked"></i> {{room_mini_count_4}} units
+                            remaining</span
+                          >
+                        </h5>
+
+                        {% if room_mini_4.ammenities %}
+                          <p class="room__details--info">
+                            {{room_mini_4.ammenities}}
+                          </p>
+                        {% else %}
+                          <ul class="room__type--features">
+                            <li><i class="bx bxs-car-garage"></i> Car Garage</li>
+                            <li><i class="bx bx-bath"></i> Bathrobe</li>
+                            <li><i class="bx bx-closet"></i> Closet</li>
+                            <li><i class="bx bx-swim"></i> Swimming Pool</li>
+                          </ul>
+                        {% endif %}
+
+                        <div class="room__details--price">
+
+                          {% if  room_mini_4.discount != "0" %}
+                          <div class="room-discount-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{room_mini_4.price }}</span>
+                            </span>
+                          </div>
+                          <div class="room-discount-badge">
+                            <span> {{ room_mini_4.discount }}% off only on Rent4less.com</span>
+                          </div>
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_mini_4.new_price }}</span>
+                            </span>
+                          </div>
+                          {% else %}
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_mini_4.price }}</span>
+                            </span>
+                          </div>
+                          {% endif %}
+                        </div>
+                      </div>
+
+                      {% if not user.is_superuser  %}
+                        {% if not user.is_staff %}  
+                        <div class="room-button update-cart" data-room={{room_mini_4.id}} data-action="add">
+                          <span class="add-to-cart">Select Room</span>
+                          <span class="added">Added To Cart</span>
+                          <i class="bx bxs-cart-alt cart-icon"></i>
+                          <i class="bx bx-shopping-bag cart-item"></i>
+                        </div>
+                        {% endif %}
+                      {% endif %}
+                    </div>     
+                  </div>
+                </div>
+              {% endif %}
+
+
+            {% else %}
+                <div class="room__type--full">
+                  <div class="text-center">
+                    <div class="img-empty">
+                      <img src="/static/asseting/img/empty-booking.png" alt="empty-booking" srcset="">
+                    </div>
+                    <p>Ooops... No Room Avaliable </p>
+                    <span> Please Check Back Later</span>
+                  </div>
+                </div>
+            {% endif %}
+
+            
+          </div>
+          <!-- END SLIDING WIDGET SHARED ROOMS -->
+
+          <!-- SLIDING WIDGET EXCLUSIVE APT -->
+          <div
+            class="sliding__widget--container-item sliding__widget--container-exclusive exclusives-single"
+          >
+
+          {% if room_exclusive_1 or room_exclusive or  room_exclusive_3 or room_exclusive_4 or room_exclusive_5 %}
+              {% if room_exclusive_1 %}
+                <div class="room__type">
+                  <h3 class="room__type--title text-capitalize letter-spacing-1">
+                    {{room_exclusive_1.bedroom_type}} bedroom
+                  </h3>
+                  <div class="room__type--content shared-single">
+                    <div class="room__type--content-main">
+                      <div class="room-img">
+                        {% if room_exclusive_1.image1 %}
+                          <img src="{{ room_exclusive_1.image1.url }}" alt="single-img" />
+                        {% endif %}
+                      </div>
+                      <div class="room__details">
+                        <h5 class="text-capitalize mb-1">
+                          <a href="#">{{ room_exclusive_1.exclusive_room }}</a>
+                          <span class="room__type--remaining"
+                            ><i class="bx bx-radio-circle-marked"></i> {{room_exclusive_count_1}} units
+                            remaining</span
+                          >
+                        </h5>
+
+                        {% if room_exclusive_1.ammenities %}
+                          <p class="room__details--info">
+                            {{room_exclusive_1.ammenities}}
+                          </p>
+                        {% else %}
+                          <ul class="room__type--features">
+                            <li><i class="bx bxs-car-garage"></i> Car Garage</li>
+                            <li><i class="bx bx-bath"></i> Bathrobe</li>
+                            <li><i class="bx bx-closet"></i> Closet</li>
+                            <li><i class="bx bx-swim"></i> Swimming Pool</li>
+                          </ul>
+                        {% endif %}
+
+                        <div class="room__details--price">
+
+                          {% if  room_exclusive_1.discount != "0" %}
+                          <div class="room-discount-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{room_exclusive_1.price }}</span>
+                            </span>
+                          </div>
+                          <div class="room-discount-badge">
+                            <span> {{ room_exclusive_1.discount }}% off only on Rent4less.com</span>
+                          </div>
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_exclusive_1.new_price }}</span>
+                            </span>
+                          </div>
+                          {% else %}
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_exclusive_1.price }}</span>
+                            </span>
+                          </div>
+                          {% endif %}
+                        </div>
+                      </div>
+
+                      {% if not user.is_superuser  %}
+                        {% if not user.is_staff %}  
+                        <div class="room-button update-cart" data-room={{room_exclusive_1.id}} data-action="add">
+                          <span class="add-to-cart">Select Room</span>
+                          <span class="added">Added To Cart</span>
+                          <i class="bx bxs-cart-alt cart-icon"></i>
+                          <i class="bx bx-shopping-bag cart-item"></i>
+                        </div>
+                        {% endif %}
+                      {% endif %}
+                    </div>     
+                  </div>
+                </div>
+              {% endif %}
+
+              {% if room_exclusive %}
+                <div class="room__type">
+                  <h3 class="room__type--title text-capitalize letter-spacing-1">
+                    {{room_exclusive.bedroom_type}} bedroom
+                  </h3>
+                  <div class="room__type--content shared-single">
+                    <div class="room__type--content-main">
+                      <div class="room-img">
+                        {% if room_exclusive.image1 %}
+                          <img src="{{ room_exclusive.image1.url }}" alt="single-img" />
+                        {% endif %}
+                      </div>
+                      <div class="room__details">
+                        <h5 class="text-capitalize mb-1">
+                          <a href="#">{{ room_exclusive.exclusive_room }}</a>
+                          <span class="room__type--remaining"
+                            ><i class="bx bx-radio-circle-marked"></i> {{room_exclusive_count}} units
+                            remaining</span
+                          >
+                        </h5>
+
+                        {% if room_exclusive.ammenities %}
+                          <p class="room__details--info">
+                            {{room_exclusive.ammenities}}
+                          </p>
+                        {% else %}
+                          <ul class="room__type--features">
+                            <li><i class="bx bxs-car-garage"></i> Car Garage</li>
+                            <li><i class="bx bx-bath"></i> Bathrobe</li>
+                            <li><i class="bx bx-closet"></i> Closet</li>
+                            <li><i class="bx bx-swim"></i> Swimming Pool</li>
+                          </ul>
+                        {% endif %}
+
+                        <div class="room__details--price">
+
+                          {% if  room_exclusive.discount != "0" %}
+                          <div class="room-discount-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{room_exclusive.price }}</span>
+                            </span>
+                          </div>
+                          <div class="room-discount-badge">
+                            <span> {{ room_exclusive.discount }}% off only on Rent4less.com</span>
+                          </div>
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_exclusive.new_price }}</span>
+                            </span>
+                          </div>
+                          {% else %}
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_exclusive.price }}</span>
+                            </span>
+                          </div>
+                          {% endif %}
+                        </div>
+                      </div>
+
+                      {% if not user.is_superuser  %}
+                        {% if not user.is_staff %}  
+                        <div class="room-button update-cart" data-room={{room_exclusive.id}} data-action="add">
+                          <span class="add-to-cart">Select Room</span>
+                          <span class="added">Added To Cart</span>
+                          <i class="bx bxs-cart-alt cart-icon"></i>
+                          <i class="bx bx-shopping-bag cart-item"></i>
+                        </div>
+                        {% endif %}
+                      {% endif %}
+                    </div>     
+                  </div>
+                </div>
+              {% endif %}
+
+
+              {% if room_exclusive_3 %}
+                <div class="room__type">
+                  <h3 class="room__type--title text-capitalize letter-spacing-1">
+                    {{room_exclusive_3.bedroom_type}} bedroom
+                  </h3>
+                  <div class="room__type--content shared-single">
+                    <div class="room__type--content-main">
+                      <div class="room-img">
+                        {% if room_exclusive_3.image1 %}
+                          <img src="{{ room_exclusive_3.image1.url }}" alt="single-img" />
+                        {% endif %}
+                      </div>
+                      <div class="room__details">
+                        <h5 class="text-capitalize mb-1">
+                          <a href="#">{{ room_exclusive_3.exclusive_room }}</a>
+                          <span class="room__type--remaining"
+                            ><i class="bx bx-radio-circle-marked"></i> {{room_exclusive_count_3}} units
+                            remaining</span
+                          >
+                        </h5>
+
+                        {% if room_exclusive_3.ammenities %}
+                          <p class="room__details--info">
+                            {{room_exclusive_3.ammenities}}
+                          </p>
+                        {% else %}
+                          <ul class="room__type--features">
+                            <li><i class="bx bxs-car-garage"></i> Car Garage</li>
+                            <li><i class="bx bx-bath"></i> Bathrobe</li>
+                            <li><i class="bx bx-closet"></i> Closet</li>
+                            <li><i class="bx bx-swim"></i> Swimming Pool</li>
+                          </ul>
+                        {% endif %}
+
+                        <div class="room__details--price">
+
+                          {% if  room_exclusive_3.discount != "0" %}
+                          <div class="room-discount-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{room_exclusive_3.price }}</span>
+                            </span>
+                          </div>
+                          <div class="room-discount-badge">
+                            <span> {{ room_exclusive_3.discount }}% off only on Rent4less.com</span>
+                          </div>
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_exclusive_3.new_price }}</span>
+                            </span>
+                          </div>
+                          {% else %}
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_exclusive_3.price }}</span>
+                            </span>
+                          </div>
+                          {% endif %}
+                        </div>
+                      </div>
+
+                      {% if not user.is_superuser  %}
+                        {% if not user.is_staff %}  
+                        <div class="room-button update-cart" data-room={{room_exclusive_3.id}} data-action="add">
+                          <span class="add-to-cart">Select Room</span>
+                          <span class="added">Added To Cart</span>
+                          <i class="bx bxs-cart-alt cart-icon"></i>
+                          <i class="bx bx-shopping-bag cart-item"></i>
+                        </div>
+                        {% endif %}
+                      {% endif %}
+                    </div>     
+                  </div>
+                </div>
+              {% endif %}
+
+
+              {% if room_exclusive_4 %}
+                <div class="room__type">
+                  <h3 class="room__type--title text-capitalize letter-spacing-1">
+                    {{room_exclusive_4.bedroom_type}} bedroom
+                  </h3>
+                  <div class="room__type--content shared-single">
+                    <div class="room__type--content-main">
+                      <div class="room-img">
+                        {% if room_exclusive_4.image1 %}
+                          <img src="{{ room_exclusive_4.image1.url }}" alt="single-img" />
+                        {% endif %}
+                      </div>
+                      <div class="room__details">
+                        <h5 class="text-capitalize mb-1">
+                          <a href="#">{{ room_exclusive_4.exclusive_room }}</a>
+                          <span class="room__type--remaining"
+                            ><i class="bx bx-radio-circle-marked"></i> {{room_exclusive_count_4}} units
+                            remaining</span
+                          >
+                        </h5>
+
+                        {% if room_exclusive_4.ammenities %}
+                          <p class="room__details--info">
+                            {{room_exclusive_4.ammenities}}
+                          </p>
+                        {% else %}
+                          <ul class="room__type--features">
+                            <li><i class="bx bxs-car-garage"></i> Car Garage</li>
+                            <li><i class="bx bx-bath"></i> Bathrobe</li>
+                            <li><i class="bx bx-closet"></i> Closet</li>
+                            <li><i class="bx bx-swim"></i> Swimming Pool</li>
+                          </ul>
+                        {% endif %}
+
+                        <div class="room__details--price">
+
+                          {% if  room_exclusive_4.discount != "0" %}
+                          <div class="room-discount-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{room_exclusive_4.price }}</span>
+                            </span>
+                          </div>
+                          <div class="room-discount-badge">
+                            <span> {{ room_exclusive_4.discount }}% off only on Rent4less.com</span>
+                          </div>
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_exclusive_4.new_price }}</span>
+                            </span>
+                          </div>
+                          {% else %}
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_exclusive_4.price }}</span>
+                            </span>
+                          </div>
+                          {% endif %}
+                        </div>
+                      </div>
+
+                      {% if not user.is_superuser  %}
+                        {% if not user.is_staff %}  
+                        <div class="room-button update-cart" data-room={{room_exclusive_4.id}} data-action="add">
+                          <span class="add-to-cart">Select Room</span>
+                          <span class="added">Added To Cart</span>
+                          <i class="bx bxs-cart-alt cart-icon"></i>
+                          <i class="bx bx-shopping-bag cart-item"></i>
+                        </div>
+                        {% endif %}
+                      {% endif %}
+                    </div>     
+                  </div>
+                </div>
+              {% endif %}
+
+
+              {% if room_exclusive_5 %}
+                <div class="room__type">
+                  <h3 class="room__type--title text-capitalize letter-spacing-1">
+                    {{room_exclusive.bedroom_type}} bedroom
+                  </h3>
+                  <div class="room__type--content shared-single">
+                    <div class="room__type--content-main">
+                      <div class="room-img">
+                        {% if room_exclusive.image1 %}
+                          <img src="{{ room_exclusive.image1.url }}" alt="single-img" />
+                        {% endif %}
+                      </div>
+                      <div class="room__details">
+                        <h5 class="text-capitalize mb-1">
+                          <a href="#">{{ room_exclusive.exclusive_room }}</a>
+                          <span class="room__type--remaining"
+                            ><i class="bx bx-radio-circle-marked"></i> {{room_exclusive_count}} units
+                            remaining</span
+                          >
+                        </h5>
+
+                        {% if room_exclusive.ammenities %}
+                          <p class="room__details--info">
+                            {{room_exclusive.ammenities}}
+                          </p>
+                        {% else %}
+                          <ul class="room__type--features">
+                            <li><i class="bx bxs-car-garage"></i> Car Garage</li>
+                            <li><i class="bx bx-bath"></i> Bathrobe</li>
+                            <li><i class="bx bx-closet"></i> Closet</li>
+                            <li><i class="bx bx-swim"></i> Swimming Pool</li>
+                          </ul>
+                        {% endif %}
+
+                        <div class="room__details--price">
+
+                          {% if  room_exclusive.discount > 0 %}
+                          <div class="room-discount-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{room_exclusive.price }}</span>
+                            </span>
+                          </div>
+                          <div class="room-discount-badge">
+                            <span> {{ room_exclusive.discount }}% off only on Rent4less.com</span>
+                          </div>
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_exclusive.new_price }}</span>
+                            </span>
+                          </div>
+                          {% else %}
+                          <div class="room-original-price">
+                            <span>
+                              <sup>&#8358;</sup>
+                              <span>{{ room_exclusive.price }}</span>
+                            </span>
+                          </div>
+                          {% endif %}
+                        </div>
+                      </div>
+
+                      {% if not user.is_superuser  %}
+                        {% if not user.is_staff %}  
+                        <div class="room-button update-cart" data-room={{room_exclusive.id}} data-action="add">
+                          <span class="add-to-cart">Select Room</span>
+                          <span class="added">Added To Cart</span>
+                          <i class="bx bxs-cart-alt cart-icon"></i>
+                          <i class="bx bx-shopping-bag cart-item"></i>
+                        </div>
+                        {% endif %}
+                      {% endif %}
+                    </div>     
+                  </div>
+                </div>
+              {% endif %}
+          
+            {% else %}
+            <div class="room__type--full">
+              <div class="text-center">
+                <div class="img-empty">
+                  <img src="/static/asseting/img/empty-booking.png" alt="empty-booking" srcset="">
+                </div>
+                <p>Ooops... No Room Avaliable </p>
+                <span> Please Check Back Later</span>
+              </div>
+            </div>
+          {% endif %}
+
+          </div>
+          <!-- END SLIDING WIDGET EXCLUSIVE APT -->
+        </div>
+        <!-- END SLIDING WIDGET CONTAINER-->
+      </div>
+      <a href="#" class="popup__close">
+        <i class="bx bx-x close-btn" id="close-btn"></i>
+      </a>
+    </div>
+      <!-- END SLIDING SIDEBAR -->
+    </div>
+
+    <!-- POPUP ANIMATION -->
+    <div class="popup" id="popup">
+      <div class="popup__content" id="popup-content">
+        <div class="popup__content--header">
+          <div class="popup__filter">
+            <div class="popup__filter--image">view Image</div>
+            <div class="popup__filter--description">View Description</div>
+          </div>
+          <a href="#showBookings" class="popup__close">
+            <span>Close </span>
+            <i class="bx bx-x"></i>
+          </a>
+        </div>
+        <div class="popup__content--body">
+          <div class="popup__left">
+            <div class="popup__left--main">
+              <div class="popup__images lazy">
+                <img src="{% static 'asseting/img/single-1.jpg' %}" alt="property" />
+              </div>
+              <div class="popup__images lazy">
+                <img src="{% static 'asseting/img/single-2.jpg' %}" alt="property" />
+              </div>
+              <div class="popup__images lazy">
+                <img src="{% static 'asseting/img/single-3.jpg' %}" alt="property" />
+              </div>
+              <div class="popup__images lazy">
+                <img src="{% static 'asseting/img/single-4.jpg' %}" alt="property" />
+              </div>
+              <div class="popup__images lazy">
+                <img src="{% static 'asseting/img/single-6.jpg' %}" alt="property" />
+              </div>
+              <div class="popup__images lazy">
+                <img src="{% static 'asseting/img/place-2.jpg' %}" alt="property" />
+              </div>
+              <div class="popup__images lazy">
+                <img src="{% static 'asseting/img/gal-6.jpeg' %}" alt="property" />
+              </div>
+              <div class="popup__images lazy">
+                <img src="{% static 'asseting/img/gal-9.jpeg' %}" alt="property" />
+              </div>
+              <div class="popup__images lazy">
+                <img src="{% static 'asseting/img/log-1.jpg' %}" alt="property" />
+              </div>
+              <div class="popup__images lazy">
+                <img src="{% static 'asseting/img/log-2.jpg' %}" alt="property" />
+              </div>
+              <div class="popup__images lazy">
+                <img src="{% static 'asseting/img/place-6.jpg' %}" alt="property" />
+              </div>
+              <div class="popup__images lazy">
+                <img src="{% static 'asseting/img/Rectangle-1.png' %}" alt="property" />
+              </div>
+              <div class="popup__images lazy">
+                <img src="{% static 'asseting/img/place-7.jpg' %}" alt="property" />
+              </div>
+              <div class="popup__images lazy">
+                <img src="{% static 'asseting/img/hotel-1.jpg' %}" alt="property" />
+              </div>
+              <div class="popup__images lazy">
+                <img src="{% static 'asseting/img/popular1.jpg' %}" alt="property" />
+              </div>
+              <div class="popup__images lazy">
+                <img src="{% static 'asseting/img/popular2.jpg' %}" alt="property" />
+              </div>
+              <div class="popup__images lazy">
+                <img src="{% static 'asseting/img/popular2.jpg' %}" alt="property" />
+              </div>
+              <div class="popup__images lazy">
+                <img src="{% static 'asseting/img/popular3.jpg' %}" alt="property" />
+              </div>
+              <div class="popup__images lazy">
+                <img src="{% static 'asseting/img/popular4.jpg' %}" alt="property" />
+              </div>
+              <div class="popup__images lazy">
+                <img src="{% static 'asseting/img/city4.jpg' %}" alt="property" />
+              </div>
+              <div class="popup__images lazy">
+                <img src="{% static 'asseting/img/city4.jpg' %}" alt="property" />
+              </div>
+              <div class="popup__images lazy">
+                <img src="{% static 'asseting/img/city4.jpg' %}" alt="property" />
+              </div>
+              <div class="popup__images lazy">
+                <img src="{% static 'asseting/img/city4.jpg' %}" alt="property" />
+              </div>
+              <div class="popup__images lazy">
+                <img src="{% static 'asseting/img/city4.jpg' %}" alt="property" />
+              </div>
+            </div>
+          </div>
+          <div class="popup__right">
+            <div class="popup__right--header">
+              <i class="bx bx-bell bx-tada"></i>
+              <h3>Description</h3>
+            </div>
+            <div class="popup__right--text">
+              <p>
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae
+                quod accusantium maxime, commodi praesentium officia? Sapiente
+                odio velit officiis doloremque fuga expedita quia repellendus
+                dolore reprehenderit quas tempora voluptas, enim optio quam
+                asperiores eaque nostrum reiciendis error placeat inventore
+                libero id, voluptate iusto ipsa! Deserunt natus odio repellat
+                ipsum fugit qui architecto dolorum ratione, cupiditate, iste
+                vel, aliquam eveniet consectetur modi voluptatem animi incidunt
+                ab deleniti adipisci! Voluptatibus esse ad corporis praesentium
+                adipisci reprehenderit magnam, similique earum asperiores
+                deserunt deleniti ducimus dolore distinctio, rerum natus eos
+                illo tempore et dicta doloremque consequuntur at? Accusantium
+                voluptatibus officia natus perferendis dolorum, neque itaque
+                culpa facere dolore reprehenderit temporibus. Cupiditate quo
+                asperiores, eos qui labore nostrum laboriosam ad, quas non
+                deserunt officiis nesciunt temporibus, maiores reiciendis
+                necessitatibus omnis nam praesentium ea voluptas harum!
+                Consequuntur odio perspiciatis maiores voluptates aliquid
+                eveniet nihil at, fugit autem laborum repudiandae nisi
+                similique, unde esse pariatur est quia cupiditate nesciunt quam
+                repellendus sequi necessitatibus rem sit explicabo! Mollitia
+                incidunt doloribus quod vero possimus facere quaerat, delectus
+                aspernatur corporis quibusdam eius quis at quia impedit quidem
+                cupiditate aut voluptates corrupti molestias fuga facilis fugit
+                blanditiis tenetur! Ullam minima, dignissimos iure vitae optio
+                excepturi ad dolore fuga pariatur velit exercitationem!
+              </p>
+              <p>
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae
+                quod accusantium maxime, commodi praesentium officia? Sapiente
+                odio velit officiis doloremque fuga expedita quia repellendus
+                dolore reprehenderit quas tempora voluptas, enim optio quam
+                asperiores eaque nostrum reiciendis error placeat inventore
+                libero id, voluptate iusto ipsa! Deserunt natus odio repellat
+                ipsum fugit qui architecto dolorum ratione, cupiditate, iste
+                vel, aliquam eveniet consectetur modi voluptatem animi incidunt
+                ab deleniti adipisci! Voluptatibus esse ad corporis praesentium
+                adipisci reprehenderit magnam, similique earum asperiores
+                deserunt deleniti ducimus dolore distinctio, rerum natus eos
+                illo tempore et dicta doloremque consequuntur at? Accusantium
+                voluptatibus officia natus perferendis dolorum, neque itaque
+                culpa facere dolore reprehenderit temporibus. Cupiditate quo
+                asperiores, eos qui labore nostrum laboriosam ad, quas non
+                deserunt officiis nesciunt temporibus, maiores reiciendis
+                necessitatibus omnis nam praesentium ea voluptas harum!
+                Consequuntur odio perspiciatis maiores voluptates aliquid
+                eveniet nihil at, fugit autem laborum repudiandae nisi
+                similique, unde esse pariatur est quia cupiditate nesciunt quam
+                repellendus sequi necessitatibus rem sit explicabo! Mollitia
+                incidunt doloribus quod vero possimus facere quaerat, delectus
+                aspernatur corporis quibusdam eius quis at quia impedit quidem
+                cupiditate aut voluptates corrupti molestias fuga facilis fugit
+                blanditiis tenetur! Ullam minima, dignissimos iure vitae optio
+                excepturi ad dolore fuga pariatur velit exercitationem!
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
+
+    <!--================ INLINE PROPERTYTEXT SCRIPT ===============-->
+    <script>
+      let propertyText = document.querySelectorAll(".room__type--remaining");
+      propertyText.forEach((element) => {
+        const ElementText = element.textContent.slice(0, 3);
+        const realText = parseInt(ElementText, 10);
+
+        if (realText > 5) {
+          element.classList.add("color-green");
+        }
+
+        if (realText <= 5) {
+          element.classList.add("color-red");
+        }
+      });
+    </script>
+
+    <script
+      src="//code.tidio.co/etuszgde4hdtn0rcdfwtkvfkptptgkoq.js"
+      async
+    ></script>
+
+    <!--================ INLINE SPINNER SCRIPT ===============-->
+    <script>
+      const spinnerWrapper = document.querySelector(".spinner-wrapper");
+
+      window.addEventListener("DOMContentLoaded", () => {
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        document.body.scrollTop = 0; // For Safari
+        spinnerWrapper.parentElement.removeChild(spinnerWrapper);
+      });
+    </script>
+
+    <!--=============== GOOGLE APIs ===============-->
+    <script
+      async
+      nonce="{script value}"
+      defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdsL3VPe9gzNi99bh16jfCs3k_jRT2OBs&callback=initMap"
+    ></script>
+
+    <script nonce="{script value}" src="{% static 'asseting/js/googleapis.js' %}"></script>
 
     <!--=============== SWIPER JS ===============-->
-    <script src="{% static 'asset_detail/js/swiper-bundle.min.js' %}"></script>
+    <script src="{% static 'asseting/js/swiper-bundle.min.js' %}"></script>
+
+    <!--=============== MIXITUP JS ===============-->
+    <script src="{% static 'asseting/js/mixitup.js' %}"></script>
 
     <!--=============== SINGLE JS ===============-->
-    <script src="{% static 'asset_detail/js/single.js' %}"></script>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'asseting/js/singling.js' %}"></script>
+
+    <!--=============== NAVIGATION JS ===============-->
+    <script src="{% static 'asseting/js/navigation.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/cart_adds.js' %}"></script>
+
+    <script type="text/javascript">
+      var user = '{{ request.user}}'
+
+      function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+          var cookies = document.cookie.split(';');
+          for(var i = 0; i < cookies.length; i++){
+            var cookie = cookies[i].trim();
+
+            if (cookie.substring(0, name.length + 1) === (name + '='))
+              {
+                cookieValue = decodeURIComponent(cookie.substring(
+                  name.length + 1
+                ));
+                break;
+              }
+          }
+        }
+        return cookieValue;
+      }
+
+      var csrftoken = getCookie('csrftoken'); 
+    </script>
+
   </body>
 </html>
-

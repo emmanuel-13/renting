@@ -1,3 +1,4 @@
+from dataclasses import fields
 from django.contrib.auth.models import User
 from django import forms
 
@@ -9,8 +10,19 @@ class ContactForm(forms.ModelForm):
         model = Contact
         fields = "__all__"
 
-
-class OrderCreateForm(forms.ModelForm):
+class Mails(forms.ModelForm):
     class Meta:
-        model = Order
-        fields = ['first_name', 'last_name', 'address', 'city']
+        model = MailMessage
+        fields = "__all__"
+        
+
+class ProfileEdit(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = "__all__"
+        exclude = ['user']
+        
+class UserEdit(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ["first_name", 'last_name', 'username', 'email']

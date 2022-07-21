@@ -1,0 +1,32 @@
+{% extends 'Dashboard/base.html' %}
+{% load static %}
+
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+<table class="table">
+  <thead>
+    <tr>
+      <th> S/N </th>
+      <th> Email </th>
+      <th> Customer Reference No </th>
+      <th> Amount </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      {% for listed in listed %}
+      <td scope="row"> {{ forloop.counter }} </td>
+      <td> {{ listed.email }} </td>
+      <td> {{ listed.reference }} </td>
+      <td> {{ listed.amount }}</td>
+      {% endfor %}
+    </tr>
+    <tr>
+  </tbody>
+</table>
+{% endblock %}
+
+
+{% block extra %}
+{% endblock %}

@@ -1,0 +1,90 @@
+
+{% extends 'Dashboard/base.html' %}
+
+{% block content %}
+
+
+{% if messages %}
+        {% for message in messages %}
+            <div class="text-center alert alert-{{ message.tags }}" id="msg">
+                {{ message|safe }}
+            </div>
+        {% endfor %}
+ {% endif %}
+ 
+    <h3 class="mt-4"> Development Messages </h3>
+    <p class="text-right">
+        <a href="{% url 'create_message' %}">
+        <button class="btn btn-success">  Create Messages </button> 
+        </a>
+    </p>
+    {% if new_messages %}
+    <div class="row" style="margin-bottom: 150px">
+            {% for apartment in new_messages %}
+            <div class="col-sm-4 mt-4">
+                <div class="card text-center" style="border-radius: 40px;">
+                    <div class="card-header">
+                        {{ apartment.title|title }}
+                    </div>
+
+                    <div class="card-body">
+                        {{ apartment.description|capfirst }}
+                    </div>
+
+                    <div class="text-center mb-4" style="float: left">
+                        <a href="{% url 'update_message' apartment.pk %}" style="text-decoration: none">
+                            <button class="btn btn-success"> Update </button>
+                        </a>
+
+                        <a  href="#" data-toggle="modal" data-target="#deleteModal" style="text-decoration: none">
+                            <button class="btn btn-danger">
+                                Delete
+                            </button>   
+                        </a>
+
+                    </div>
+
+                    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">About To Delete Why!!!</h5>
+                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">×</span>
+                        </button>
+                                </div>
+                                <div class="modal-body">
+                                    Please Note that all process would be deleted too once checked
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">
+                          Cancel
+                        </button>
+                                <a class="btn btn-primary" href="{% url 'delete_message' apartment.pk %}"> Delete </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+    </div>
+{% else %}
+    <p> no messages </p>
+{% endif %}
+
+
+
+    <script>
+        setTimeout(function(){
+            if ($('#msg').length > 0) {
+                $('#msg').remove();
+            }
+            
+        }, 2000);
+    </script>
+{% endblock %}
+
+
+
+

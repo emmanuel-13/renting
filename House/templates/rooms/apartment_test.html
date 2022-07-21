@@ -2,39 +2,41 @@
 {% load crispy_forms_tags bootstrap3 %}
 
 {% block content %}
-<div class="row">
-    <div class="col-sm-3">
-
+<div class="row justify-content-center align-items-center ">
+    <div class="card-header pl-0 col-12 pt-0">
+        <a href="{% url 'apartment_list' estate.estate_name %}" class="d-flex align-items-center text-capitalize text-info"  style="text-decoration:none;">
+            <i class="fa fa-chevron-left pr-2" aria-hidden="true"></i> go back
+        </a>
     </div>
 
-    <div class="col-sm-6 mt-4">
-            <a href="{% url 'apartment_list' estate.estate_name %}" style="text-decoration:none;color: blue">
-                <p class="card-header">
-                     Apartment Name: {{ apartment.estate_name }}
-                </p>
-            </a>
-        <div style="display: flex; justify-content: space-around; margin-bottom: 20px">
-
-            <p class="pt-4">Block: {{ apartment.block }}</p>
-
-            <p class="pt-4"> Flat ID: <span> {{ apartment.flat_id }} </span></p>
-
+    <div class="col-lg-6 col-xl-5 col-md-10 col-12 pb-3 mt-3 px-0 shadow rounded">
+        <div class="card-header bg-secondary"> 
+            <h5 class="text-captalize text-center text-light">Update Apartment</h5>
         </div>
-        <form action="" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.non_field_errors }}
-            {% for field in form %}
-            <div class="row">
-                <div class="col-md-3">{% bootstrap_label field.label %}</div>
-                <div class="col-md-8">{% bootstrap_field field show_label=False %}</div>
+
+        <div class="card-body">
+            <a href="{% url 'apartment_list' estate.estate_name %}" class="d-flex align-items-center pt-3"  style="text-decoration:none;">
+                <p class="pr-3 mb-0 text-muted">Apartment Name: </p> 
+                <p class="m-0 p-0">{{ apartment.estate_name }}</p>
+            </a>
+    
+            <div class="d-flex py-4 align-items-center">
+                <p class="m-0" >Block: {{ apartment.block }}</p>
+                <p class="m-0 pl-4"> Flat ID: <span> {{ apartment.flat_id }} </span></p>
             </div>
-            {% endfor %}
-            <button type="submit" class="btn btn-info form-control"> Update </button>
-        </form>
-    </div>
-
-    <div class="col-sm-3">
-
+    
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                {% for field in form %}
+                <div class="row flex-column">
+                    <div class="col-sm-12">{% bootstrap_label field.label %}</div>
+                    <div class="col-sm-12">{% bootstrap_field field show_label=False %}</div>
+                </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-success form-control mt-3"> Update </button>
+            </form>
+        </div>
     </div>
 </div>
 

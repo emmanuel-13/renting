@@ -1,0 +1,122 @@
+div.form-group div.help-block{
+    color: #53b535 !important;
+}
+
+.text-green{
+    color: #53b535;
+}
+
+.bg-green{
+    background-color: #53b530;
+}
+
+label{
+    font-size: 1rem !important;
+}
+
+.bootstrap3-multi-input{
+    margin-left: 0.25rem;
+}
+
+.block_set{
+    margin-bottom: 1rem;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    padding: 1rem 0.5rem;
+    box-sizing: border-box;
+}
+
+.block-widget{
+    width: 50%;
+}
+
+.block-widget .d-block .form-group{
+    margin-bottom: 0rem;
+}
+
+.delete-row{
+    position: absolute;
+    right: 0.5rem;
+    color: #53b535;
+}
+
+.delete-row:hover{
+    color: rgb(247, 57, 57);
+}
+
+.gap-2{
+    gap: 1rem;
+}
+
+.col-sm-3:nth-child(even) .card-dense{
+    background-image: linear-gradient( to right bottom,#009DDC ,#2A2D34 );
+}
+
+.col-sm-3:nth-child(even) .card-dense:hover{
+    background-image: linear-gradient( to left bottom, #2A2D34, #009DDC  );
+}
+
+.col-sm-3:nth-child(odd) .card-dense{
+    background-image: linear-gradient(to right bottom, #258806 , #53b535 );
+    transition: all 0.4s ease-in-out;
+}
+
+.col-sm-3:nth-child(odd) .card-dense:hover{
+    background-image: linear-gradient(to left bottom , #53b535, #258806 );
+}
+
+.abs-icon{
+    font-size: 4rem;
+    position: absolute;
+    right: -1rem;
+    top: -1rem;
+    transform: rotate(45deg);
+}
+
+.link{
+    text-decoration: none;
+    transition: transform 0.4s ease-in-out;
+    overflow: hidden;
+    backface-visibility: hidden;
+}
+
+.link:hover{
+    transform: scale(1.005) translateY(-0.25rem);
+}
+
+a:hover{
+    text-decoration: none !important;
+}
+
+.estate-img{
+    width: 100%;
+    height: 16rem !important;
+    object-fit: cover;
+}
+
+.estate-card-content{
+    flex: 1;
+}
+
+@media screen and (max-width: 1440px) {
+     .estate-img{
+        height: 12rem !important;
+    }
+
+   .estate-images{
+        width: 6rem;
+        height: 15rem;
+    }
+}
+
+@media screen and (max-width: 567px) {
+    .block-widget{
+        width: 100%;
+    }
+
+    label{
+        font-size: 1rem !important;
+    }
+}
+
+

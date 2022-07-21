@@ -1,6 +1,8 @@
 {% extends 'Dashboard/base.html' %}
 {% load static %}
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/main2.css' %}">
+
 
 {% if messages %}
         {% for message in messages %}
@@ -13,19 +15,24 @@
     <h3> Estate List </h3>
     <div class="row">
         {% for apartment in estate %}
-        <div class="col-sm-4 mt-4">
-            <div class="card text-center" style="border-radius: 40px; background-image: url({% static 'media/download.jfif' %}) height: 100px">
-                <a href="{% url 'estate_detailing' apartment %}" style="text-decoration: none;">
-                    <div class="card-body">
-                        <h4> {{ apartment }} </h4>
-                        <p> {{apartment.location }}
-                        <p>
+        <div class="col-xl-3 col-lg-4 col-sm-6 col-12 mt-4  ">
+            <a class="link card d-flex rounded shadow pl-0" href="{% url 'estate_detailing' apartment %}">
+                {% comment %} <div class="estate-images"> {% endcomment %}
+                    <img src="{{ apartment.image.url }}" class="img-fluid estate-img" />
+                {% comment %} </div> {% endcomment %}
+                <div class="p-4 pl-4 estate-card-content">
+                    <h5 class="h5 text-capitalize text-dark"> {{ apartment|title }} </h5>
+                    <p class="text-dark bg-secondary d-inline-block p-1 my-2 text-capitalize"> {{apartment.location|truncatechars:30 }}
+                    <p class="text-muted d-block">
+                        {% if apartment.block_set.count %}
                         Total Block {{apartment.block_set.count}}
+                        {% else %}
+                        no block for this apartment 
+                        {% endif %}
                     </p>
-                    </div>
-                </a>
-            </div>
-        </div>
+                </div>
+            </a>
+        </div>  
         {% endfor %}
     </div>
     {% else %}
@@ -46,4 +53,6 @@
     }, 2000);
 </script>
 {% endblock %}
+
+
 

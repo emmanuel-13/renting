@@ -8,29 +8,37 @@
                 </div>
             {% endfor %}
     {% endif %}
-<div class="card-header">
-    <a href="{% url 'estate_detailing' estate %}" style="text-decoration: none;">{{estate}}</a>|Block {{ estate.block_set.first }}
-</div>
+    <div class="card-header mb-3 pl-0">
+        <a href="{% url 'estate_detailing' estate %}" style="text-decoration: none;" class="text-capitalize text-info">
+            <i class="fa fa-chevron-left" aria-hidden="true"></i> go back
+        </a>
+    </div>
+
+    <a class="mt-2 text-muted h5" href="{% url 'estate_detailing' estate %}" style="text-decoration: none;">{{estate}} | Block {{ blocks }}</a> 
 
     <div class="row mt-4">
         {% if apartment %}
             {% for apartmentD in apartment %}
-            <div class="col-sm-4">
-                <div class="card mb-4">
-                    <div class="card-body text-center">
-                        <br> {{ apartmentD.flat_id|upper }}
+            <div class="col-sm-3">
+                <div class="card mb-4 card-dense shadow rounded py-3 mb-4 link text-center">
+                    <div class="card-body text-center text-light">
+                        {% if apartmentD.apartment_type == "S" %}
+                        <h5 class="h5"> Shared Apartment </h5>
+                        {% elif apartmentD.apartment_type == "X" %}
+                         <h5 class="h5">Exclusive Apartment</h5>
+                        {% endif %}
+                        
+                        <h6>{{ apartmentD.flat_id|upper }}</h6>
+
                         {% if apartmentD.flat_id in room %}
                         <a href="{% url 'room_det' apartmentD.flat_id %}" style="text-decoration: none">
-                            <div class="card-header">
-                               Total room {{apartmentD.bedroom_type}}
-                            </div>
+                            <button class="btn text-green btn-light mt-1">Total room {{apartmentD.bedroom_type}}</button>
                         </a>
                         {% else %}
-                                <br> No Rooms Available
-                               <br>
-                                <a href="{% url 'apartment_update'  apartmentD.flat_id %}">
-                                    <button class="btn btn-success"> Update Apartment </button>
-                                </a>
+                            <h5 class="mt-1">No Rooms Available</h5>
+                            <a href="{% url 'apartment_update'  apartmentD.flat_id %}" class="mt-1">
+                                <button class="btn text-green btn-light mt-1">Update Apartment </button>
+                            </a>
                         {% endif %}
                     </div>
                     </a>

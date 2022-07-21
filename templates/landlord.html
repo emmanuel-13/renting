@@ -1,0 +1,267 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--=============== FAVICON ===============-->
+    <link
+      rel="shortcut icon"
+      href="{% static 'asseting/img/favicon.png' %}"
+      type="image/x-icon"
+    />
+
+    <!--=============== BOXICONS ===============-->
+    <link
+      href="https://unpkg.com/boxicons@2.1.2/css' %}/boxicons.min.css"
+      rel="stylesheet"
+    />
+
+    <!--=============== SWIPER css ===============-->
+    <link rel="stylesheet" href="{% static 'asseting/css/swiper-bundle.min.css' %}" />
+
+    <!--=============== css ===============-->
+    <link rel="stylesheet" href="{% static 'asseting/css/styleing.css' %}" />
+
+    <title>Rent4Less</title>
+  </head>
+  <body>
+    <!--==================== SPINNER ====================-->
+    <div class="spinner-wrapper">
+      <div class="spinner"></div>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="text-center alert alert-{{ message.tags }}" id="msg">
+                {{ message|safe }}
+            </div>
+        {% endfor %}
+ {% endif %}
+    <!--==================== LOGIN CONTAINER ====================-->
+    <div class="login">
+      <section class="login__left login__left--landlord">
+        <div class="login__form login__form--landlord login__form--container">
+          <div class="login__form--logo">
+            <a href="/" class="nav__logo">
+              <img
+                src="{% static 'asseting/img/rent4less-logo-small.png' %}"
+                alt="rent4less-logo-small"
+              />
+            </a>
+          </div>
+          <div class="login__form--message">
+            <h2 class="color-green">WELCOME TO RENT4LESS!</h2>
+            <p>
+              Explore the endless possibilities of consistent earnings by
+              getting on our Guaranteed Rental Income Programme (GRIP) today by
+              <b>listing your Property.</b>
+            </p>
+          </div>
+          <div class="login__form--wrapper">
+            <form action="" autocomplete="off" class="process__form" method="post">
+              {% csrf_token %}
+              <div class="process__form-container">
+                <fieldset class="process__form-div">
+                  <input
+                    type="text"
+                    name="first-name"
+                    id="first-name"
+                    class="process__form-input"
+                    placeholder=" "
+                    required
+                  />
+                  <label for="first-name" class="process__form-label"
+                    >First Name</label
+                  >
+                </fieldset>
+                <fieldset class="process__form-div">
+                  <input
+                    type="text"
+                    name="last-name"
+                    id="last-name"
+                    class="process__form-input"
+                    placeholder=" "
+                    required
+                  />
+                  <label for="last-name" class="process__form-label"
+                    >Last Name</label
+                  >
+                </fieldset>
+              </div>
+              <div class="process__form-container">
+                <fieldset class="process__form-div">
+                  <input
+                    type="number"
+                    name="phone"
+                    id="phone"
+                    class="process__form-input"
+                    placeholder=" "
+                    required
+                  />
+                  <label for="phone" class="process__form-label"
+                    >Phone Number</label
+                  >
+                </fieldset>
+                <fieldset class="process__form-div">
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    class="process__form-input"
+                    placeholder=" "
+                    required
+                  />
+                  <label for="email" class="process__form-label"
+                    >Email Address</label
+                  >
+                </fieldset>
+              </div>
+              <fieldset class="process__form-div">
+                <input
+                  type="text"
+                  name="address"
+                  id="address"
+                  class="process__form-input"
+                  placeholder=" "
+                  required
+                />
+                <label for="address" class="process__form-label"
+                  >Full Address of Property</label
+                >
+              </fieldset>
+              <div class="process__form-container">
+                <fieldset class="process__form-div">
+                  <input
+                    type="text"
+                    name="location"
+                    id="location"
+                    class="process__form-input"
+                    placeholder=" "
+                    required
+                  />
+                  <label for="location" class="process__form-label"
+                    >Location of Property</label
+                  >
+                </fieldset>
+                <fieldset class="process__form-div">
+                  <input
+                    type="number"
+                    name="flat"
+                    id="flat"
+                    class="process__form-input"
+                    placeholder=" "
+                    required
+                  />
+                  <label for="flat" class="process__form-label"
+                    >Number of Flats</label
+                  >
+                </fieldset>
+                <fieldset class="process__form-div">
+                  <input
+                    type="number"
+                    name="room"
+                    id="room"
+                    class="process__form-input"
+                    placeholder=" "
+                    required
+                  />
+                  <label for="room" class="process__form-label"
+                    >Number of Rooms</label
+                  >
+                </fieldset>
+              </div>
+              <fieldset class="process__form-div--textarea mb-3">
+                <textarea
+                  id="textarea"
+                  name="description"
+                  class="process__form-textarea"
+                  placeholder=" "
+                  rows="10"
+                ></textarea>
+                <label for="textarea" class="process__form-label"
+                  >Brief Description of Property</label
+                >
+              </fieldset>
+              <button
+                type="submit"
+                class="button letter-spacing-1"
+              >
+                Submit
+              </button>
+            </form>
+            <span class="login__form--copy">&copy; 2022 Rent4Less</span>
+          </div>
+        </div>
+      </section>
+      <section class="login__right">
+        <div class="login__overlay"></div>
+        <div class="swiper mySwiper loginRightSwiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <img
+                src="{% static 'asseting/img/hotel-small.jpg' %}"
+                data-srcset="{% static 'asseting/img/hotel-1.jpg' %}"
+                id="lazy-image"
+                alt="homes"
+                class="swiper-lazy"
+              />
+              <!-- <div class="swiper-lazy-preloader"></div> -->
+            </div>
+            <div class="swiper-slide">
+              <img
+                src="{% static 'asseting/img/hotel-2.jpeg' %}"
+                data-srcset="{% static 'asseting/img/hotel-2.jpeg' %}"
+                id="lazy-image"
+                alt="homes"
+                class="swiper-lazy"
+              />
+              <!-- <div class="swiper-lazy-preloader"></div> -->
+            </div>
+            <div class="swiper-slide">
+              <img
+                src="{% static 'asseting/img/estate-5.jpg' %}"
+                data-srcset="{% static 'asseting/img/estate-5.jpg' %}"
+                id="lazy-image"
+                alt="homes"
+                class="swiper-lazy"
+              />
+              <!-- <div class="swiper-lazy-preloader"></div> -->
+            </div>
+            <div class="swiper-slide">
+              <img
+                src="{% static 'asseting/img/place-4.jpg' %}"
+                data-srcset="{% static 'asseting/img/place-4.jpg' %}"
+                id="lazy-image"
+                alt="homes"
+                class="swiper-lazy"
+                alt=""
+              />
+              <!-- <div class="swiper-lazy-preloader"></div> -->
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!--================ INLINE SCRIPT ===============-->
+    <script
+      src="//code.tidio.co/etuszgde4hdtn0rcdfwtkvfkptptgkoq.js"
+      async
+    ></script>
+
+    <script>
+      const spinnerWrapper = document.querySelector(".spinner-wrapper");
+
+      window.addEventListener("DOMContentLoaded", () => {
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        document.body.scrollTop = 0; // For Safari
+        spinnerWrapper.parentElement.removeChild(spinnerWrapper);
+      });
+    </script>
+
+    <script src="{% static 'asseting/js/swiper-bundle.min.js' %}"></script>
+    <script src="{% static 'asseting/js/signing.js' %}"></script>
+  </body>
+</html>

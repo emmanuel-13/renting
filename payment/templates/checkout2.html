@@ -1,0 +1,219 @@
+{% load static mathfilters %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--=============== FAVICON ===============-->
+    <link
+      rel="shortcut icon"
+      href="{% static 'asset_detail/img/favicon.png' %}"
+      type="image/x-icon"
+    />
+    <!--=============== BOXICONS ===============-->
+    <link
+      href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <!--=============== SWIPER CSS ===============-->
+    <link rel="stylesheet" href="{% static 'asset_detail/css/swiper-bundle.min.css' %}" />
+
+    <!--=============== LIGHTBOX CSS ===============-->
+    <link rel="stylesheet" href="{% static 'asset_detail/css/lightbox.css' %}" />
+
+    <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="{% static 'asset_detail/css/style.css' %}" />
+
+    <title>Rent4Less</title>
+  </head>
+  <body>
+    <div class="checkout">
+      <main class="main">
+        <div class="section cart__header">
+          <a href="{% url 'cart_detail' %}" class="mb-3 checkout__button">
+            <i class="bx bx-chevron-left"></i> <span>Back to Cart</span>
+          </a>
+
+          <!-- this is if you have any reservation in your cart -->
+          <div class="cart__header-content">
+            <h2>Proceed to reserve your Booking</h2>
+            <p>
+              By placing this order, you agree to our company
+              <a href="#" class="letter-spacing-1">Privacy Policy</a> and
+              <a href="#" class="letter-spacing-1"> Conditions of Use</a>
+            </p>
+          </div>
+        </div>
+        <div class="main__wrapper">
+          <!-- the style for this page can be foun in cart.scss -->
+
+          <div class="checkout__main section">
+            <h2 class="checkout__main-title text-capitalize">
+              Booking information
+            </h2>
+            <form class="checkout__form" method="post">
+              {% csrf_token %}
+              <h4 class="checkout__form-title">
+                <i class="bx bx-radio-circle-marked"></i> Add New Address
+              </h4>
+
+              {% comment %} <div class="checkout__form-container">
+                <div class="checkout__form-div">
+                  <input
+                    type="text"
+                    name="name"
+                    class="checkout__form-input"
+                    placeholder=" "
+                    required
+                  />
+                  <label for="name" class="checkout__form-label"
+                    >First Name</label
+                  >
+                </div>
+              </div> {% endcomment %}
+
+              {% comment %} <div class="checkout__form-div">
+                <input
+                  type="text"
+                  class="checkout__form-input"
+                  placeholder=" "
+                  required
+                />
+                <label for="address" class="checkout__form-label"
+                  >Street Address</label
+                >
+              </div> {% endcomment %}
+
+              <div class="checkout__form-container">
+                <div class="checkout__form-div">
+                  <input
+                    type="text"
+                    name="city"
+                    class="checkout__form-input"
+                    placeholder=" "
+                    required
+                  />
+                  <label for="city" class="checkout__form-label">City</label>
+                </div>
+                <div class="checkout__form-div">
+                  <input
+                    type="number"
+                    class="checkout__form-input"
+                    placeholder="enter your phone number"
+                    name="phone-no"
+                  />
+                  <label for="zip code" class="checkout__form-label"
+                    >Phone Number</label
+                  >
+                </div>
+              </div>
+
+              <div class="checkout__main-select">
+                <h4 class="checkout__form-title">
+                  <i class="bx bx-radio-circle-marked"></i> Payment Mode
+                </h4>
+
+                <div class="checkout__main-select-container">
+                  <select name="payment_type" id="">
+                    <option value="1"> 1 Month </option>
+                    <option value="3"> 3 Month(Quarterly) </option>
+                    <option value="6"> 6 Month(Bi-Annually) </option>
+                    <option value="12"> 12 Month(Annually) </option>
+                  </select>
+                </div>
+              </div>
+              {% if request.session.basket %}
+                {% if user.is_authenticated and not user.is_superuser and not user.is_staff %}
+              <button class="btn btn-success" type="submit">Proceed to Checkout</button>
+                {% endif %}
+              {% endif %}
+            </div>
+            
+          </form>
+
+            <div class="cart__side">
+              <div class="cart__side-checkout">
+                <p class="cart__side-checkout-title text-capitalize">
+                  Booking Summary
+                </p>
+                {% if basket %}
+                <div class="cart__side-checkout-main">
+                  {% for item in basket %}
+                  <div
+                    class="cart__side-checkout-main-content justify-between pb-0"
+                  >
+                    <span class="text-capitalize">rent :</span>
+                    <p class="cart__price-actual">
+                      <sup>&#8358;</sup>
+                      {{ item.room.rented }}
+                    </p>
+                  </div>
+                  <div
+                    class="cart__side-checkout-main-content justify-between pb-0"
+                  >
+                    <span class="text-capitalize">Service fee :</span>
+                    <p class="cart__price-actual">
+                      <sup>&#8358;</sup>
+                      {{ item.room.service }}
+                    </p>
+                  </div>
+                  <div
+                    class="cart__side-checkout-main-content justify-between pb-0"
+                  >
+                    <span class="text-capitalize">power charge :</span>
+                    <p class="cart__price-actual">
+                      <sup>&#8358;</sup>
+                      {{ item.room.power }}
+                    </p>
+                  </div>
+
+                  <div
+                    class="cart__side-checkout-main-content justify-between pb-0"
+                  >
+                    <span class="text-capitalize">room type</span>
+                    <p class="cart__price-actual">
+                      {{ forloop.counter }}: {% if item.room.apartment_type == 'S' %}
+                        {{ item.room.room_types }} 
+                        {% else %}
+                        {{ item.room.exclusive_room }}
+                      {% endif %}
+                    </p>
+                  </div>
+
+                  <div
+                    class="cart__side-checkout-main-content justify-between pb-0"
+                  >
+                    <span class="text-capitalize">Tax</span>
+                    <p class="cart__price-actual">
+                      (20%) <sup>&#8358;</sup>{{ basket.get_total_prices|sub:basket.subtotals_price}}
+                    </p>
+                  </div>
+
+                  
+
+                  {% comment %} <div class="cart__side-checkout-main-button">
+                    
+                  </div> {% endcomment %}
+                  {% endfor %}
+                  {{ tax }}
+
+                  <div class="cart__side-checkout-main-total">
+                    <span class="text-capitalize">Total :</span>
+                    <p class="cart__price-actual">
+                      <sup>&#8358;</sup>
+                      {{ basket.get_total_price }}
+                    </p>
+                  </div>
+                </div>
+
+                {% else %}
+                <p> cart is empty </p>
+                {% endif %}
+              </div>
+            </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

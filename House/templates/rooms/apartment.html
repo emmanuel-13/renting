@@ -3,38 +3,111 @@
 
 
 {% block content %}
-    <h2 class="card-header"><a href="#" style="text-decoration: none"> ADD Estate </a></h2>
-    <form action="" method="post" class="mt-4" enctype="multipart/form-data">
+        {% if form.error %}
+            <p> please correct the error below</p>
+        {% endif %}
+
+        <h5 class="card-header">
+            <a href="#" class="text-muted" style="text-decoration: none">Create Estate</a>
+        </h5>
+
+    <form action="" method="post" class="mt-4 card py-5 px-4 rounded-start" enctype="multipart/form-data" autocomplete="off">
         {% csrf_token %}
-     <fieldset>
+        <fieldset> 
             {{ form.non_field_errors }}
             {% for field in form %}
-            <div class="row">
-                <div class="col-md-2">{% bootstrap_label field.label %}</div>
-                <div class="col-md-6">{% bootstrap_field field show_label=False %}</div>
+            <div class="row flex-column align-items-center mb-2">
+                <div class="col-lg-6 col-md-8 col-sm-12 ">{% bootstrap_label field.label %}</div>
+                <div class="col-lg-6 col-md-8 col-sm-12 ">{% bootstrap_field field show_label=False %}</div>
             </div>
             {% endfor %}
-    </fieldset>
+        </fieldset>
 
-    <fieldset>
-            <legend> Block </legend>
-            {{ blocks.management_form }}
-            {{ blocks.non_form_errors }}
-                            {% for form in blocks %}
-                    <div class="inline {{ blocks.prefix }} mt-2 mr-4 ml-4">
-                    {% for field in form.visible_fields %}
-                            <div class="row mt-3">
-                                    <div class="col-md-2">{% bootstrap_label field.label %}</div>
-                                    <div class="col-md-6">{% bootstrap_field field show_label=False %}</div>
-                            </div>
-                    {% endfor %}
-                    </div>
-            {% endfor %}
-    </fieldset>
-    <div class="row">
-            <div class="col-md-3 mt-3">
-                    <button type="submit" class="btn btn-success text-center form-control"> Save </button>
+        <fieldset> 
+            <div class="row flex-column align-items-center mb-4">
+                <div class="col-md-8 col-lg-6 col-sm-12">
+                    <label for=""> Estate Property </label>
+                </div>
+                <div class="col-md-8 col-lg-6 col-sm-12">
+                    <textarea class="w-100" name="property_detail" id="" rows="10"></textarea>
+                </div>
             </div>
+
+            <div class="row flex-column align-items-center mb-4">
+                <div class="col-md-8 col-lg-6 col-sm-12">
+                    <label for=""> Estate Video </label>
+                </div>
+                <div class="col-md-8 col-lg-6 col-sm-12">
+                    <input type="file" name="video">
+                </div>
+            </div>
+
+            <div class="row flex-column align-items-center mb-4">
+                <div class="col-md-8 col-lg-6 col-sm-12">
+                    <label for=""> Additional Details </label>
+                </div>
+                <div class="col-md-8 col-lg-6 col-sm-12">
+                    <textarea class="w-100" name="additional_detail" id="" cols="60" rows="10"></textarea>
+                </div>
+            </div>
+
+            <div class="row flex-column align-items-center mb-4">
+                <div class="col-md-8 col-lg-6 col-sm-12">
+                    <label for=""> Additional Details </label>
+                </div>
+                <div class="col-md-8 col-lg-6 col-sm-12">
+                    <textarea class="w-100" name="additional_detail" id="" cols="60" rows="10"></textarea>
+                </div>
+            </div>
+
+            <div class="row flex-column align-items-center mb-4">
+                <div class="col-md-8 col-lg-6 col-sm-12">
+                    <label for=""> Feature </label>
+                </div>
+                <div class="col-md-8 col-lg-6 col-sm-12">
+                    <textarea class="w-100" name="feature" id="" cols="60" rows="10"></textarea>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset> 
+            <div class="row flex-column align-items-center mb-4">
+                <div class="col-md-8 col-lg-6 col-sm-12">
+                    <label for=""> Estate Images </label>
+                </div>
+                <div class="col-md-8 col-lg-6 col-sm-12">
+                    <input type="file" name="image" multiple accept="image/*" >
+                </div>
+            </div>
+        </fieldset>
+        
+        <fieldset>
+            <div class="row flex-column align-items-center mb-4">
+                <div class="col-md-8 col-lg-6 col-sm-12">
+                    <h3 class="text-dark my-4 "> Block </h3>
+                </div>
+                {{ blocks.management_form }}
+                {{ blocks.non_form_errors }}
+                <div class="col-md-8 col-lg-6 col-sm-12 ">
+                    {% for form in blocks %}
+                        <div class="inline row {{ blocks.prefix }}">
+                            {% for field in form.visible_fields %}
+                                <div class="row flex-column flex-nowrap mr-1 block-widget mb-2">
+                                    <div class="ml-4">{% bootstrap_label field.label %}</div>
+                                    <div class="d-block col-12 ml-2">{% bootstrap_field field show_label=False %}</div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>    
+        </fieldset>
+
+
+    <div class="row flex-column align-items-center mt-4">
+        <div class="col-md-6 mt-3">
+            <button type="submit" class="btn btn-success text-center form-control" name="button"> Save </button>
+        </div>
     </div>
     </form>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -43,10 +116,13 @@
 <script type="text/javascript">
     $('.inline.{{ blocks.prefix }}').formset({
         prefix: "{{ blocks.prefix }}",
-        addCssClass: "btn btn-block btn-info bordered inline-form-add", 
-        deleteText: 'remove',
+        addCssClass: "btn btn-block btn-info d-inline bordered inline-form-add",
+        {% comment %} deletedCssClass: "btn btn-block btn-primary bordered",  {% endcomment %}
+        deleteText: `<i class="fa fa-trash" aria-hidden="true"></i>`,
         addText: 'add block',
         formCssClass: 'inline-form'
     });
 </script>
 {% endblock %}
+
+

@@ -1,0 +1,90 @@
+{% extends "Dashboard/base.html" %}
+
+{% block content %}
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h3 class="m-0 font-weight-medium text-success">
+                {% if users %}
+                 User Views
+                 {% else %}
+                 LandLord Views
+                 {% endif %}
+              </h3>
+            </div>
+            
+            <div class="card-body overflow-auto">
+                {% if users %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            
+                            <th>(S/N)/First Name </th>
+                            <th> Last Name </th>
+                            <th> Email </th>
+                            <th> Username </th>
+                            <th> Phone No </th>
+                            <th> View User </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            
+                            <td>({{ forloop.counter }}) {{ user.user.first_name|capfirst }}
+                            <td> {{ user.user.last_name|capfirst }}</td>
+                            <td> {{ user.user.email|capfirst }}</td>
+                            <td> {{ user.user.username|capfirst }} </td>
+                            {% if user.phone_no %}
+                            <td> {{ user.phone_no }} </td>
+                            {% else %}
+                            <td> no phone no </td>
+                            {% endif %}
+                            <td> 
+                                <a href="{% url 'user_form_view' user.id %}">
+                                <button class="btn btn-success"> view </button>
+                                </a>
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                {% elif landLord %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            
+                            <th>S/N -> First Name </th>
+                            <th> Last Name </th>
+                            <th> Email </th>
+                            <th> Phone No </th>
+                            <th> Date Created </th>
+                            <th> View User </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in landlord %}
+                        <tr>
+                            
+                            <td>{{ forloop.counter }} -> {{ user.first_name|capfirst }}
+                            <td> {{ user.last_name|capfirst }}</td>
+                            <td> {{ user.email|capfirst }}</td>
+                            <td> {{ user.phone_no }} </td>
+                            <td> {{ user.date_created }} </td>
+                            <td> 
+                                <a href="{% url 'user_form_view' user.id %}">
+                                <button class="btn btn-success"> view </button>
+                                </a>
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p> no landlord found </p>
+                {% endif %}
+            </div>
+        </div>
+{% endblock  %}

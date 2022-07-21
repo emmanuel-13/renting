@@ -1,0 +1,625 @@
+{% load static humanize %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--=============== FAVICON ===============-->
+    <link
+      rel="shortcut icon"
+      href="{% static 'asseting/img/favicon.png' %}"
+      type="image/x-icon"
+    />
+
+    <!--=============== BOXICONS ===============-->
+    <link
+      href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+
+    <!--=============== SWIPER CSS ===============-->
+    <link rel="stylesheet" href="{% static 'asseting/css/swiper-bundle.min.css'  %}" />
+
+    <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="{% static 'asseting/css/styleing.css'  %}" />
+
+    <title>Rent4Less</title>
+  </head>
+  <body>
+    <!--==================== SPINNER ====================-->
+    <div class="spinner-wrapper">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- ======= TOAST ANIMATION ====== -->
+    <div class="toast">
+      <div class="toast-content">
+        <i class="bx bxs-check-circle check"></i>
+        <div class="message">
+          <span class="message-text text-1"></span>
+        </div>
+      </div>
+
+      <div class="progress"></div>
+    </div>
+    <!-- ======= END TOAST ANIMATION ====== -->
+
+    <!--==================== SECONDARY NAVBAR ====================-->
+      {% include 'secondary_navbar.html' %}
+
+    <!--=============== PROPERTY LISTINGS ===============-->
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="text-center alert alert-{{ message.tags }}" id="msg">
+                {{ message|safe }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <main class="main main__list listings">
+      <!-- search functionality goes here -->
+      <!-- <section class="search">
+        <div class="search__wrapper">
+          <form action="">
+            <input type="text" placeholder="Search By Location" required />
+            <i class="bx bx-search"></i>
+            <button>Search</button>
+          </form>
+        </div>
+      </section> -->
+      <!-- search functionality ends here -->
+
+      <div class="main__wrapper">
+        <section class="section email">
+          <div class="email__container">
+            <form class="form__container" method="post" id="sub">
+              <label for="text">Stay Updated with our latest rates</label>
+              <div class="form__control">
+                <input type="email"  name="email" id="email" placeholder="Email Address" required />
+                <button type="submit">Subscribe</button>
+              </div>
+            </form>
+          </div>
+        </section>
+        <section class="section description">
+          <h3 class="description__heading">{{city.estate_set.count }} Property{{city|pluralize}} in {{city}}</h3>
+          <h5 class="description__subheading">
+            Rooms and apartments for your comfort from {{city.estate_set.count }} Property{{city|pluralize}} @ {{ city }}
+          </h5>
+          <p class="description__text">
+            Experience free-living like never before with Rent4Less. From shared
+            living to exclusive apartments, we have specially curated a list of
+            abodes to meet your needs and provide a wholesome living experience.
+          </p>
+        </section>
+        <section class="section filter">
+          <div class="filter__wrapper">
+            <div class="filter__header">
+              <i class="bx bx-filter"></i>
+              <h2>Search Filter</h2>
+            </div>
+            <div class="filter__body">
+              <div class="filter__range">
+                <div class="filter__range--title">
+                  <label for="Name" class="filter__range--title-name"
+                    >Property Type</label
+                  >
+                </div>
+                <label class="filter__range--type" onclick="alert('try later thank you')">
+                  <a
+                    href="#"
+                    class="filter__link"
+                    type="_blank"
+                  >
+                    <input
+                      type="checkbox"
+                      data-href="#"
+                      id=""
+                    />
+                    <span>Shared</span>
+                  </a>
+                </label>
+                <label class="filter__range--type" onclick="alert('try later thank you')">
+                  <a
+                    href="#"
+                    class="filter__link"
+                    type="_blank"
+                  >
+                    <input
+                      type="checkbox"
+                      data-href="#"
+                      id=""
+                    />
+                    <span>Exclusive</span>
+                  </a>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="filter__wrapper filter__wrapper--sticky">
+            <div class="filter__header">
+              <i class="bx bxs-location-plus"></i>
+              <h2>Search Other Area</h2>
+            </div>
+            <div class="filter__body">
+              <div class="filter__range">
+                {% if estate %}
+                  {% for estate in estate %}
+                  <label class="filter__range--type">
+                    <a
+                      href="{% url 'property_detail' estate.pk %}"
+                      class="filter__link"
+                      type="_blank"
+                    >
+                      <input
+                        type="checkbox"
+                        data-href="http://127.0.0.1:5501/index.html"
+                        id=""
+                      />
+                      <span>{{ estate.citys }}</span>
+                      <br />
+                      <li class="filter__range--number">{{ estate.estate_set.count }} properties</li>
+                    </a>
+                  </label>
+                  {% endfor %}
+                {% else %}
+                  <label class="filter__range--type">
+                    <a
+                      href="http://127.0.0.1:5501/index.html"
+                      class="filter__link"
+                      type="_blank"
+                    >
+                      <input
+                        type="checkbox"
+                        data-href="http://127.0.0.1:5501/index.html"
+                        id=""
+                      />
+                      <span>Ikoyi</span>
+                      <br />
+                      <li class="filter__range--number">20 properties</li>
+                    </a>
+                  </label>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section listing">
+          <div class="listing__wrapper">
+            <!--=============== PROPERTY FILTER VERTICAL ===============-->
+
+            <!-- listings -->
+
+            <ul class="listing__tab">
+              <li class="list-half">
+                <i class="bx bx-grid-alt"></i>
+              </li>
+              <li class="list-full active">
+                <i class="bx bxs-notification"></i>
+              </li>
+            </ul>
+
+            <div class="listing__container">
+              {% if main_estate %}
+              {% for estate in main_estate %}
+              <div class="cards all exclusives">
+                <div class="cards__image">
+                  <a href="{% url 'apartment_detail' estate.estate_name %}" class="hidden">Reserve Now</a>
+                  <img src="{{ estate.image.url }}" alt="" />
+                </div>
+                <div class="cards__body">
+                  <div class="cards__body--title">
+                    {% if apart %}
+                      {% for apart in apart %}
+                        {% if apart.estate_name == estate.estate_name %}
+                            {% if apart.apartment_type == "X" %}
+                              {% if forloop.counter0 >= 1%}
+                              <span class="cards__body--highlight letter-spacing-2">
+                                  Exclusive
+                              </span>
+                              {% endif %}
+                            {% elif apart.apartment_type == "X" and apart.apartment_type == "S" %}
+                              <span class="cards__body--highlight letter-spacing-2">
+                                Exclusive
+                              </span>
+                              <span class="cards__body--highlight letter-spacing-2">
+                                Shared 
+                              </span>
+                            {% else %}
+                              <span class="cards__body--highlight letter-spacing-2">
+                                Shared
+                              </span>
+                          {% endif %}
+
+                        
+                        {% endif %}
+
+                        {% endfor %}
+
+                      {% else %}
+                      <span class="cards__body--highlight letter-spacing-2"
+                        >Exclusive</span
+                      >
+                      {% endif %}
+                    
+                    {% comment %} <div class="cards__body--price">&#8358;12k - &#8358;5M</div> {% endcomment %}
+                  </div>
+                  <h6>
+                    <a href="#">{{ estate.estate_name }}</a>
+                  </h6>
+                  <div class="cards__body--description">
+                    <i class="bx bxs-map"></i>
+                    <p class="text-capitalize">{{estate.location}}, {{estate.city}}</p>
+                  </div>
+                  <ul class="cards__body--list">
+                    <li class="cards__body--item">
+                      Bath <span> <i class="bx bx-bath"></i>2</span>
+                    </li>
+                    <li class="cards__body--item">
+                      Bed <span> <i class="bx bx-bed"></i>2</span>
+                    </li>
+                    <li class="cards__body--item">
+                      Rooms <span> <i class="bx bxs-door-open"></i>2</span>
+                    </li>
+                    <li class="cards__body--item">
+                      Area <span> <i class="bx bx-trip"></i>1450</span>
+                    </li>
+                    <li class="cards__body--item">
+                      Bed <span> <i class="bx bx-bed"></i>2</span>
+                    </li>
+                    <li class="cards__body--item">
+                      CCTV <span> <i class="bx bxs-cctv"></i></span>
+                    </li>
+                    <li class="cards__body--item">
+                      Area <span> <i class="bx bx-trip"></i>1450</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="cards__footer">
+                  <p class="cards__footer--initials">A</p>
+                  {% comment %} <p class="cards__footer--price">&#8358;12k - &#8358;5M</p> {% endcomment %}
+                  <a href="{% url 'apartment_detail' estate.estate_name %}" class="btn button__outlined"
+                    >Reserve Now</a
+                  >
+                </div>
+              </div>
+              {% endfor %}
+
+              {% else %}
+              <div class="cards all shared">
+                <div class="cards__image">
+                  <a href="#" class="hidden">Reserve Now</a>
+                  <img src="{% static 'asseting/img/place-2.jpg' %}" alt="" />
+                </div>
+                <div class="cards__body">
+                  <div class="cards__body--title">
+                    <span class="cards__body--highlight letter-spacing-2"
+                      >Shared</span
+                    >
+                    <div class="cards__body--price">$40,000</div>
+                  </div>
+                  <h6>
+                    <a href="#">vila in coral gables</a>
+                  </h6>
+                  <div class="cards__body--description">
+                    <i class="bx bxs-map"></i>
+                    <p class="text-capitalize">west flaminggo road, Ikorodu</p>
+                  </div>
+                  <ul class="cards__body--list">
+                    <li class="cards__body--item">
+                      Bath <span> <i class="bx bx-bath"></i>2</span>
+                    </li>
+                    <li class="cards__body--item">
+                      Bed <span> <i class="bx bx-bed"></i>2</span>
+                    </li>
+                    <li class="cards__body--item">
+                      Rooms <span> <i class="bx bxs-door-open"></i>2</span>
+                    </li>
+                    <li class="cards__body--item">
+                      Area <span> <i class="bx bx-trip"></i>1450</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="cards__footer">
+                  <p class="cards__footer--initials">A</p>
+                  <p class="cards__footer--price">$35,000</p>
+                  <a href="#" class="btn button__outlined">Reserve Now</a>
+                </div>
+              </div>
+              <div class="cards all shared">
+                <div class="cards__image">
+                  <a href="#" class="hidden">Reserve Now</a>
+                  <img src="{% static 'asseting/img/place-3.jpg' %}" alt="" />
+                </div>
+                <div class="cards__body">
+                  <div class="cards__body--title">
+                    <span class="cards__body--highlight letter-spacing-2"
+                      >Shared</span
+                    >
+                    <div class="cards__body--price">$40,000</div>
+                  </div>
+                  <h6>
+                    <a href="#">vila in coral gables</a>
+                  </h6>
+                  <div class="cards__body--description">
+                    <i class="bx bxs-map"></i>
+                    <p class="text-capitalize">west flaminggo road, Ikorodu</p>
+                  </div>
+                  <ul class="cards__body--list">
+                    <li class="cards__body--item">
+                      Bath <span> <i class="bx bx-bath"></i>2</span>
+                    </li>
+                    <li class="cards__body--item">
+                      Bed <span> <i class="bx bx-bed"></i>2</span>
+                    </li>
+                    <li class="cards__body--item">
+                      Rooms <span> <i class="bx bxs-door-open"></i>2</span>
+                    </li>
+                    <li class="cards__body--item">
+                      Area <span> <i class="bx bx-trip"></i>1450</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="cards__footer">
+                  <p class="cards__footer--initials">A</p>
+                  <p class="cards__footer--price">$35,000</p>
+                  <a href="#" class="btn button__outlined">Reserve Now</a>
+                </div>
+              </div>
+              <div class="cards all exclusives">
+                <div class="cards__image">
+                  <a href="#" class="hidden">Reserve Now</a>
+                  <img src="{% static 'asseting/img/place-4.jpg' %}" alt="" />
+                </div>
+                <div class="cards__body">
+                  <div class="cards__body--title">
+                    <span class="cards__body--highlight letter-spacing-2"
+                      >Exclusive</span
+                    >
+                    <div class="cards__body--price">$40,000</div>
+                  </div>
+                  <h6>
+                    <a href="#">vila in coral gables</a>
+                  </h6>
+                  <div class="cards__body--description">
+                    <i class="bx bxs-map"></i>
+                    <p class="text-capitalize">west flaminggo road, Ikorodu</p>
+                  </div>
+                  <ul class="cards__body--list">
+                    <li class="cards__body--item">
+                      Bath <span> <i class="bx bx-bath"></i>2</span>
+                    </li>
+                    <li class="cards__body--item">
+                      Bed <span> <i class="bx bx-bed"></i>2</span>
+                    </li>
+                    <li class="cards__body--item">
+                      Rooms <span> <i class="bx bxs-door-open"></i>2</span>
+                    </li>
+                    <li class="cards__body--item">
+                      Area <span> <i class="bx bx-trip"></i>1450</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="cards__footer">
+                  <p class="cards__footer--initials">A</p>
+                  <p class="cards__footer--price">$35,000</p>
+                  <a href="#" class="btn button__outlined">Reserve Now</a>
+                </div>
+              </div>
+              <div class="cards all exclusives">
+                <div class="cards__image">
+                  <a href="#" class="hidden">Reserve Now</a>
+                  <img src="{% static 'asseting/img/place-6.jpg' %}" alt="" />
+                </div>
+                <div class="cards__body">
+                  <div class="cards__body--title">
+                    <span class="cards__body--highlight letter-spacing-2"
+                      >Exclusive</span
+                    >
+                    <div class="cards__body--price">$40,000</div>
+                  </div>
+                  <h6>
+                    <a href="#">vila in coral gables</a>
+                  </h6>
+                  <div class="cards__body--description">
+                    <i class="bx bxs-map"></i>
+                    <p class="text-capitalize">west flaminggo road, Ikorodu</p>
+                  </div>
+                  <ul class="cards__body--list">
+                    <li class="cards__body--item">
+                      Bath <span> <i class="bx bx-bath"></i>2</span>
+                    </li>
+                    <li class="cards__body--item">
+                      Bed <span> <i class="bx bx-bed"></i>2</span>
+                    </li>
+                    <li class="cards__body--item">
+                      Rooms <span> <i class="bx bxs-door-open"></i>2</span>
+                    </li>
+                    <li class="cards__body--item">
+                      Area <span> <i class="bx bx-trip"></i>1450</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="cards__footer">
+                  <p class="cards__footer--initials">A</p>
+                  <p class="cards__footer--price">$35,000</p>
+                  <a href="#" class="btn button__outlined">Reserve Now</a>
+                </div>
+              </div>
+              <div class="cards all shared">
+                <div class="cards__image">
+                  <a href="#" class="hidden">Reserve Now</a>
+                  <img src="{% static 'asseting/img/place-6.jpg' %}" alt="" />
+                </div>
+                <div class="cards__body">
+                  <div class="cards__body--title">
+                    <span class="cards__body--highlight letter-spacing-2"
+                      >Shared</span
+                    >
+                    <div class="cards__body--price">$40,000</div>
+                  </div>
+                  <h6>
+                    <a href="#">vila in coral gables</a>
+                  </h6>
+                  <div class="cards__body--description">
+                    <i class="bx bxs-map"></i>
+                    <p class="text-capitalize">west flaminggo road, Ikorodu</p>
+                  </div>
+                  <ul class="cards__body--list">
+                    <li class="cards__body--item">
+                      Bath <span> <i class="bx bx-bath"></i>2</span>
+                    </li>
+                    <li class="cards__body--item">
+                      Bed <span> <i class="bx bx-bed"></i>2</span>
+                    </li>
+                    <li class="cards__body--item">
+                      Rooms <span> <i class="bx bxs-door-open"></i>2</span>
+                    </li>
+                    <li class="cards__body--item">
+                      Area <span> <i class="bx bx-trip"></i>1450</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="cards__footer">
+                  <p class="cards__footer--initials">A</p>
+                  <p class="cards__footer--price">$35,000</p>
+                  <a href="#" class="btn button__outlined">Reserve Now</a>
+                </div>
+              </div>
+              {% endif %}
+            </div>
+
+            <nav class="listing__pagination">
+                {% if apartments.has_other_pages %}
+                <ul class="pagination">
+                  {% if apartments.has_previous %}
+                    <li><a href="?page={{ apartments.previous_page_number }}">&laquo;</a></li>
+                  {% else %}
+                    <li class="disabled"><span>&laquo;</span></li>
+                  {% endif %}
+                  {% for i in apartments.paginator.page_range %}
+                    {% if apartments.number == i %}
+                      <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                    {% else %}
+                      <li><a href="?page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                  {% endfor %}
+                  {% if apartments.has_next %}
+                    <li><a href="?page={{ apartments.next_page_number }}">&raquo;</a></li>
+                  {% else %}
+                    <li class="disabled"><span>&raquo;</span></li>
+                  {% endif %}
+                </ul>
+              {% endif %}
+            </nav>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!--==================== ESTATE ====================-->
+    <section class="city__estate section container mt-2">
+      <span class="section__subtitle text-center"
+        >A selection of the best Estate deals, only available today</span
+      >
+      <h2 class="section__title text-center">Hot Deals <span>.</span></h2>
+
+      <div class="city__estate--wrapper">
+        {% if mainly %}
+          {% for mainly in mainly %}
+          <a href="{% url 'apartment_detail' mainly.estate_name %}" class="city__estate--wrapper-card">
+            <div class="card__image">
+              <img src="{{mainly.image.url}}" alt="estate" />
+            </div>
+            <div class="card__content">
+              <h3>{{mainly.estate_name}}</h3>
+              <p>{{ mainly.location }}, {{ mainly.city }}</p>
+            </div>
+            {% comment %} <div class="card__discount">
+              <div>
+                <p class="estate-discount text-uppercase">
+                  up to <span>13%</span>off
+                </p>
+                <div class="slant"></div>
+              </div>
+            </div> {% endcomment %}
+          </a>
+          {% endfor %}
+        {% else %}
+
+        <a class="city__estate--wrapper-card">
+          <div class="card__image">
+            <img src="{% static 'asseting/img/place-1.jpg' %}" alt="estate" />
+          </div>
+          <div class="card__content">
+            <h3>Luxury Palace</h3>
+            <p>Ogudu, Lagos</p>
+          </div>
+        </a>
+
+        {% endif %}
+        
+      </div>
+    </section>
+
+    <!--========== SCROLL UP ==========-->
+    <a href="#" class="scrollup" id="scroll-up">
+      <i class="bx bx-chevrons-up"></i>
+    </a>
+
+    <!--================ INLINE SPINNER SCRIPT ===============-->
+    <script
+      src="//code.tidio.co/etuszgde4hdtn0rcdfwtkvfkptptgkoq.js"
+      async
+    ></script>
+    <script>
+      const spinnerWrapper = document.querySelector(".spinner-wrapper");
+
+      window.addEventListener("DOMContentLoaded", () => {
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        document.body.scrollTop = 0; // For Safari
+        spinnerWrapper.parentElement.removeChild(spinnerWrapper);
+      });
+    </script>
+
+    <!-- =============== MAIN JS =============== -->
+    <script src="{% static 'asseting/js/listing.js' %}"></script>
+
+    <!-- =============== NAVIGATION JS =============== -->
+    <!-- <script src="{% static 'asseting/js/navigation.js'"></script> -->
+      <!--=============== MAIN JS ===============-->
+      <script src="{% static 'asset_detail/js/listing.js' %}"></script>
+      <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+      <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  
+    <script>
+      $("#sub").on('submit', function(e) {
+        e.preventDefault();
+  
+        $.ajax({
+          type: "POST",
+          url: "{% url 'email_verify' %}",
+          data: {
+            email: $('#email').val(),
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            dataType: "json",
+          },
+          success: function(data){
+            alert(data.msg);
+            $('#email').val('');
+            console.log(data);
+          },
+          failure: function(data) {
+            alert(data.msg)
+          }
+        })
+      })
+    </script> 
+  </body>
+</html>

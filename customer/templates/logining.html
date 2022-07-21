@@ -1,0 +1,193 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--=============== FAVICON ===============-->
+    <link
+      rel="shortcut icon"
+      href="{% static 'asseting/img/favicon.png' %}"
+      type="image/x-icon"
+    />
+
+    <!--=============== BOXICONS ===============-->
+    <link
+      href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+
+    <!--=============== SWIPER CSS ===============-->
+    <link rel="stylesheet" href="{% static 'asseting/css/swiper-bundle.min.css' %}" />
+
+    <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="{% static 'asseting/css/styleing.css' %}" />
+
+    <title>Rent4Less</title>
+  </head>
+  <body>
+    <!--==================== SPINNER ====================-->
+    <div class="spinner-wrapper">
+      <div class="spinner"></div>
+    </div>
+
+    <!--==================== LOGIN CONTAINER ====================-->
+    <div class="login">
+      <section class="login__left">
+        <div class="login__form login__form--container">
+          <div class="login__form--logo">
+            <a href="/" class="nav__logo">
+              <img
+                src="{% static 'asseting/img/rent4less-logo-small.png' %}"
+                alt="rent4less-logo-small"
+              />
+            </a>
+          </div>
+          <div class="login__form--message">
+            <h2>Welcome Back!</h2>
+            <p>Sign in by entering the information below</p>
+          </div>
+          <div class="login__form--wrapper">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="text-center alert alert-{{ message.tags }}" id="msg" style="font-size: 20px">
+                        {{ message|safe|title }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <form action="" autocomplete="off" class="process__form" method="post">
+              {% csrf_token %}
+              <fieldset class="process__form-div">
+                <input
+                  type="text"
+                  name="username"
+                  id="username"
+                  class="process__form-input"
+                  placeholder=" "
+                  required
+                />
+                <label for="username" class="process__form-label"
+                  >Username</label
+                >
+              </fieldset>
+              <fieldset class="process__form-div">
+                <input
+                  type="password"
+                  name="password"
+                  id="password"
+                  class="process__form-input"
+                  placeholder=" "
+                  required
+                />
+                <label for="password" class="process__form-label"
+                  >Password</label
+                >
+              </fieldset>
+              <div class="login__form--wrapper-remember">
+                <span class="check">
+                  <input
+                    type="checkbox"
+                    v-model="remember"
+                    id="rememberme"
+                    name="rememberme"
+                  />
+                  <label for="rememberme">Remember Me</label>
+                </span>
+                <span>
+                  <a href="{% url 'password_reset' %}">Forgotten Password?</a>
+                </span>
+              </div>
+              <button
+                type="submit"
+                class="button letter-spacing-1"
+              >
+                Sign In
+              </button>
+              <div class="login__form--wrapper-new">
+                <p>
+                  Don't have an account?
+                  <a href="{% url 'register' %}">Create one here</a>
+                  .
+                </p>
+              </div>
+            </form>
+            <span class="login__form--copy">&copy; 2022 Rent4Less</span>
+          </div>
+        </div>
+      </section>
+      <section class="login__right">
+        <div class="login__overlay"></div>
+        <div class="swiper mySwiper loginRightSwiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <img
+                src="{% static 'asseting/img/hotel-small.jpg' %}"
+                data-srcset="{% static 'asseting/img/hotel-1.jpg' %}"
+                id="lazy-image"
+                alt="homes"
+                class="swiper-lazy"
+              />
+              <!-- <div class="swiper-lazy-preloader"></div> -->
+            </div>
+            <div class="swiper-slide">
+              <img
+                src="{% static 'asseting/img/hotel-2.jpeg' %}"
+                data-srcset="{% static 'asseting/img/hotel-2.jpeg' %}"
+                id="lazy-image"
+                alt="homes"
+                class="swiper-lazy"
+              />
+              <!-- <div class="swiper-lazy-preloader"></div> -->
+            </div>
+            <div class="swiper-slide">
+              <img
+                src="{% static 'asseting/img/estate-5.jpg' %}"
+                data-srcset="{% static 'asseting/img/estate-5.jpg' %}"
+                id="lazy-image"
+                alt="homes"
+                class="swiper-lazy"
+              />
+              <!-- <div class="swiper-lazy-preloader"></div> -->
+            </div>
+            <div class="swiper-slide">
+              <img
+                src="{% static 'asseting/img/place-4.jpg' %}"
+                data-srcset="{% static 'asseting/img/place-4.jpg' %}"
+                id="lazy-image"
+                alt="homes"
+                class="swiper-lazy"
+                alt=""
+              />
+              <!-- <div class="swiper-lazy-preloader"></div> -->
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!--================ INLINE SCRIPT ===============-->
+    <script>
+      const spinnerWrapper = document.querySelector(".spinner-wrapper");
+
+      window.addEventListener("DOMContentLoaded", () => {
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        document.body.scrollTop = 0; // For Safari
+        spinnerWrapper.parentElement.removeChild(spinnerWrapper);
+      });
+    </script>
+
+    <script src="{% static 'asseting/js/swiper-bundle.min.js' %}"></script>
+    <script src="{% static 'asseting/js/signing.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <script>
+      setTimeout(function(){
+          if ($('#msg').length > 0) {
+              $('#msg').remove();
+          }
+          
+      }, 2000);
+  </script>
+  </body>
+</html>

@@ -1,4 +1,4 @@
-{% load static %}
+{% load static custom_tags %}
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
     <!-- Sidebar Toggle (Topbar) -->
     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
@@ -6,27 +6,42 @@
   </button>
 
     <!-- Topbar Search -->
-    
-    {% if user.is_superuser %}
-      <span> Administrator Dashboard </span>
+    {% if user.username == "admin2" %}
+      <span class="text-success h5"> Development Dashboard </span>
+    {% elif user.is_superuser %}
+      <span class="text-success h5"> Administrator Dashboard </span>
     {% elif user.is_staff %}
-      <span> Staff Dashboard </span>
+      <span class="text-success h5"> {{request.user.username}} Dashboard </span>
     {% else %}
-    <span> My Dashboard </span>
+    <span class="text-success h5"> {{request.user.username}} Dashboard </span>
     {% endif %}
 
     <!-- Topbar Navbar -->
     <ul class="navbar-nav ml-auto">
+        {% comment %} {% comment %} <li class="nav-item mt-4"> 
+          <i class="fas fa-bell fa-sm fa-fw text-gray-400">
+          {% comment %} </i> {% if user.is_superuser and user.is_staff %}
+           <sup> {% my_payment %} </sup>
+
+           {% elif user.is_authenticated %}
+           <a href="{% url 'user_dashboard' %}">
+            <sup> {% my_messages %} </sup>
+           </a>
+          {% endif %} 
+
+          
+          
+        </li> {% endcomment %}
         <div class="topbar-divider d-none d-sm-block"></div>
 
         <!-- Nav Item - User Information -->
         <li class="nav-item dropdown no-arrow">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">welcome {{user.username}}</span
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small text-uppercase">{{user.username}}</span
         >
-        {% if user.profile.profile_image %}
+        {% if user.profile.image %}
           <img
-          class="img-profile rounded-circle" src="{{ user.profile.profile_image.url }}"/>
+          class="img-profile rounded-circle" src="{{ user.profile.image.url }}"/>
         {% else %}
         <img
           class="img-profile rounded-circle"
@@ -38,17 +53,11 @@
       <div
         class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
         aria-labelledby="userDropdown"
-      >
-        <a class="dropdown-item text-center" href="#">
-          <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-          hey {{user.username}}
-        </a>
-        <div class="dropdown-divider"></div>
-        
-        {% comment %} <a class="dropdown-item" href="{% url 'profile' %}"> {% endcomment %}
+      >        
+        <a class="dropdown-item" href="{% url 'profile_edit' user.username %}"> 
           <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
           Profile
-        {% comment %} </a> {% endcomment %}
+        </a>
         <div class="dropdown-divider"></div>
         <a
           class="dropdown-item"

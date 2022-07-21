@@ -36,9 +36,17 @@
             {% if room.unique_room_id %}
             <p> Room ID: {{ room.unique_room_id }} </p>
             <p> Room Features: {{ room.ammenities }} </p>
-            <p> Room Type: <span>{{ room.room_types }} </span></p>
-            <p> Room Price #{{ room.price }} </p>
-            {% if room.occupied == False %}
+            <p> Room Type: 
+                <span>
+                    {% if room.apartment_type == "S" %}
+                        {{room.room_types }}
+                    {% else %}
+                    {{room.exclusive_room }} 
+                    {% endif %} 
+                </span>
+            </p>
+            <p> Room Price {{ room.price }} </p>
+            {% if room.occupied == "available" %}
                 <p> Available </p>
             {% else %}
                 <p> Occupied </p>

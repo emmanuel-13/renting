@@ -12,12 +12,20 @@
             {% endfor %}
         {% endif %}
         <h3 class="card-header"> Rooms </h3>
-        <p class="text-right"><a href="#"> export csv </a></p>
+        <p class="text-right">
+            <button class="btn btn-success">
+                <a href="{% url 'room_csv' %}"> export csv </a>
+            </button>
+        </p>
 
     <div class="row" style="overflow-x: scroll;">
         <form method="get">
             <div class="col-sm-12 mt-4">
+                {% if myfilter%}
                 {{ myfilter.form }}
+                {% else %}
+                    {{ myfilterer.form }}
+                {% endif %}
                 <button type="submit" class="btn btn-success"> Search </button>
             </div>
         </form>
@@ -31,7 +39,9 @@
                         <th> Apartment Name </th>
                         <th> Block </th>
                         <th> Room ID </th>
+                        {% if user.is_superuser and user.is_staff %}
                         <th> Edit </th>
+                        {% endif %}
                         <th> Unique Room Type </th>
                         <th> Room Type </th>
                         <th> Price </th>
@@ -48,21 +58,41 @@
                         </td>
                         <td> {{ rooms.blocks }} </td>
                         <td> {{ rooms.room_id }} </td>
+                        {% if user.is_superuser %}
                         <td>
+                            {% if rooms.room_types %}
                             <a href="{% url 'room_detail_update' rooms.pk %}">
                                 <button class="btn btn-success"> Update </button>
                             </a>
+                            {% else %}
+
+                            <a href="{% url 'room_detail_updater' rooms.pk %}">
+                                <button class="btn btn-success"> Update </button>
+                            </a>
+
+                            {% endif %}
                         </td>
+                        {% endif %}
+
                         {% if rooms.unique_room_id %}
                         <td> {{rooms.unique_room_id }} </td>
                         
-                        <td> {{rooms.room_types }} </td>
-                        <td> #{{ rooms.price }}</td>
+                        
+                        <td>
+                            {% if rooms.apartment_type == "S" %}
+                             {{ rooms.room_types }}
+                            {% else %}
+                            {{ rooms.exclusive_room }} 
+                            {% endif %}
+                        </td>
+                        <td> {{ rooms.price }}</td>
                         
                         {% if rooms.occupied == "running" %}
-                            <td style="background-color: red; color: white"> Occupied </td>
+                            <td style="background-color: green; color: white"> Occupied </td>
                         {% elif rooms.occupied == "pending" %}
-                        <td style="background-color: green; color: white"> Pending </td> 
+                            <td style="background-color: green; color: white"> Pending </td> 
+                        {% elif rooms.occupied == "expired" %}
+                            <td style="background-color: green; color: white"> Expired </td> 
                         {% else %}
                         <td> Avaliable </td>
                         {% endif %}
@@ -71,7 +101,55 @@
                     {% endfor %}
                 </tbody>  
             </table>
-            
+            {% elif myfilterer.qs %}
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th> Apartment Name </th>
+                        <th> Block </th>
+                        <th> Unique Room Type </th>
+                        <th> Room Type </th>
+                        <th> Price </th>
+                        <th> Status </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rooms in myfilterer.qs %}
+                    <tr> 
+                        <td>
+                            <a href="{% url 'room_details' rooms.pk %}" style="text-decoration: none">
+                                {{ rooms.apartment_name_rooms }}
+                            </a>
+                        </td>
+                        <td> {{ rooms.blocks }} </td>
+
+                        {% if rooms.unique_room_id %}
+                        <td> {{rooms.unique_room_id }} </td>
+                        
+                        
+                        <td>
+                            {% if rooms.apartment_type == "S" %}
+                             {{ rooms.room_types }}
+                            {% else %}
+                            {{ rooms.exclusive_room }} 
+                            {% endif %}
+                        </td>
+                        <td> {{ rooms.price }}</td>
+                        
+                        {% if rooms.occupied == "running" %}
+                            <td style="background-color: green; color: white"> Occupied </td>
+                        {% elif rooms.occupied == "pending" %}
+                            <td style="background-color: yellow; color: white"> Pending </td> 
+                        {% elif rooms.occupied == "expired" %}
+                            <td style="background-color: red; color: white"> Expired </td> 
+                        {% else %}
+                        <td> Avaliable </td>
+                        {% endif %}
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>  
+            </table>
             {% else %}
                 <p> no room found </p>
                 <button class="btn btn-info"><a href="{% url 'room_list' %}"> view all </a></button>

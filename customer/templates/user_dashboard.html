@@ -1,6 +1,9 @@
-{% extends "Dashboard/base.html" %} {% load static %} {% block content %}
-<!-- Content Start -->
+{% extends "Dashboard/base.html" %} {% load static custom_tags %} 
 
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/main2.css' %}">
+<!-- Content Start -->
 
 {% if messages %}
               {% for message in messages %}
@@ -9,117 +12,292 @@
                   </div>
               {% endfor %}
           {% endif %}
-<div class="row">
-  <div class="col-xl-4 col-md-6 mb-4">
-    <div class="card border-left-primary shadow h-100 py-2">
-        <div class="card-body">
-            <div class="row no-gutters align-items-center">
-                <div class="col mr-2">
-                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                        Bookings
-                    </div>
-                    <div class="h5 mb-0 font-weight-bold text-gray-800">
 
-                    {% if booking_counter %}
-                       {{ booking_counter }}
+    <div class="row">
+        <div class="col-12 col-xl-8">
+            <div class="row">
+                <div class="col-xl-4 col-sm-6 mb-4">
+                    <div class="card border-left-success shadow h-100 py-4">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-sm h6 font-weight-medium text-success text-uppercase mb-1">
+                                        Bookings
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+        
+                                    {% if booking %}
+                                    {{ booking }}
+                                    {% else %}
+                                        no booking made 
+                                    {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-bookmark fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="col-xl-4 col-sm-6 mb-4">
+                    <div class="card border-left-success shadow h-100 py-4">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-sm h6 font-weight-medium text-success text-uppercase mb-1">
+                                        Name
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800 text-capitalize">
+                                        {{users}}
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="col-xl-4 col-sm-6 mb-4">
+                    <div class="card border-left-success shadow h-100 py-4">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-sm h6 font-weight-medium text-success text-uppercase mb-1">
+                                        Room Taken
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                        {% if room %}
+                                            {% with bookings=room %}
+                                                {{bookings.room.unique_room_id }}
+                                            {% endwith %}
+                                        {% else %}
+                                        no room booked
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-home fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% comment %} overview {% endcomment %}
+            <div class="card col-12 shadow mb-4 p-0">
+                <div class="card-header py-3">
+                <h4 class="m-0 font-weight-medium text-success">
+                    Booking Overview
+                </h4>
+                </div>
+                
+                <div class="booking-card-body card-body overflow-auto" style="scrollbar-width: none;">
+                    {% if booking %}
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            {% if booking > 1 %}
+                            <th> Rooms </th>
+                            {% else %}
+                            <th> Room </th>
+                            {% endif %}
+                            <th> Check IN</th>
+                            <th> Status </th>
+                            <th> Duration </th>
+                            <th> Amount </th>
+                            <th> Check Out </th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for booking in bookings %}
+                        <tr>
+                            <td> {{ booking.room.unique_room_id }}</td>
+                            <td> {{ booking.book_date }}</td>
+                            <td> {% if booking.checkout|is_old_date %} Running {% else %} Expiry {% endif %}</td>
+                            <td> {{ booking.payment.payment_type }} Month </td>
+                            <td> &#8358;{{ booking.payment.prices }} </td>
+                            <td> {{ booking.checkout }} </td>
+                        </tr>
+                        {% endfor %}
+                        
+                        </tbody>
+                    </table>
                     {% else %}
-                        no booking made 
+                    <p>
+                        Five recent booking would appear here when the time is right for reference purposes and so.
+                    </p>
                     {% endif %}
-                    </div>
-                </div>
-                <div class="col-auto">
-                    <i class="fas fa-book fa-2x text-gray-300"></i>
                 </div>
             </div>
-        </div>
-    </div>
-  </div>
 
-  <div class="col-xl-4 col-md-6 mb-4">
-    <div class="card border-left-primary shadow h-100 py-2">
-        <div class="card-body">
-            <div class="row no-gutters align-items-center">
-                <div class="col mr-2">
-                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                        Name
-                    </div>
-                    <div class="h5 mb-0 font-weight-bold text-gray-800">
-                        {{users}}
-                    </div>
-                </div>
-                <div class="col-auto">
-                    <i class="fas fa-home fa-2x text-gray-300"></i>
-                </div>
-            </div>
         </div>
-    </div>
-  </div>
+        
+        <div class=" col-12 col-xl-4 d-none d-xl-block">
+            {% comment %} profile {% endcomment %}
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h5 class="m-0 font-weight-bold text-success">
+                        My Profile
+                    </h5>
+                </div>
+                
+                <div class="card-body">
+                    {% if profile %}
+                        <div class="text-center">
+                            <img src="{{ profile.image.url }}" alt="more" class="img-profile text-center rounded-circle" width="130px" height="130px">
+                        </div>
+                        <div class="card-body text-center">
+                            {% if profile.user.get_full_name %} 
+                                <span>{{ profile.title }} </span>
+                                <h5 class="card-title mb-1"> {{ profile.user.get_full_name }}</h5> 
+                            {% endif %}
+                            <p class="text-capitalize pb-3">Location: {% if profile.address %} 
+                                {{ profile.address }} {% else %} No location {% endif %}
+                            </p>
 
-  <div class="col-xl-4 col-md-6 mb-4">
-    <div class="card border-left-primary shadow h-100 py-2">
-        <div class="card-body">
-            <div class="row no-gutters align-items-center">
-                <div class="col mr-2">
-                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                        Room Taken
-                    </div>
-                    <div class="h5 mb-0 font-weight-bold text-gray-800">
-                        {% if booking_counter %}
-                            {{ booking_counter }}
+                            <div class="border-top pt-2 d-flex justify-content-between">
+                                <span>Username</span>
+                                <p class="text-dark text-capitalize font-weight-bold"> {{ user.username }}</p> 
+                            </div>
+
+                            <div class="border-top pt-2 d-flex justify-content-between">
+                                <span>DOB</span>
+                                <p class="text-dark text-capitalize font-weight-bold"> {{ profile.date_of_birth }} </p>
+                            </div>
+
+                            <div class="border-top pt-2 d-flex justify-content-between">
+                                <span>Email</span>
+                                <p class="text-dark font-weight-bold"> {{ user.email|capfirst }}</p>
+                            </div>
+                            {% if not profile.user.get_full_name or  not profile.user.last_name or not profile.user.first_name or not profile.title %}
+                            Profile Incomplete
+                            <a href="{% url 'profile_edit' user.username %}">
+                                <button class="btn btn-success">
+                                    Update profile
+                                </button>
+                            </a>
+                            {% endif %}
+                        </div>
                         {% else %}
-                        no room booked
+                            no profile created
                         {% endif %}
-                    </div>
-                </div>
-                <div class="col-auto">
-                    <i class="fas fa-home fa-2x text-gray-300"></i>
                 </div>
             </div>
+
+            
+           
+        </div>
+
+
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-lg-12 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-success">
+                    Messages
+                  </h6>
+                </div>
+                <div class="card-body overflow-auto">
+                  {% if admin_messages %}
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th> Title </th>
+                        <th> Date Sent </th>
+                        <th> Content </th>
+                        <th> Message type </th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                    {% if admin_messages %}
+                      {% for booking in admin_messages %}
+                      <tr>
+                          <td> {{ booking.title|capfirst|truncatechars:20 }}</td>
+                          
+                          {% if booking.updated_at %}
+                          <td> {{ booking.updated_at }}</td>
+                          {% else %}
+                          <td> {{ booking.date_created }}</td>
+                          {% endif %}
+                          <td> {{ booking.description|truncatechars:50 }}</td>
+                          {% if booking.date_created|is_old_date %}
+                            <td style="color: green"> New </td>
+                          {% else %}
+                            <td style="color: red"> Old </td>
+                          {% endif %}
+                      </tr>
+                      {% endfor %}
+
+                      {% endif %}
+
+
+                      {% if admin %}
+                      {% for booking in admin %}
+                      <tr>
+                          <td> {{ booking.title|capfirst|truncatechars:20 }}</td>
+                          
+                          {% if booking.updated_at %}
+                          <td> {{ booking.updated_at }}</td>
+                          {% else %}
+                          <td> {{ booking.date_created }}</td>
+                          {% endif %}
+                          <td> {{ booking.description|truncatechars:50 }}</td>
+                          {% if booking.date_created|is_old_date %}
+                            <td style="color: green"> New </td>
+                          {% else %}
+                            <td style="color: red"> Old </td>
+                          {% endif %}
+                      </tr>
+                      {% endfor %}
+
+                      {% endif %}
+
+                      {% if mail %}
+                      {% for booking in mail %}
+                      <tr>
+                          <td> {{ booking.title|capfirst|truncatechars:20 }}</td>
+                          <td> {{ booking.date_created }}</td>
+                          <td> {{ booking.content|truncatechars:50 }}</td>
+                          {% if booking.date_created|is_old_date %}
+                            <td style="color: green;"> New </td>
+                          {% else %}
+                            <td style="color: red;"> Old </td>
+                          {% endif %}
+                      </tr>
+                      {% endfor %}
+
+                      {% endif %}
+
+
+
+
+                      
+                    </tbody>
+                  </table>
+                  {% else %}
+                  <p>
+                    Five recent booking would appear here when booking are availiable for reference purposes and so.
+                  </p>
+                  {% endif %}
+                </div>
+              </div>
         </div>
     </div>
-  </div>
-</div>
 
-<div class="card shadow mb-4">
-    <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary">
-        Overview
-      </h6>
-    </div>
-    
-    <div class="card-body">
-        {% if booking %}
-        <table class="table">
-            <thead>
-            <tr>
-                <th> Users </th>
-                <th> Rooms </th>
-                <th> Check IN</th>
-                <th> Status </th>
-                <th> Check OUT</th>
-            </tr>
-            </thead>
 
-            <tbody>
-            {% for booking in bookings %}
-            <tr>
-                <td> {{booking.guest }}</td>
-                <td> {{ booking.room.room_id }}</td>
-                <td> {{ booking.check_in}}</td>
-                <td> {% if booking.status == False %} Incompleted {% else %} Completed {% endif %}</td>
-                <td> {{ booking.check_out}}</td>
-            </tr>
-            {% endfor %}
-            
-            </tbody>
-        </table>
-        {% else %}
-        <p>
-            Five recent booking would appear here when the time is right for reference purposes and so.
-        </p>
-        {% endif %}
-    </div>
-</div>
+
+
+
+
+
 <!-- End Content-->
 
 {% endblock %}
