@@ -65,6 +65,7 @@ fastutils==0.42.14
 filelock==3.7.1
 fpdf2==2.5.5
 future==0.18.2
+gunicorn
 html5lib==1.1
 idna==3.3
 importlib-metadata==4.12.0
